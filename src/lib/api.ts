@@ -18,10 +18,10 @@ export interface ListParams {
   search?: string;
   searchFields?: string[];
   filters?: Record<string, unknown>;
-  dateField?: string;
-  dateFrom?: string;
-  dateTo?: string;
-  orderBy?: string;
+  dateField?: string | undefined;
+  dateFrom?: string | undefined;
+  dateTo?: string | undefined;
+  orderBy?: string | undefined;
   ascending?: boolean;
   page?: number;
   pageSize?: number;

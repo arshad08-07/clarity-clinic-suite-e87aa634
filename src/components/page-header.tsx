@@ -6,8 +6,8 @@ export function PageHeader({
   actions,
 }: {
   title: string;
-  description?: string;
-  actions?: ReactNode;
+  description?: string | undefined;
+  actions?: ReactNode | undefined;
 }) {
   return (
     <div className="flex flex-col gap-3 pb-5 sm:flex-row sm:items-end sm:justify-between">
