@@ -159,6 +159,41 @@ export type Database = {
         }
         Relationships: []
       }
+      claim_status_history: {
+        Row: {
+          changed_by: string | null
+          claim_id: string
+          created_at: string
+          id: string
+          note: string | null
+          status: string
+        }
+        Insert: {
+          changed_by?: string | null
+          claim_id: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          status: string
+        }
+        Update: {
+          changed_by?: string | null
+          claim_id?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claim_status_history_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       communications: {
         Row: {
           channel: string
@@ -428,16 +463,34 @@ export type Database = {
           fundus_os: string | null
           history: string | null
           id: string
+          iris_od: string | null
+          iris_os: string | null
+          lacrimal_od: string | null
+          lacrimal_os: string | null
+          lashes_od: string | null
+          lashes_os: string | null
           lens_od: string | null
           lens_os: string | null
           lids_od: string | null
           lids_os: string | null
+          macula_od: string | null
+          macula_os: string | null
+          optic_disc_od: string | null
+          optic_disc_os: string | null
           patient_id: string
           plan: string | null
           pupil_od: string | null
           pupil_os: string | null
+          retina_od: string | null
+          retina_os: string | null
+          sclera_od: string | null
+          sclera_os: string | null
           updated_at: string
+          vessels_od: string | null
+          vessels_os: string | null
           visit_id: string | null
+          vitreous_od: string | null
+          vitreous_os: string | null
         }
         Insert: {
           advice?: string | null
@@ -456,16 +509,34 @@ export type Database = {
           fundus_os?: string | null
           history?: string | null
           id?: string
+          iris_od?: string | null
+          iris_os?: string | null
+          lacrimal_od?: string | null
+          lacrimal_os?: string | null
+          lashes_od?: string | null
+          lashes_os?: string | null
           lens_od?: string | null
           lens_os?: string | null
           lids_od?: string | null
           lids_os?: string | null
+          macula_od?: string | null
+          macula_os?: string | null
+          optic_disc_od?: string | null
+          optic_disc_os?: string | null
           patient_id: string
           plan?: string | null
           pupil_od?: string | null
           pupil_os?: string | null
+          retina_od?: string | null
+          retina_os?: string | null
+          sclera_od?: string | null
+          sclera_os?: string | null
           updated_at?: string
+          vessels_od?: string | null
+          vessels_os?: string | null
           visit_id?: string | null
+          vitreous_od?: string | null
+          vitreous_os?: string | null
         }
         Update: {
           advice?: string | null
@@ -484,16 +555,34 @@ export type Database = {
           fundus_os?: string | null
           history?: string | null
           id?: string
+          iris_od?: string | null
+          iris_os?: string | null
+          lacrimal_od?: string | null
+          lacrimal_os?: string | null
+          lashes_od?: string | null
+          lashes_os?: string | null
           lens_od?: string | null
           lens_os?: string | null
           lids_od?: string | null
           lids_os?: string | null
+          macula_od?: string | null
+          macula_os?: string | null
+          optic_disc_od?: string | null
+          optic_disc_os?: string | null
           patient_id?: string
           plan?: string | null
           pupil_od?: string | null
           pupil_os?: string | null
+          retina_od?: string | null
+          retina_os?: string | null
+          sclera_od?: string | null
+          sclera_os?: string | null
           updated_at?: string
+          vessels_od?: string | null
+          vessels_os?: string | null
           visit_id?: string | null
+          vitreous_od?: string | null
+          vitreous_os?: string | null
         }
         Relationships: [
           {
@@ -703,6 +792,7 @@ export type Database = {
       invoice_items: {
         Row: {
           amount: number
+          batch_id: string | null
           created_at: string
           description: string
           id: string
@@ -715,6 +805,7 @@ export type Database = {
         }
         Insert: {
           amount?: number
+          batch_id?: string | null
           created_at?: string
           description: string
           id?: string
@@ -727,6 +818,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          batch_id?: string | null
           created_at?: string
           description?: string
           id?: string
@@ -738,6 +830,13 @@ export type Database = {
           unit_price?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "invoice_items_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "product_batches"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "invoice_items_invoice_id_fkey"
             columns: ["invoice_id"]
@@ -917,10 +1016,49 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_activities: {
+        Row: {
+          activity: string
+          created_at: string
+          created_by: string | null
+          id: string
+          lead_id: string
+          next_action_at: string | null
+          outcome: string | null
+        }
+        Insert: {
+          activity: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id: string
+          next_action_at?: string | null
+          outcome?: string | null
+        }
+        Update: {
+          activity?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id?: string
+          next_action_at?: string | null
+          outcome?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           assigned_to: string | null
           branch_id: string | null
+          campaign: string | null
           converted_patient_id: string | null
           created_at: string
           email: string | null
@@ -936,6 +1074,7 @@ export type Database = {
         Insert: {
           assigned_to?: string | null
           branch_id?: string | null
+          campaign?: string | null
           converted_patient_id?: string | null
           created_at?: string
           email?: string | null
@@ -951,6 +1090,7 @@ export type Database = {
         Update: {
           assigned_to?: string | null
           branch_id?: string | null
+          campaign?: string | null
           converted_patient_id?: string | null
           created_at?: string
           email?: string | null
@@ -1016,6 +1156,118 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      optical_orders: {
+        Row: {
+          branch_id: string | null
+          brand: string | null
+          coating: string | null
+          cost_price: number
+          created_at: string
+          created_by: string | null
+          delivery_date: string | null
+          discount: number
+          frame_product_id: string | null
+          id: string
+          invoice_id: string | null
+          lens_index: string | null
+          lens_product_id: string | null
+          notes: string | null
+          optical_prescription_id: string | null
+          patient_id: string
+          quantity: number
+          selling_price: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          brand?: string | null
+          coating?: string | null
+          cost_price?: number
+          created_at?: string
+          created_by?: string | null
+          delivery_date?: string | null
+          discount?: number
+          frame_product_id?: string | null
+          id?: string
+          invoice_id?: string | null
+          lens_index?: string | null
+          lens_product_id?: string | null
+          notes?: string | null
+          optical_prescription_id?: string | null
+          patient_id: string
+          quantity?: number
+          selling_price?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          brand?: string | null
+          coating?: string | null
+          cost_price?: number
+          created_at?: string
+          created_by?: string | null
+          delivery_date?: string | null
+          discount?: number
+          frame_product_id?: string | null
+          id?: string
+          invoice_id?: string | null
+          lens_index?: string | null
+          lens_product_id?: string | null
+          notes?: string | null
+          optical_prescription_id?: string | null
+          patient_id?: string
+          quantity?: number
+          selling_price?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "optical_orders_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_frame_product_id_fkey"
+            columns: ["frame_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_lens_product_id_fkey"
+            columns: ["lens_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_optical_prescription_id_fkey"
+            columns: ["optical_prescription_id"]
+            isOneToOne: false
+            referencedRelation: "optical_prescriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       optical_prescriptions: {
         Row: {
@@ -1124,11 +1376,16 @@ export type Database = {
         Row: {
           add_od: number | null
           add_os: number | null
+          aided_va_od: string | null
+          aided_va_os: string | null
+          auto_ref_od: string | null
+          auto_ref_os: string | null
           axis_od: number | null
           axis_os: number | null
           bcva_od: string | null
           bcva_os: string | null
           color_vision: string | null
+          contrast_sensitivity: string | null
           created_at: string
           cyl_od: number | null
           cyl_os: number | null
@@ -1137,25 +1394,37 @@ export type Database = {
           iop_od: number | null
           iop_os: number | null
           keratometry: string | null
+          near_va_od: string | null
+          near_va_os: string | null
           notes: string | null
           optometrist_id: string | null
+          pachymetry_od: number | null
+          pachymetry_os: number | null
           patient_id: string
           pd: number | null
+          prism_od: string | null
+          prism_os: string | null
           sph_od: number | null
           sph_os: number | null
           ucva_od: string | null
           ucva_os: string | null
           updated_at: string
           visit_id: string | null
+          visual_field: string | null
         }
         Insert: {
           add_od?: number | null
           add_os?: number | null
+          aided_va_od?: string | null
+          aided_va_os?: string | null
+          auto_ref_od?: string | null
+          auto_ref_os?: string | null
           axis_od?: number | null
           axis_os?: number | null
           bcva_od?: string | null
           bcva_os?: string | null
           color_vision?: string | null
+          contrast_sensitivity?: string | null
           created_at?: string
           cyl_od?: number | null
           cyl_os?: number | null
@@ -1164,25 +1433,37 @@ export type Database = {
           iop_od?: number | null
           iop_os?: number | null
           keratometry?: string | null
+          near_va_od?: string | null
+          near_va_os?: string | null
           notes?: string | null
           optometrist_id?: string | null
+          pachymetry_od?: number | null
+          pachymetry_os?: number | null
           patient_id: string
           pd?: number | null
+          prism_od?: string | null
+          prism_os?: string | null
           sph_od?: number | null
           sph_os?: number | null
           ucva_od?: string | null
           ucva_os?: string | null
           updated_at?: string
           visit_id?: string | null
+          visual_field?: string | null
         }
         Update: {
           add_od?: number | null
           add_os?: number | null
+          aided_va_od?: string | null
+          aided_va_os?: string | null
+          auto_ref_od?: string | null
+          auto_ref_os?: string | null
           axis_od?: number | null
           axis_os?: number | null
           bcva_od?: string | null
           bcva_os?: string | null
           color_vision?: string | null
+          contrast_sensitivity?: string | null
           created_at?: string
           cyl_od?: number | null
           cyl_os?: number | null
@@ -1191,16 +1472,23 @@ export type Database = {
           iop_od?: number | null
           iop_os?: number | null
           keratometry?: string | null
+          near_va_od?: string | null
+          near_va_os?: string | null
           notes?: string | null
           optometrist_id?: string | null
+          pachymetry_od?: number | null
+          pachymetry_os?: number | null
           patient_id?: string
           pd?: number | null
+          prism_od?: string | null
+          prism_os?: string | null
           sph_od?: number | null
           sph_os?: number | null
           ucva_od?: string | null
           ucva_os?: string | null
           updated_at?: string
           visit_id?: string | null
+          visual_field?: string | null
         }
         Relationships: [
           {
@@ -1266,6 +1554,7 @@ export type Database = {
           diagnosis_text: string | null
           eye: Database["public"]["Enums"]["eye_side"] | null
           id: string
+          is_primary: boolean
           notes: string | null
           patient_id: string
           severity: string | null
@@ -1278,6 +1567,7 @@ export type Database = {
           diagnosis_text?: string | null
           eye?: Database["public"]["Enums"]["eye_side"] | null
           id?: string
+          is_primary?: boolean
           notes?: string | null
           patient_id: string
           severity?: string | null
@@ -1290,6 +1580,7 @@ export type Database = {
           diagnosis_text?: string | null
           eye?: Database["public"]["Enums"]["eye_side"] | null
           id?: string
+          is_primary?: boolean
           notes?: string | null
           patient_id?: string
           severity?: string | null
@@ -1319,6 +1610,67 @@ export type Database = {
           },
           {
             foreignKeyName: "patient_diagnoses_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "visits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_documents: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          doc_type: string
+          file_url: string | null
+          id: string
+          notes: string | null
+          patient_id: string
+          surgery_id: string | null
+          title: string
+          visit_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          doc_type: string
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          patient_id: string
+          surgery_id?: string | null
+          title: string
+          visit_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          doc_type?: string
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          surgery_id?: string | null
+          title?: string
+          visit_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_documents_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_documents_surgery_id_fkey"
+            columns: ["surgery_id"]
+            isOneToOne: false
+            referencedRelation: "surgeries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_documents_visit_id_fkey"
             columns: ["visit_id"]
             isOneToOne: false
             referencedRelation: "visits"
@@ -1470,6 +1822,8 @@ export type Database = {
           id: string
           instructions: string | null
           prescription_id: string
+          route: string | null
+          strength: string | null
         }
         Insert: {
           created_at?: string
@@ -1481,6 +1835,8 @@ export type Database = {
           id?: string
           instructions?: string | null
           prescription_id: string
+          route?: string | null
+          strength?: string | null
         }
         Update: {
           created_at?: string
@@ -1492,6 +1848,8 @@ export type Database = {
           id?: string
           instructions?: string | null
           prescription_id?: string
+          route?: string | null
+          strength?: string | null
         }
         Relationships: [
           {
@@ -1554,6 +1912,57 @@ export type Database = {
             columns: ["visit_id"]
             isOneToOne: false
             referencedRelation: "visits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_batches: {
+        Row: {
+          batch_no: string
+          branch_id: string | null
+          cost_price: number
+          created_at: string
+          expiry_date: string | null
+          id: string
+          product_id: string
+          quantity: number
+          selling_price: number
+        }
+        Insert: {
+          batch_no: string
+          branch_id?: string | null
+          cost_price?: number
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          product_id: string
+          quantity?: number
+          selling_price?: number
+        }
+        Update: {
+          batch_no?: string
+          branch_id?: string | null
+          cost_price?: number
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          product_id?: string
+          quantity?: number
+          selling_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_batches_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_batches_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]
@@ -1901,18 +2310,23 @@ export type Database = {
       surgeries: {
         Row: {
           anesthesia: string | null
+          assistant_id: string | null
           biometry_axial_length: number | null
           biometry_k1: number | null
           biometry_k2: number | null
           branch_id: string | null
           complications: string | null
           consent_signed: boolean
+          consumables: string | null
           created_at: string
+          duration_min: number
+          ended_at: string | null
           estimated_cost: number | null
           eye: Database["public"]["Enums"]["eye_side"]
           id: string
           iol_inventory_id: string | null
           iol_power: number | null
+          nurse_id: string | null
           op_notes: string | null
           ot_room_id: string | null
           patient_id: string
@@ -1920,24 +2334,30 @@ export type Database = {
           pre_op_notes: string | null
           procedure: string
           scheduled_at: string | null
+          started_at: string | null
           status: Database["public"]["Enums"]["surgery_status"]
           surgeon_id: string | null
           updated_at: string
         }
         Insert: {
           anesthesia?: string | null
+          assistant_id?: string | null
           biometry_axial_length?: number | null
           biometry_k1?: number | null
           biometry_k2?: number | null
           branch_id?: string | null
           complications?: string | null
           consent_signed?: boolean
+          consumables?: string | null
           created_at?: string
+          duration_min?: number
+          ended_at?: string | null
           estimated_cost?: number | null
           eye?: Database["public"]["Enums"]["eye_side"]
           id?: string
           iol_inventory_id?: string | null
           iol_power?: number | null
+          nurse_id?: string | null
           op_notes?: string | null
           ot_room_id?: string | null
           patient_id: string
@@ -1945,24 +2365,30 @@ export type Database = {
           pre_op_notes?: string | null
           procedure: string
           scheduled_at?: string | null
+          started_at?: string | null
           status?: Database["public"]["Enums"]["surgery_status"]
           surgeon_id?: string | null
           updated_at?: string
         }
         Update: {
           anesthesia?: string | null
+          assistant_id?: string | null
           biometry_axial_length?: number | null
           biometry_k1?: number | null
           biometry_k2?: number | null
           branch_id?: string | null
           complications?: string | null
           consent_signed?: boolean
+          consumables?: string | null
           created_at?: string
+          duration_min?: number
+          ended_at?: string | null
           estimated_cost?: number | null
           eye?: Database["public"]["Enums"]["eye_side"]
           id?: string
           iol_inventory_id?: string | null
           iol_power?: number | null
+          nurse_id?: string | null
           op_notes?: string | null
           ot_room_id?: string | null
           patient_id?: string
@@ -1970,11 +2396,19 @@ export type Database = {
           pre_op_notes?: string | null
           procedure?: string
           scheduled_at?: string | null
+          started_at?: string | null
           status?: Database["public"]["Enums"]["surgery_status"]
           surgeon_id?: string | null
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "surgeries_assistant_id_fkey"
+            columns: ["assistant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "surgeries_branch_id_fkey"
             columns: ["branch_id"]
@@ -1987,6 +2421,13 @@ export type Database = {
             columns: ["iol_inventory_id"]
             isOneToOne: false
             referencedRelation: "iol_inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surgeries_nurse_id_fkey"
+            columns: ["nurse_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -2120,10 +2561,15 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_clinical: { Args: { _user_id: string }; Returns: boolean }
+      is_finance: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       next_invoice_no: { Args: never; Returns: string }
       next_mrn: { Args: never; Returns: string }
       next_po_no: { Args: never; Returns: string }
+      owns_patient: { Args: { _patient_id: string }; Returns: boolean }
+      recalc_invoice: { Args: { _invoice_id: string }; Returns: undefined }
+      same_branch: { Args: { _branch: string }; Returns: boolean }
     }
     Enums: {
       app_role:
