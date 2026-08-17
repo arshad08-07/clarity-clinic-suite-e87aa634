@@ -320,7 +320,7 @@ export function ResourceModule({ config }: { config: ResourceConfig }) {
                 {tableFields.map((f) => (
                   <TableHead key={f.name}>{f.label}</TableHead>
                 ))}
-                <TableHead className="w-[120px] text-right no-print">Actions</TableHead>
+                <TableHead className="w-[280px] text-right no-print">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

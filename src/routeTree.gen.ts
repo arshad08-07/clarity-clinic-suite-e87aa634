@@ -46,6 +46,7 @@ import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
 import { Route as AuthenticatedSurgeriesRouteImport } from './routes/_authenticated/surgeries'
 import { Route as AuthenticatedPatientPatientIdRouteImport } from './routes/_authenticated/patient.$patientId'
+import { Route as AuthenticatedVisitVisitIdRouteImport } from './routes/_authenticated/visit.$visitId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -240,6 +241,12 @@ const AuthenticatedPatientPatientIdRoute =
     path: '/patient/$patientId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedVisitVisitIdRoute =
+  AuthenticatedVisitVisitIdRouteImport.update({
+    id: '/visit/$visitId',
+    path: '/visit/$visitId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -278,6 +285,7 @@ export interface FileRoutesByFullPath {
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
+  '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -316,6 +324,7 @@ export interface FileRoutesByTo {
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
+  '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -356,6 +365,7 @@ export interface FileRoutesById {
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
   '/_authenticated/surgeries': typeof AuthenticatedSurgeriesRoute
   '/_authenticated/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
+  '/_authenticated/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -396,6 +406,7 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/surgeries'
     | '/patient/$patientId'
+    | '/visit/$visitId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -434,6 +445,7 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/surgeries'
     | '/patient/$patientId'
+    | '/visit/$visitId'
   id:
     | '__root__'
     | '/'
@@ -473,6 +485,7 @@ export interface FileRouteTypes {
     | '/_authenticated/suppliers'
     | '/_authenticated/surgeries'
     | '/_authenticated/patient/$patientId'
+    | '/_authenticated/visit/$visitId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -743,6 +756,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPatientPatientIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/visit/$visitId': {
+      id: '/_authenticated/visit/$visitId'
+      path: '/visit/$visitId'
+      fullPath: '/visit/$visitId'
+      preLoaderRoute: typeof AuthenticatedVisitVisitIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -780,6 +800,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
   AuthenticatedSurgeriesRoute: typeof AuthenticatedSurgeriesRoute
   AuthenticatedPatientPatientIdRoute: typeof AuthenticatedPatientPatientIdRoute
+  AuthenticatedVisitVisitIdRoute: typeof AuthenticatedVisitVisitIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -817,6 +838,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
   AuthenticatedSurgeriesRoute: AuthenticatedSurgeriesRoute,
   AuthenticatedPatientPatientIdRoute: AuthenticatedPatientPatientIdRoute,
+  AuthenticatedVisitVisitIdRoute: AuthenticatedVisitVisitIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

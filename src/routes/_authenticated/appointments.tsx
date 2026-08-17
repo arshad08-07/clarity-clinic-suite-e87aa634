@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CheckInButton, PatientRecordLink } from "@/components/clinic-actions";
+import { AppointmentActions } from "@/components/clinic-actions";
 import { ResourceModule } from "@/components/resource-module";
 import { appointmentsConfig } from "@/lib/module-configs";
 
@@ -8,21 +8,22 @@ export const Route = createFileRoute("/_authenticated/appointments")({
   head: () => ({
     meta: [
       { title: "Appointments — Vision Care HMS" },
-      { name: "description", content: "Book, reschedule and check in appointments with automatic visit and token creation." },
+      {
+        name: "description",
+        content: "Book, reschedule and check in appointments — check-in creates the visit and queue token automatically.",
+      },
       { property: "og:title", content: "Appointments — Vision Care HMS" },
-      { property: "og:description", content: "Book, reschedule and check in appointments with automatic queue entry." },
+      {
+        property: "og:description",
+        content: "Appointment desk with one-click check-in into the live queue.",
+      },
     ],
   }),
   component: () => (
     <ResourceModule
       config={{
         ...appointmentsConfig,
-        rowActions: (row) => (
-          <>
-            <CheckInButton row={row} />
-            {row["patient_id"] ? <PatientRecordLink patientId={String(row["patient_id"])} /> : null}
-          </>
-        ),
+        rowActions: (row) => <AppointmentActions row={row} />,
       }}
     />
   ),
