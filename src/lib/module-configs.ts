@@ -313,7 +313,7 @@ export const diagnosesConfig: ResourceConfig = {
       refLabel: (r) => `${r["code"]} · ${r["name"]}`,
     },
     { name: "diagnosis_text", label: "Free text", inTable: false },
-    { name: "is_primary", label: "Primary diagnosis", type: "select", options: [{ value: "true", label: "Primary" }, { value: "false", label: "Secondary" }], defaultValue: "true" },
+    { name: "is_primary", label: "Primary diagnosis", type: "boolean", defaultValue: true },
     { name: "eye", label: "Eye", type: "select", options: EYE, defaultValue: "OU" },
     { name: "severity", label: "Severity", type: "select", options: opts("mild", "moderate", "severe") },
     staffRef("diagnosed_by", "Diagnosed by"),
