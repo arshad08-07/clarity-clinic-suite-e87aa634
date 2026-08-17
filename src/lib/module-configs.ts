@@ -881,15 +881,15 @@ export const auditConfig: ResourceConfig = {
   title: "Audit Logs",
   singular: "Audit entry",
   description: "Every create, update and delete performed in the system.",
-  searchFields: ["table_name", "action", "record_id"],
+  searchFields: ["entity", "action"],
   orderBy: "created_at",
   readOnly: true,
   fields: [
     { name: "created_at", label: "When", type: "datetime" },
-    { name: "table_name", label: "Table" },
+    { name: "entity", label: "Entity" },
     { name: "action", label: "Action", type: "select" },
-    { name: "record_id", label: "Record" },
-    { name: "user_id", label: "User" },
+    { name: "entity_id", label: "Record id" },
+    { name: "user_id", label: "User id" },
   ],
 };
 
@@ -903,7 +903,7 @@ export const settingsConfig: ResourceConfig = {
   ascending: true,
   fields: [
     { name: "key", label: "Key", required: true },
-    { name: "value", label: "Value", type: "textarea", full: true },
-    { name: "description", label: "Description", full: true },
+    branchRef(),
+    { name: "updated_at", label: "Updated", type: "datetime", inForm: false },
   ],
 };
