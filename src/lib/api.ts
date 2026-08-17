@@ -150,7 +150,7 @@ export function useSaveRow(table: string, label = "Record") {
       }
       const { data, error } = await db.from(table).insert(payload).select().single();
       if (error) throw error;
-      await writeAudit("create", table, (data as Row)?.id);
+      await writeAudit("create", table, (data as Row)?.["id"]);
       return data as Row;
     },
     onSuccess: () => {
