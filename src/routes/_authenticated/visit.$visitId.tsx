@@ -3,7 +3,9 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { DiagnosticOrderPanel, statusVariant } from "@/components/diagnostic-order-panel";
 import { EmptyState } from "@/components/empty-state";
+import { OrderDiagnosticsDialog } from "@/components/order-diagnostics-dialog";
 import { PageHeader } from "@/components/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,8 +16,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { db, errorMessage, type Row } from "@/lib/api";
+import { DIAG_STATUS_LABEL, useUpdateDiagnosticOrder, useVisitDiagnostics } from "@/lib/diagnostics";
 import { age, fmtDateTime, fmtTime, titleize } from "@/lib/format";
 import { ALLOWED, patientName, STAGE_LABEL, useVisit, useVisitUpdate, waitingMinutes } from "@/lib/queue";
+
 
 export const Route = createFileRoute("/_authenticated/visit/$visitId")({
   head: () => ({
