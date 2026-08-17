@@ -274,8 +274,9 @@ function OptometryForm({ visit, onCompleted }: { visit: Row; onCompleted: () => 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {OPTOM_FIELDS.map((f) => (
           <div key={f.name} className="grid gap-1.5">
-            <Label>{f.label}</Label>
+            <Label htmlFor={`optom-${f.name}`}>{f.label}</Label>
             <Input
+              id={`optom-${f.name}`}
               type={f.number ? "number" : "text"}
               step="0.25"
               value={values[f.name] === null || values[f.name] === undefined ? "" : String(values[f.name])}
@@ -285,8 +286,9 @@ function OptometryForm({ visit, onCompleted }: { visit: Row; onCompleted: () => 
         ))}
       </div>
       <div className="mt-3 grid gap-1.5">
-        <Label>Notes</Label>
+        <Label htmlFor="optom-notes">Notes</Label>
         <Textarea
+          id="optom-notes"
           value={values["notes"] ? String(values["notes"]) : ""}
           onChange={(e) => set("notes", e.target.value)}
         />
@@ -392,8 +394,8 @@ function ConsultationForm({ visit, onSend }: { visit: Row; onSend: (next: string
           </div>
           {EXAM_FIELDS.map((f) => (
             <div key={f.name} className="grid gap-1.5">
-              <Label>{f.label}</Label>
-              <Input value={String(values[f.name] ?? "")} onChange={(e) => set(f.name, e.target.value)} />
+              <Label htmlFor={`exam-${f.name}`}>{f.label}</Label>
+              <Input id={`exam-${f.name}`} value={String(values[f.name] ?? "")} onChange={(e) => set(f.name, e.target.value)} />
             </div>
           ))}
         </div>
