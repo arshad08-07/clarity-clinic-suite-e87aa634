@@ -275,6 +275,7 @@ export type Database = {
       diagnostic_orders: {
         Row: {
           created_at: string
+          doctor_notes: string | null
           eye: Database["public"]["Enums"]["eye_side"] | null
           findings: string | null
           id: string
@@ -283,7 +284,11 @@ export type Database = {
           patient_id: string
           performed_at: string | null
           performed_by: string | null
+          priority: string
           report_url: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          started_at: string | null
           status: Database["public"]["Enums"]["order_status"]
           test_id: string | null
           updated_at: string
@@ -291,6 +296,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          doctor_notes?: string | null
           eye?: Database["public"]["Enums"]["eye_side"] | null
           findings?: string | null
           id?: string
@@ -299,7 +305,11 @@ export type Database = {
           patient_id: string
           performed_at?: string | null
           performed_by?: string | null
+          priority?: string
           report_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          started_at?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           test_id?: string | null
           updated_at?: string
@@ -307,6 +317,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          doctor_notes?: string | null
           eye?: Database["public"]["Enums"]["eye_side"] | null
           findings?: string | null
           id?: string
@@ -315,7 +326,11 @@ export type Database = {
           patient_id?: string
           performed_at?: string | null
           performed_by?: string | null
+          priority?: string
           report_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          started_at?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           test_id?: string | null
           updated_at?: string
@@ -339,6 +354,13 @@ export type Database = {
           {
             foreignKeyName: "diagnostic_orders_performed_by_fkey"
             columns: ["performed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diagnostic_orders_reviewed_by_fkey"
+            columns: ["reviewed_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -2680,6 +2702,7 @@ export type Database = {
         | "in_progress"
         | "completed"
         | "cancelled"
+        | "reviewed"
       payment_status: "unpaid" | "partial" | "paid" | "refunded"
       po_status:
         | "draft"
@@ -2871,6 +2894,7 @@ export const Constants = {
         "in_progress",
         "completed",
         "cancelled",
+        "reviewed",
       ],
       payment_status: ["unpaid", "partial", "paid", "refunded"],
       po_status: [
