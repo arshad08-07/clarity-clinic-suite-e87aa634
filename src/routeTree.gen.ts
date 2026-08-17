@@ -17,6 +17,7 @@ import { Route as AuthenticatedAppointmentsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedBranchesRouteImport } from './routes/_authenticated/branches'
+import { Route as AuthenticatedCatalogRouteImport } from './routes/_authenticated/catalog'
 import { Route as AuthenticatedCommunicationsRouteImport } from './routes/_authenticated/communications'
 import { Route as AuthenticatedDiagnosesRouteImport } from './routes/_authenticated/diagnoses'
 import { Route as AuthenticatedDiagnosticsRouteImport } from './routes/_authenticated/diagnostics'
@@ -26,6 +27,7 @@ import { Route as AuthenticatedExpensesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedFollowUpsRouteImport } from './routes/_authenticated/follow-ups'
 import { Route as AuthenticatedInsuranceRouteImport } from './routes/_authenticated/insurance'
 import { Route as AuthenticatedInventoryRouteImport } from './routes/_authenticated/inventory'
+import { Route as AuthenticatedIolRouteImport } from './routes/_authenticated/iol'
 import { Route as AuthenticatedLeadsRouteImport } from './routes/_authenticated/leads'
 import { Route as AuthenticatedOpticalPrescriptionsRouteImport } from './routes/_authenticated/optical-prescriptions'
 import { Route as AuthenticatedOpticalShopRouteImport } from './routes/_authenticated/optical-shop'
@@ -81,6 +83,11 @@ const AuthenticatedBranchesRoute = AuthenticatedBranchesRouteImport.update({
   path: '/branches',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCatalogRoute = AuthenticatedCatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCommunicationsRoute =
   AuthenticatedCommunicationsRouteImport.update({
     id: '/communications',
@@ -127,6 +134,11 @@ const AuthenticatedInsuranceRoute = AuthenticatedInsuranceRouteImport.update({
 const AuthenticatedInventoryRoute = AuthenticatedInventoryRouteImport.update({
   id: '/inventory',
   path: '/inventory',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedIolRoute = AuthenticatedIolRouteImport.update({
+  id: '/iol',
+  path: '/iol',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedLeadsRoute = AuthenticatedLeadsRouteImport.update({
@@ -212,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuthenticatedAuditRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/branches': typeof AuthenticatedBranchesRoute
+  '/catalog': typeof AuthenticatedCatalogRoute
   '/communications': typeof AuthenticatedCommunicationsRoute
   '/diagnoses': typeof AuthenticatedDiagnosesRoute
   '/diagnostics': typeof AuthenticatedDiagnosticsRoute
@@ -221,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/insurance': typeof AuthenticatedInsuranceRoute
   '/inventory': typeof AuthenticatedInventoryRoute
+  '/iol': typeof AuthenticatedIolRoute
   '/leads': typeof AuthenticatedLeadsRoute
   '/optical-prescriptions': typeof AuthenticatedOpticalPrescriptionsRoute
   '/optical-shop': typeof AuthenticatedOpticalShopRoute
@@ -244,6 +258,7 @@ export interface FileRoutesByTo {
   '/audit': typeof AuthenticatedAuditRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/branches': typeof AuthenticatedBranchesRoute
+  '/catalog': typeof AuthenticatedCatalogRoute
   '/communications': typeof AuthenticatedCommunicationsRoute
   '/diagnoses': typeof AuthenticatedDiagnosesRoute
   '/diagnostics': typeof AuthenticatedDiagnosticsRoute
@@ -253,6 +268,7 @@ export interface FileRoutesByTo {
   '/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/insurance': typeof AuthenticatedInsuranceRoute
   '/inventory': typeof AuthenticatedInventoryRoute
+  '/iol': typeof AuthenticatedIolRoute
   '/leads': typeof AuthenticatedLeadsRoute
   '/optical-prescriptions': typeof AuthenticatedOpticalPrescriptionsRoute
   '/optical-shop': typeof AuthenticatedOpticalShopRoute
@@ -278,6 +294,7 @@ export interface FileRoutesById {
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/branches': typeof AuthenticatedBranchesRoute
+  '/_authenticated/catalog': typeof AuthenticatedCatalogRoute
   '/_authenticated/communications': typeof AuthenticatedCommunicationsRoute
   '/_authenticated/diagnoses': typeof AuthenticatedDiagnosesRoute
   '/_authenticated/diagnostics': typeof AuthenticatedDiagnosticsRoute
@@ -287,6 +304,7 @@ export interface FileRoutesById {
   '/_authenticated/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/_authenticated/insurance': typeof AuthenticatedInsuranceRoute
   '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
+  '/_authenticated/iol': typeof AuthenticatedIolRoute
   '/_authenticated/leads': typeof AuthenticatedLeadsRoute
   '/_authenticated/optical-prescriptions': typeof AuthenticatedOpticalPrescriptionsRoute
   '/_authenticated/optical-shop': typeof AuthenticatedOpticalShopRoute
@@ -312,6 +330,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/billing'
     | '/branches'
+    | '/catalog'
     | '/communications'
     | '/diagnoses'
     | '/diagnostics'
@@ -321,6 +340,7 @@ export interface FileRouteTypes {
     | '/follow-ups'
     | '/insurance'
     | '/inventory'
+    | '/iol'
     | '/leads'
     | '/optical-prescriptions'
     | '/optical-shop'
@@ -344,6 +364,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/billing'
     | '/branches'
+    | '/catalog'
     | '/communications'
     | '/diagnoses'
     | '/diagnostics'
@@ -353,6 +374,7 @@ export interface FileRouteTypes {
     | '/follow-ups'
     | '/insurance'
     | '/inventory'
+    | '/iol'
     | '/leads'
     | '/optical-prescriptions'
     | '/optical-shop'
@@ -377,6 +399,7 @@ export interface FileRouteTypes {
     | '/_authenticated/audit'
     | '/_authenticated/billing'
     | '/_authenticated/branches'
+    | '/_authenticated/catalog'
     | '/_authenticated/communications'
     | '/_authenticated/diagnoses'
     | '/_authenticated/diagnostics'
@@ -386,6 +409,7 @@ export interface FileRouteTypes {
     | '/_authenticated/follow-ups'
     | '/_authenticated/insurance'
     | '/_authenticated/inventory'
+    | '/_authenticated/iol'
     | '/_authenticated/leads'
     | '/_authenticated/optical-prescriptions'
     | '/_authenticated/optical-shop'
@@ -467,6 +491,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBranchesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/catalog': {
+      id: '/_authenticated/catalog'
+      path: '/catalog'
+      fullPath: '/catalog'
+      preLoaderRoute: typeof AuthenticatedCatalogRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/communications': {
       id: '/_authenticated/communications'
       path: '/communications'
@@ -528,6 +559,13 @@ declare module '@tanstack/react-router' {
       path: '/inventory'
       fullPath: '/inventory'
       preLoaderRoute: typeof AuthenticatedInventoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/iol': {
+      id: '/_authenticated/iol'
+      path: '/iol'
+      fullPath: '/iol'
+      preLoaderRoute: typeof AuthenticatedIolRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/leads': {
@@ -636,6 +674,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedBranchesRoute: typeof AuthenticatedBranchesRoute
+  AuthenticatedCatalogRoute: typeof AuthenticatedCatalogRoute
   AuthenticatedCommunicationsRoute: typeof AuthenticatedCommunicationsRoute
   AuthenticatedDiagnosesRoute: typeof AuthenticatedDiagnosesRoute
   AuthenticatedDiagnosticsRoute: typeof AuthenticatedDiagnosticsRoute
@@ -645,6 +684,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFollowUpsRoute: typeof AuthenticatedFollowUpsRoute
   AuthenticatedInsuranceRoute: typeof AuthenticatedInsuranceRoute
   AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
+  AuthenticatedIolRoute: typeof AuthenticatedIolRoute
   AuthenticatedLeadsRoute: typeof AuthenticatedLeadsRoute
   AuthenticatedOpticalPrescriptionsRoute: typeof AuthenticatedOpticalPrescriptionsRoute
   AuthenticatedOpticalShopRoute: typeof AuthenticatedOpticalShopRoute
@@ -666,6 +706,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAuditRoute: AuthenticatedAuditRoute,
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedBranchesRoute: AuthenticatedBranchesRoute,
+  AuthenticatedCatalogRoute: AuthenticatedCatalogRoute,
   AuthenticatedCommunicationsRoute: AuthenticatedCommunicationsRoute,
   AuthenticatedDiagnosesRoute: AuthenticatedDiagnosesRoute,
   AuthenticatedDiagnosticsRoute: AuthenticatedDiagnosticsRoute,
@@ -675,6 +716,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFollowUpsRoute: AuthenticatedFollowUpsRoute,
   AuthenticatedInsuranceRoute: AuthenticatedInsuranceRoute,
   AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
+  AuthenticatedIolRoute: AuthenticatedIolRoute,
   AuthenticatedLeadsRoute: AuthenticatedLeadsRoute,
   AuthenticatedOpticalPrescriptionsRoute:
     AuthenticatedOpticalPrescriptionsRoute,
