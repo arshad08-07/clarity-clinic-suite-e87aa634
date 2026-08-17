@@ -2478,13 +2478,18 @@ export type Database = {
         Row: {
           appointment_id: string | null
           branch_id: string | null
+          called_at: string | null
           checked_in_at: string
           chief_complaint: string | null
           completed_at: string | null
           created_at: string
+          department: string | null
           doctor_id: string | null
           id: string
+          on_hold: boolean
           patient_id: string
+          priority: string
+          stage_changed_at: string
           status: Database["public"]["Enums"]["visit_status"]
           token_no: number | null
           updated_at: string
@@ -2492,13 +2497,18 @@ export type Database = {
         Insert: {
           appointment_id?: string | null
           branch_id?: string | null
+          called_at?: string | null
           checked_in_at?: string
           chief_complaint?: string | null
           completed_at?: string | null
           created_at?: string
+          department?: string | null
           doctor_id?: string | null
           id?: string
+          on_hold?: boolean
           patient_id: string
+          priority?: string
+          stage_changed_at?: string
           status?: Database["public"]["Enums"]["visit_status"]
           token_no?: number | null
           updated_at?: string
@@ -2506,13 +2516,18 @@ export type Database = {
         Update: {
           appointment_id?: string | null
           branch_id?: string | null
+          called_at?: string | null
           checked_in_at?: string
           chief_complaint?: string | null
           completed_at?: string | null
           created_at?: string
+          department?: string | null
           doctor_id?: string | null
           id?: string
+          on_hold?: boolean
           patient_id?: string
+          priority?: string
+          stage_changed_at?: string
           status?: Database["public"]["Enums"]["visit_status"]
           token_no?: number | null
           updated_at?: string
@@ -2553,6 +2568,68 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      checkin_appointment: {
+        Args: { _appointment_id: string }
+        Returns: {
+          appointment_id: string | null
+          branch_id: string | null
+          called_at: string | null
+          checked_in_at: string
+          chief_complaint: string | null
+          completed_at: string | null
+          created_at: string
+          department: string | null
+          doctor_id: string | null
+          id: string
+          on_hold: boolean
+          patient_id: string
+          priority: string
+          stage_changed_at: string
+          status: Database["public"]["Enums"]["visit_status"]
+          token_no: number | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "visits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_walk_in_visit: {
+        Args: {
+          _branch_id?: string
+          _chief_complaint?: string
+          _doctor_id?: string
+          _patient_id: string
+          _priority?: string
+        }
+        Returns: {
+          appointment_id: string | null
+          branch_id: string | null
+          called_at: string | null
+          checked_in_at: string
+          chief_complaint: string | null
+          completed_at: string | null
+          created_at: string
+          department: string | null
+          doctor_id: string | null
+          id: string
+          on_hold: boolean
+          patient_id: string
+          priority: string
+          stage_changed_at: string
+          status: Database["public"]["Enums"]["visit_status"]
+          token_no: number | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "visits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
