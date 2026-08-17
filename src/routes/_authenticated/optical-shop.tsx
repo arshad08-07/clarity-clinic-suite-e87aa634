@@ -1,16 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { ResourceModule } from "@/components/resource-module";
-import { opticalShopConfig } from "@/lib/module-configs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { opticalOrdersConfig, opticalShopConfig } from "@/lib/module-configs";
 
 export const Route = createFileRoute("/_authenticated/optical-shop")({
   head: () => ({
     meta: [
       { title: "Optical Shop — Vision Care HMS" },
-      { name: "description", content: "Manage optical shop in the Vision Care eye hospital management system." },
+      { name: "description", content: "Frames, lenses and contact lens stock plus prescription-linked optical orders." },
       { property: "og:title", content: "Optical Shop — Vision Care HMS" },
-      { property: "og:description", content: "Manage optical shop in the Vision Care eye hospital management system." },
+      { property: "og:description", content: "Optical stock and prescription-linked spectacle orders." },
     ],
   }),
-  component: () => <ResourceModule config={opticalShopConfig} />,
+  component: OpticalShopPage,
 });
+
+function OpticalShopPage() {
+  return (
+    <Tabs defaultValue="orders">
+      <TabsList>
+        <TabsTrigger value="orders">Orders</TabsTrigger>
+        <TabsTrigger value="stock">Stock</TabsTrigger>
+      </TabsList>
+      <TabsContent value="orders" className="mt-4">
+        <ResourceModule config={opticalOrdersConfig} />
+      </TabsContent>
+      <TabsContent value="stock" className="mt-4">
+        <ResourceModule config={opticalShopConfig} />
+      </TabsContent>
+    </Tabs>
+  );
+}

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { PatientRecordLink } from "@/components/clinic-actions";
 import { ResourceModule } from "@/components/resource-module";
 import { patientsConfig } from "@/lib/module-configs";
 
@@ -7,10 +8,17 @@ export const Route = createFileRoute("/_authenticated/patients")({
   head: () => ({
     meta: [
       { title: "Patients — Vision Care HMS" },
-      { name: "description", content: "Manage patients in the Vision Care eye hospital management system." },
+      { name: "description", content: "Patient master with MRN, demographics and full clinical record access." },
       { property: "og:title", content: "Patients — Vision Care HMS" },
-      { property: "og:description", content: "Manage patients in the Vision Care eye hospital management system." },
+      { property: "og:description", content: "Patient master with MRN, demographics and full clinical record access." },
     ],
   }),
-  component: () => <ResourceModule config={patientsConfig} />,
+  component: () => (
+    <ResourceModule
+      config={{
+        ...patientsConfig,
+        rowActions: (row) => <PatientRecordLink patientId={String(row["id"])} />,
+      }}
+    />
+  ),
 });

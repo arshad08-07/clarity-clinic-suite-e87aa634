@@ -45,6 +45,7 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
 import { Route as AuthenticatedSurgeriesRouteImport } from './routes/_authenticated/surgeries'
+import { Route as AuthenticatedPatientPatientIdRouteImport } from './routes/_authenticated/patient.$patientId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -233,6 +234,12 @@ const AuthenticatedSurgeriesRoute = AuthenticatedSurgeriesRouteImport.update({
   path: '/surgeries',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPatientPatientIdRoute =
+  AuthenticatedPatientPatientIdRouteImport.update({
+    id: '/patient/$patientId',
+    path: '/patient/$patientId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/staff': typeof AuthenticatedStaffRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
+  '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -307,6 +315,7 @@ export interface FileRoutesByTo {
   '/staff': typeof AuthenticatedStaffRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
+  '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -346,6 +355,7 @@ export interface FileRoutesById {
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
   '/_authenticated/surgeries': typeof AuthenticatedSurgeriesRoute
+  '/_authenticated/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -385,6 +395,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/suppliers'
     | '/surgeries'
+    | '/patient/$patientId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -422,6 +433,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/suppliers'
     | '/surgeries'
+    | '/patient/$patientId'
   id:
     | '__root__'
     | '/'
@@ -460,6 +472,7 @@ export interface FileRouteTypes {
     | '/_authenticated/staff'
     | '/_authenticated/suppliers'
     | '/_authenticated/surgeries'
+    | '/_authenticated/patient/$patientId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -723,6 +736,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSurgeriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/patient/$patientId': {
+      id: '/_authenticated/patient/$patientId'
+      path: '/patient/$patientId'
+      fullPath: '/patient/$patientId'
+      preLoaderRoute: typeof AuthenticatedPatientPatientIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -759,6 +779,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
   AuthenticatedSurgeriesRoute: typeof AuthenticatedSurgeriesRoute
+  AuthenticatedPatientPatientIdRoute: typeof AuthenticatedPatientPatientIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -795,6 +816,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
   AuthenticatedSurgeriesRoute: AuthenticatedSurgeriesRoute,
+  AuthenticatedPatientPatientIdRoute: AuthenticatedPatientPatientIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
