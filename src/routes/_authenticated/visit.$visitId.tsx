@@ -191,10 +191,11 @@ function VisitWorkspace() {
         </section>
 
         <div className="lg:col-span-3">
-          <Tabs defaultValue={status === "with_doctor" || status === "completed" ? "consultation" : "optometry"}>
+          <Tabs defaultValue={status === "diagnostics" ? "diagnostics" : status === "with_doctor" || status === "completed" ? "consultation" : "optometry"}>
             <TabsList>
               <TabsTrigger value="optometry">Optometry</TabsTrigger>
               <TabsTrigger value="consultation">Consultation</TabsTrigger>
+              <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
             </TabsList>
             <TabsContent value="optometry" className="mt-4">
               <OptometryForm visit={v} onCompleted={() => move("with_doctor")} />
@@ -202,7 +203,11 @@ function VisitWorkspace() {
             <TabsContent value="consultation" className="mt-4">
               <ConsultationForm visit={v} onSend={move} />
             </TabsContent>
+            <TabsContent value="diagnostics" className="mt-4">
+              <DiagnosticsSection visit={v} onSend={move} />
+            </TabsContent>
           </Tabs>
+
         </div>
       </div>
     </div>
