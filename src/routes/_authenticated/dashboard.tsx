@@ -64,8 +64,9 @@ function Dashboard() {
     select: "id, scheduled_at, status, reason, patients(first_name, last_name, mrn)",
     orderBy: "scheduled_at",
     ascending: true,
-    gte: ["scheduled_at", start],
-    lte: ["scheduled_at", end],
+    dateField: "scheduled_at",
+    dateFrom: start,
+    dateTo: end,
     pageSize: 8,
   });
 
@@ -89,7 +90,8 @@ function Dashboard() {
     table: "invoices",
     select: "id, invoice_no, total, paid_amount, status",
     orderBy: "created_at",
-    gte: ["created_at", start],
+    dateField: "created_at",
+    dateFrom: start,
     pageSize: 100,
   });
 
@@ -99,7 +101,8 @@ function Dashboard() {
     orderBy: "due_date",
     ascending: true,
     filters: { is_done: false },
-    lte: ["due_date", day],
+    dateField: "due_date",
+    dateTo: day,
     pageSize: 6,
   });
 
