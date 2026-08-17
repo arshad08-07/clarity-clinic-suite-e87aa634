@@ -2680,6 +2680,7 @@ export type Database = {
         | "in_progress"
         | "completed"
         | "cancelled"
+        | "reviewed"
       payment_status: "unpaid" | "partial" | "paid" | "refunded"
       po_status:
         | "draft"
@@ -2871,6 +2872,7 @@ export const Constants = {
         "in_progress",
         "completed",
         "cancelled",
+        "reviewed",
       ],
       payment_status: ["unpaid", "partial", "paid", "refunded"],
       po_status: [
