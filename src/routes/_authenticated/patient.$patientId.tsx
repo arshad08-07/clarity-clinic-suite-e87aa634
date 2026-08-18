@@ -150,6 +150,18 @@ const SOURCES: Source[] = [
     describe: (r) => `${titleize(String(r["doc_type"]))} · ${String(r["title"])}`,
   },
   {
+    table: "pharmacy_sales",
+    select: "id, created_at, quantity, amount, status, returned_qty, products(name, sku), product_batches(batch_no)",
+    label: "Pharmacy",
+    dateField: "created_at",
+    describe: (r) => {
+      const prod = r["products"] as { name?: string } | null;
+      const batch = r["product_batches"] as { batch_no?: string } | null;
+      const returned = Number(r["returned_qty"] ?? 0);
+      return `${prod?.name ?? "Medicine"} × ${String(r["quantity"])}${batch?.batch_no ? ` · batch ${batch.batch_no}` : ""} · ${fmtMoney(r["amount"])}${returned > 0 ? ` · returned ${returned}` : ""}`;
+    },
+  },
+  {
     table: "communications",
     select: "id, created_at, channel, direction, subject, message",
     label: "Communication",
@@ -165,6 +177,7 @@ const TONE: Record<string, string> = {
   Examination: "bg-teal-500/10 text-teal-700 dark:text-teal-300",
   Diagnosis: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
   Prescription: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
+  Pharmacy: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
   Surgery: "bg-rose-500/10 text-rose-700 dark:text-rose-300",
   Invoice: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
 };

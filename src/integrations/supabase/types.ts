@@ -1842,6 +1842,146 @@ export type Database = {
           },
         ]
       }
+      pharmacy_sales: {
+        Row: {
+          amount: number
+          batch_id: string | null
+          branch_id: string | null
+          created_at: string
+          dispensed_by: string | null
+          id: string
+          invoice_id: string | null
+          invoice_item_id: string | null
+          notes: string | null
+          patient_id: string
+          prescription_id: string | null
+          prescription_item_id: string | null
+          product_id: string
+          quantity: number
+          returned_qty: number
+          status: string
+          tax_percent: number
+          unit_price: number
+          updated_at: string
+          visit_id: string | null
+        }
+        Insert: {
+          amount?: number
+          batch_id?: string | null
+          branch_id?: string | null
+          created_at?: string
+          dispensed_by?: string | null
+          id?: string
+          invoice_id?: string | null
+          invoice_item_id?: string | null
+          notes?: string | null
+          patient_id: string
+          prescription_id?: string | null
+          prescription_item_id?: string | null
+          product_id: string
+          quantity?: number
+          returned_qty?: number
+          status?: string
+          tax_percent?: number
+          unit_price?: number
+          updated_at?: string
+          visit_id?: string | null
+        }
+        Update: {
+          amount?: number
+          batch_id?: string | null
+          branch_id?: string | null
+          created_at?: string
+          dispensed_by?: string | null
+          id?: string
+          invoice_id?: string | null
+          invoice_item_id?: string | null
+          notes?: string | null
+          patient_id?: string
+          prescription_id?: string | null
+          prescription_item_id?: string | null
+          product_id?: string
+          quantity?: number
+          returned_qty?: number
+          status?: string
+          tax_percent?: number
+          unit_price?: number
+          updated_at?: string
+          visit_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacy_sales_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "product_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_dispensed_by_fkey"
+            columns: ["dispensed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_invoice_item_id_fkey"
+            columns: ["invoice_item_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_prescription_id_fkey"
+            columns: ["prescription_id"]
+            isOneToOne: false
+            referencedRelation: "prescriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_prescription_item_id_fkey"
+            columns: ["prescription_item_id"]
+            isOneToOne: false
+            referencedRelation: "prescription_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "visits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prescription_items: {
         Row: {
           created_at: string

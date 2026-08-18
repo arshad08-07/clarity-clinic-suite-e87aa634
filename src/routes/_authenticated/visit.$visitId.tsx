@@ -9,6 +9,7 @@ import { NewInvoiceDialog } from "@/components/new-invoice-dialog";
 import { OrderDiagnosticsDialog } from "@/components/order-diagnostics-dialog";
 
 import { PageHeader } from "@/components/page-header";
+import { PharmacyDispense } from "@/components/pharmacy-dispense";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -202,6 +203,7 @@ function VisitWorkspace() {
               <TabsTrigger value="optometry">Optometry</TabsTrigger>
               <TabsTrigger value="consultation">Consultation</TabsTrigger>
               <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
+              <TabsTrigger value="pharmacy">Pharmacy</TabsTrigger>
             </TabsList>
             <TabsContent value="optometry" className="mt-4">
               <OptometryForm visit={v} onCompleted={() => move("with_doctor")} />
@@ -212,6 +214,10 @@ function VisitWorkspace() {
             <TabsContent value="diagnostics" className="mt-4">
               <DiagnosticsSection visit={v} onSend={move} />
             </TabsContent>
+            <TabsContent value="pharmacy" className="mt-4">
+              <PharmacyDispense visitId={visitId} />
+            </TabsContent>
+
           </Tabs>
 
         </div>
