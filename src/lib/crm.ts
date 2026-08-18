@@ -53,9 +53,12 @@ export function useLogLeadActivity() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (values: Row) => {
-      const { data: auth } = await db.rpc("noop_never_called").catch?.(() => ({ data: null })) ?? { data: null };
-      void auth;
-      const { data, error } = await db.from("lead_activities").insert(values).select().single();
+      const { data: auth } = await supabase.auth.getUser();
+      const { data, error } = await db
+        .from("lead_activities")
+        .insert({ created_by: auth.user?.id ?? null, ...values })
+        .select()
+        .single();
       if (error) throw error;
       return data as Row;
     },
