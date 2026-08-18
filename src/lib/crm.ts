@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { supabase } from "@/integrations/supabase/client";
 import { db, errorMessage, type Row } from "@/lib/api";
 
 /** Possible existing patients that share the lead's phone or email. */
