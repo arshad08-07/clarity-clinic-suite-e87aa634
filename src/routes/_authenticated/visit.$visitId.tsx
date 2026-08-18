@@ -5,7 +5,9 @@ import { toast } from "sonner";
 
 import { DiagnosticOrderPanel, statusVariant } from "@/components/diagnostic-order-panel";
 import { EmptyState } from "@/components/empty-state";
+import { NewInvoiceDialog } from "@/components/new-invoice-dialog";
 import { OrderDiagnosticsDialog } from "@/components/order-diagnostics-dialog";
+
 import { PageHeader } from "@/components/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
