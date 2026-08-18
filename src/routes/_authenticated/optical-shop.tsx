@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { ResourceModule } from "@/components/resource-module";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { opticalOrdersConfig, opticalShopConfig } from "@/lib/module-configs";
 
@@ -24,7 +25,18 @@ function OpticalShopPage() {
         <TabsTrigger value="stock">Stock</TabsTrigger>
       </TabsList>
       <TabsContent value="orders" className="mt-4">
-        <ResourceModule config={opticalOrdersConfig} />
+        <ResourceModule
+          config={{
+            ...opticalOrdersConfig,
+            rowActions: (row) => (
+              <Button asChild size="sm" variant="outline">
+                <Link to="/optical-order/$orderId" params={{ orderId: String(row["id"]) }}>
+                  Open
+                </Link>
+              </Button>
+            ),
+          }}
+        />
       </TabsContent>
       <TabsContent value="stock" className="mt-4">
         <ResourceModule config={opticalShopConfig} />
