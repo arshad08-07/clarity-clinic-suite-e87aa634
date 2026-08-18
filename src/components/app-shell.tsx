@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
 import { Bell, LogOut, Menu, Eye } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { DocumentFooter, DocumentHeader } from "@/components/document-header";
 import { RouteGuard } from "@/components/route-guard";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -82,7 +83,8 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { profile, roles, user } = useAuth();
+  const { profile, roles, user, primaryBranchId } = useAuth();
+  const { settings } = useSettings(primaryBranchId);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -93,6 +95,9 @@ export function AppShell({ children }: { children: ReactNode }) {
     pageSize: 5,
     enabled: !!user,
   });
+
+  // Keep non-React helpers (money formatting, printed documents) in sync.
+  useEffect(() => setSettingsSnapshot(settings), [settings]);
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
@@ -193,7 +198,9 @@ export function AppShell({ children }: { children: ReactNode }) {
         </header>
 
         <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6">
+          <DocumentHeader />
           <RouteGuard>{children}</RouteGuard>
+          <DocumentFooter />
         </main>
 
       </div>
