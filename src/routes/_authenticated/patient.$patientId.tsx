@@ -249,6 +249,33 @@ function PatientRecord() {
   });
 
   const p = patient.data;
+  const leadId = p?.["lead_id"] ? String(p["lead_id"]) : null;
+
+  const lead = useQuery({
+    queryKey: ["patient-lead", leadId],
+    enabled: !!leadId,
+    queryFn: async () => {
+      const { data } = await db
+        .from("leads")
+        .select("id, name, source, campaign, status, created_at")
+        .eq("id", leadId)
+        .maybeSingle();
+      return (data ?? null) as Row | null;
+    },
+  });
+
+  const leadActivities = useQuery({
+    queryKey: ["patient-lead-activities", leadId],
+    enabled: !!leadId,
+    queryFn: async () => {
+      const { data } = await db
+        .from("lead_activities")
+        .select("id, activity, outcome, created_at")
+        .eq("lead_id", leadId)
+        .order("created_at", { ascending: false });
+      return (data ?? []) as Row[];
+    },
+  });
 
   if (patient.isLoading) return <Skeleton className="h-64 w-full" />;
   if (!p) return <EmptyState title="Patient not found" description="This record no longer exists." />;
