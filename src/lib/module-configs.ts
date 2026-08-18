@@ -469,15 +469,26 @@ export const surgeriesConfig: ResourceConfig = {
       inTable: false,
       section: "Clinical",
     },
-    { name: "consent_signed", label: "Consent signed", type: "boolean", defaultValue: false, section: "Clinical" },
-    { name: "estimated_cost", label: "Estimated cost", type: "money", section: "Clinical" },
+    {
+      name: "consent_status",
+      label: "Consent",
+      type: "select",
+      options: opts("pending", "signed", "declined"),
+      defaultValue: "pending",
+      section: "Clinical",
+    },
+    { name: "estimate_amount", label: "Estimate", type: "money", section: "Clinical" },
+    { name: "discharge_summary", label: "Discharge summary", type: "textarea", full: true, inTable: false, section: "Notes" },
     { name: "pre_op_notes", label: "Pre-op notes", type: "textarea", full: true, inTable: false, section: "Notes" },
     { name: "op_notes", label: "Operative notes", type: "textarea", full: true, inTable: false, section: "Notes" },
     { name: "post_op_notes", label: "Post-op notes", type: "textarea", full: true, inTable: false, section: "Notes" },
     { name: "complications", label: "Complications", type: "textarea", full: true, inTable: false, section: "Notes" },
     { ...branchRef(), section: "Notes" },
   ],
-  filters: [{ name: "status", label: "Status", type: "select", options: SURGERY_STATUS }],
+  filters: [
+    { name: "status", label: "Status", type: "select", options: SURGERY_STATUS },
+    { name: "consent_status", label: "Consent", type: "select", options: opts("pending", "signed", "declined") },
+  ],
 };
 
 export const otRoomsConfig: ResourceConfig = {
