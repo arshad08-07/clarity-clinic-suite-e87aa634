@@ -47,6 +47,7 @@ import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedSurgeriesRouteImport } from './routes/_authenticated/surgeries'
 import { Route as AuthenticatedInvoiceInvoiceIdRouteImport } from './routes/_authenticated/invoice.$invoiceId'
 import { Route as AuthenticatedPatientPatientIdRouteImport } from './routes/_authenticated/patient.$patientId'
+import { Route as AuthenticatedPurchaseOrderPoIdRouteImport } from './routes/_authenticated/purchase-order.$poId'
 import { Route as AuthenticatedVisitVisitIdRouteImport } from './routes/_authenticated/visit.$visitId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -248,6 +249,12 @@ const AuthenticatedPatientPatientIdRoute =
     path: '/patient/$patientId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPurchaseOrderPoIdRoute =
+  AuthenticatedPurchaseOrderPoIdRouteImport.update({
+    id: '/purchase-order/$poId',
+    path: '/purchase-order/$poId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedVisitVisitIdRoute =
   AuthenticatedVisitVisitIdRouteImport.update({
     id: '/visit/$visitId',
@@ -293,6 +300,7 @@ export interface FileRoutesByFullPath {
   '/surgeries': typeof AuthenticatedSurgeriesRoute
   '/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
+  '/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
 export interface FileRoutesByTo {
@@ -333,6 +341,7 @@ export interface FileRoutesByTo {
   '/surgeries': typeof AuthenticatedSurgeriesRoute
   '/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
+  '/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
 export interface FileRoutesById {
@@ -375,6 +384,7 @@ export interface FileRoutesById {
   '/_authenticated/surgeries': typeof AuthenticatedSurgeriesRoute
   '/_authenticated/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
   '/_authenticated/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
+  '/_authenticated/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/_authenticated/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
 export interface FileRouteTypes {
@@ -417,6 +427,7 @@ export interface FileRouteTypes {
     | '/surgeries'
     | '/invoice/$invoiceId'
     | '/patient/$patientId'
+    | '/purchase-order/$poId'
     | '/visit/$visitId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -457,6 +468,7 @@ export interface FileRouteTypes {
     | '/surgeries'
     | '/invoice/$invoiceId'
     | '/patient/$patientId'
+    | '/purchase-order/$poId'
     | '/visit/$visitId'
   id:
     | '__root__'
@@ -498,6 +510,7 @@ export interface FileRouteTypes {
     | '/_authenticated/surgeries'
     | '/_authenticated/invoice/$invoiceId'
     | '/_authenticated/patient/$patientId'
+    | '/_authenticated/purchase-order/$poId'
     | '/_authenticated/visit/$visitId'
   fileRoutesById: FileRoutesById
 }
@@ -776,6 +789,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPatientPatientIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/purchase-order/$poId': {
+      id: '/_authenticated/purchase-order/$poId'
+      path: '/purchase-order/$poId'
+      fullPath: '/purchase-order/$poId'
+      preLoaderRoute: typeof AuthenticatedPurchaseOrderPoIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/visit/$visitId': {
       id: '/_authenticated/visit/$visitId'
       path: '/visit/$visitId'
@@ -821,6 +841,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSurgeriesRoute: typeof AuthenticatedSurgeriesRoute
   AuthenticatedInvoiceInvoiceIdRoute: typeof AuthenticatedInvoiceInvoiceIdRoute
   AuthenticatedPatientPatientIdRoute: typeof AuthenticatedPatientPatientIdRoute
+  AuthenticatedPurchaseOrderPoIdRoute: typeof AuthenticatedPurchaseOrderPoIdRoute
   AuthenticatedVisitVisitIdRoute: typeof AuthenticatedVisitVisitIdRoute
 }
 
@@ -860,6 +881,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSurgeriesRoute: AuthenticatedSurgeriesRoute,
   AuthenticatedInvoiceInvoiceIdRoute: AuthenticatedInvoiceInvoiceIdRoute,
   AuthenticatedPatientPatientIdRoute: AuthenticatedPatientPatientIdRoute,
+  AuthenticatedPurchaseOrderPoIdRoute: AuthenticatedPurchaseOrderPoIdRoute,
   AuthenticatedVisitVisitIdRoute: AuthenticatedVisitVisitIdRoute,
 }
 
