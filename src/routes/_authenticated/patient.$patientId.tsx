@@ -107,11 +107,11 @@ const SOURCES: Source[] = [
   },
   {
     table: "surgeries",
-    select: "id, created_at, scheduled_at, procedure, eye, status, iol_power",
+    select: "id, created_at, scheduled_at, procedure, eye, status, iol_power, discharged_at",
     label: "Surgery",
     dateField: "created_at",
     describe: (r) =>
-      `${String(r["procedure"])} · ${String(r["eye"])} · ${titleize(String(r["status"]))}${r["iol_power"] ? ` · IOL ${String(r["iol_power"])}D` : ""}`,
+      `${String(r["procedure"])} · ${String(r["eye"])} · ${titleize(String(r["status"]))}${r["iol_power"] ? ` · IOL ${String(r["iol_power"])}D` : ""}${r["discharged_at"] ? " · discharged" : ""}`,
   },
   {
     table: "optical_orders",
@@ -210,6 +210,7 @@ function PatientRecord() {
             label: s.label,
             when: String(r[s.dateField] ?? r["created_at"] ?? ""),
             text: s.describe(r),
+            surgeryId: s.table === "surgeries" ? String(r["id"]) : null,
           }));
         }),
       );
@@ -288,6 +289,15 @@ function PatientRecord() {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm">{e.text}</p>
                     <p className="text-xs text-muted-foreground">{fmtDateTime(e.when)}</p>
+                    {e.surgeryId ? (
+                      <Link
+                        to="/surgery/$surgeryId"
+                        params={{ surgeryId: e.surgeryId }}
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Open surgery workspace
+                      </Link>
+                    ) : null}
                   </div>
                 </li>
               ))}
