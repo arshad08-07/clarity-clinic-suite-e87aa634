@@ -239,7 +239,9 @@ export function useRaiseOpticalInvoice(orderId: string) {
       if (order["invoice_id"]) throw new Error("This order already has an invoice");
       if (String(order["status"]) === "cancelled") throw new Error("Cancelled orders cannot be billed");
 
-      const { data: no, error: noErr } = await db.rpc("next_invoice_no");
+      const { data: no, error: noErr } = await db.rpc("next_invoice_no", {
+        _branch: (order["branch_id"] as string | null) ?? undefined,
+      });
       if (noErr) throw noErr;
       const { data: inv, error: invErr } = await db
         .from("invoices")

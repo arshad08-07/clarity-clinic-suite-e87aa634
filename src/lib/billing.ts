@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import { db, errorMessage, type Row } from "@/lib/api";
 import { fmtDateTime, fmtMoney } from "@/lib/format";
+import { getSettings } from "@/lib/settings";
 
 export const INVOICE_SELECT =
   "id, invoice_no, invoice_type, patient_id, visit_id, branch_id, subtotal, discount, tax, total, paid_amount, status, notes, created_at, patients(id, mrn, first_name, last_name, phone, address), branches(id, name, address, phone), visits(id, token_no, status, checked_in_at)";
@@ -112,7 +113,9 @@ export function useCreateInvoice() {
       invoice_type?: string;
       notes?: string | null;
     }) => {
-      const { data: no, error: noErr } = await db.rpc("next_invoice_no");
+      const { data: no, error: noErr } = await db.rpc("next_invoice_no", {
+        _branch: values.branch_id ?? undefined,
+      });
       if (noErr) throw noErr;
       const { data, error } = await db
         .from("invoices")
@@ -251,7 +254,9 @@ export function useVisitInvoices(visitId: string) {
 
 /** Opens a printable receipt window for the invoice and its payment history. */
 export function printReceipt(invoice: Row, items: Row[], payments: Row[]) {
-  const clinic = (invoice["branches"] as Row | null)?.["name"] ?? "Vision Care";
+  const { clinic_identity: id, branding, billing } = getSettings();
+  const branch = invoice["branches"] as Row | null;
+  const clinic = id.name || branch?.["name"] || "Vision Care";
   const patient = invoicePatientName(invoice);
   const mrn = (invoice["patients"] as Row | null)?.["mrn"] ?? "—";
   const esc = (s: unknown) =>
@@ -283,11 +288,23 @@ th,td{border-bottom:1px solid #e2e8f0;padding:6px 4px;text-align:left} .r{text-a
 .tot div{display:flex;justify-content:space-between;padding:3px 0}
 .big{font-weight:700;border-top:1px solid #94a3b8;margin-top:4px;padding-top:6px}
 </style></head><body>
-<h1>${esc(clinic)}</h1>
-<div class="muted">${esc((invoice["branches"] as Row | null)?.["address"] ?? "")} ${esc(
-    (invoice["branches"] as Row | null)?.["phone"] ?? "",
+<div style="display:flex;gap:12px;align-items:center;border-bottom:2px solid ${esc(branding.accent)};padding-bottom:10px">
+${branding.show_logo && id.logo_url ? `<img src="${esc(id.logo_url)}" alt="" style="height:46px">` : ""}
+<div><h1>${esc(clinic)}</h1>
+<div class="muted">${esc(
+    [branch?.["name"], id.address || branch?.["address"], id.city, id.state, id.pincode]
+      .filter(Boolean)
+      .join(", "),
   )}</div>
-<h2 style="font-size:15px">Receipt · ${esc(invoice["invoice_no"])}</h2>
+<div class="muted">${esc(
+    [id.phone || branch?.["phone"], id.email, id.website].filter(Boolean).join(" · "),
+  )}</div>
+${branding.show_gst && id.gst_no ? `<div class="muted">${esc(billing.tax_label)} No: ${esc(id.gst_no)}</div>` : ""}
+</div></div>
+${branding.document_header ? `<p class="muted">${esc(branding.document_header)}</p>` : ""}
+<h2 style="font-size:15px">Receipt · ${esc(billing.receipt_prefix)}${esc(
+    String(invoice["invoice_no"]).replace(billing.invoice_prefix, ""),
+  )} · Invoice ${esc(invoice["invoice_no"])}</h2>
 <div class="muted">Raised ${fmtDateTime(String(invoice["created_at"]))} · Type ${esc(invoice["invoice_type"])} · Status ${esc(
     STATUS_LABEL[String(invoice["status"])] ?? invoice["status"],
   )}</div>
@@ -295,7 +312,7 @@ th,td{border-bottom:1px solid #e2e8f0;padding:6px 4px;text-align:left} .r{text-a
 <table><thead><tr><th>Item</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Tax</th><th class="r">Amount</th></tr></thead><tbody>${rows}</tbody></table>
 <div class="tot">
 <div><span>Subtotal</span><span>${fmtMoney(invoice["subtotal"])}</span></div>
-<div><span>Tax</span><span>${fmtMoney(invoice["tax"])}</span></div>
+<div><span>${esc(billing.tax_label)}</span><span>${fmtMoney(invoice["tax"])}</span></div>
 <div><span>Discount</span><span>-${fmtMoney(invoice["discount"])}</span></div>
 <div class="big"><span>Total</span><span>${fmtMoney(invoice["total"])}</span></div>
 <div><span>Paid</span><span>${fmtMoney(invoice["paid_amount"])}</span></div>
@@ -305,7 +322,7 @@ th,td{border-bottom:1px solid #e2e8f0;padding:6px 4px;text-align:left} .r{text-a
 <table><thead><tr><th>Date</th><th>Method</th><th>Reference</th><th class="r">Amount</th></tr></thead><tbody>${
     pays || '<tr><td colspan="4">No payments recorded</td></tr>'
   }</tbody></table>
-<p class="muted" style="margin-top:24px">Computer generated receipt.</p>
+<p class="muted" style="margin-top:24px">${esc(branding.document_footer)}</p>
 <script>window.onload=()=>window.print()</script>
 </body></html>`;
   const w = window.open("", "_blank", "width=820,height=900");
