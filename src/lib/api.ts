@@ -138,7 +138,6 @@ export function useSaveRow(table: string, label = "Record") {
       if (id) {
         const { data, error } = await db.from(table).update(payload).eq("id", id).select().single();
         if (error) throw error;
-        await writeAudit("update", table, id);
         return data as Row;
       }
       if (BRANCH_SCOPED_TABLES.has(table) && !payload["branch_id"]) {
@@ -148,7 +147,6 @@ export function useSaveRow(table: string, label = "Record") {
       const { data, error } = await db.from(table).insert(payload).select().single();
 
       if (error) throw error;
-      await writeAudit("create", table, (data as Row)?.["id"]);
       return data as Row;
     },
     onSuccess: () => {
@@ -165,7 +163,6 @@ export function useDeleteRow(table: string, label = "Record") {
     mutationFn: async (id: string) => {
       const { error } = await db.from(table).delete().eq("id", id);
       if (error) throw error;
-      await writeAudit("delete", table, id);
     },
     onSuccess: () => {
       toast.success(`${label} deleted`);
