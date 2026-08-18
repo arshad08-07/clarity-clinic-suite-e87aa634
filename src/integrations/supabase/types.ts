@@ -1357,16 +1357,24 @@ export type Database = {
         Row: {
           branch_id: string | null
           brand: string | null
+          cancel_reason: string | null
+          cancelled_at: string | null
           coating: string | null
           cost_price: number
           created_at: string
           created_by: string | null
+          delivered_at: string | null
           delivery_date: string | null
           discount: number
+          frame_price: number
           frame_product_id: string | null
           id: string
           invoice_id: string | null
           lens_index: string | null
+          lens_od_price: number
+          lens_od_product_id: string | null
+          lens_os_price: number
+          lens_os_product_id: string | null
           lens_product_id: string | null
           notes: string | null
           optical_prescription_id: string | null
@@ -1374,21 +1382,31 @@ export type Database = {
           quantity: number
           selling_price: number
           status: string
+          stock_applied: boolean
+          tax_percent: number
           updated_at: string
         }
         Insert: {
           branch_id?: string | null
           brand?: string | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
           coating?: string | null
           cost_price?: number
           created_at?: string
           created_by?: string | null
+          delivered_at?: string | null
           delivery_date?: string | null
           discount?: number
+          frame_price?: number
           frame_product_id?: string | null
           id?: string
           invoice_id?: string | null
           lens_index?: string | null
+          lens_od_price?: number
+          lens_od_product_id?: string | null
+          lens_os_price?: number
+          lens_os_product_id?: string | null
           lens_product_id?: string | null
           notes?: string | null
           optical_prescription_id?: string | null
@@ -1396,21 +1414,31 @@ export type Database = {
           quantity?: number
           selling_price?: number
           status?: string
+          stock_applied?: boolean
+          tax_percent?: number
           updated_at?: string
         }
         Update: {
           branch_id?: string | null
           brand?: string | null
+          cancel_reason?: string | null
+          cancelled_at?: string | null
           coating?: string | null
           cost_price?: number
           created_at?: string
           created_by?: string | null
+          delivered_at?: string | null
           delivery_date?: string | null
           discount?: number
+          frame_price?: number
           frame_product_id?: string | null
           id?: string
           invoice_id?: string | null
           lens_index?: string | null
+          lens_od_price?: number
+          lens_od_product_id?: string | null
+          lens_os_price?: number
+          lens_os_product_id?: string | null
           lens_product_id?: string | null
           notes?: string | null
           optical_prescription_id?: string | null
@@ -1418,6 +1446,8 @@ export type Database = {
           quantity?: number
           selling_price?: number
           status?: string
+          stock_applied?: boolean
+          tax_percent?: number
           updated_at?: string
         }
         Relationships: [
@@ -1440,6 +1470,20 @@ export type Database = {
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_lens_od_product_id_fkey"
+            columns: ["lens_od_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_lens_os_product_id_fkey"
+            columns: ["lens_os_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
           {
