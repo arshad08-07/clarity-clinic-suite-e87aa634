@@ -188,7 +188,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           </DropdownMenu>
         </header>
 
-        <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6">{children}</main>
+        <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6">
+          <RouteGuard>{children}</RouteGuard>
+        </main>
+
       </div>
     </div>
   );
