@@ -285,6 +285,32 @@ function PatientRecord() {
               {fmtMoney(payments.data?.billed ?? 0)} / {fmtMoney(payments.data?.paid ?? 0)}
             </p>
           </div>
+          {lead.data ? (
+            <div className="border-t pt-3">
+              <p className="text-xs text-muted-foreground">Enquiry origin</p>
+              <p className="font-medium">
+                {titleize(String(lead.data["source"] ?? "lead"))}
+                {lead.data["campaign"] ? ` · ${String(lead.data["campaign"])}` : ""}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Converted from lead “{String(lead.data["name"])}”
+                {p["converted_at"] ? ` on ${fmtDateTime(String(p["converted_at"]))}` : ""}
+              </p>
+              {leadActivities.data?.length ? (
+                <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                  {leadActivities.data.slice(0, 5).map((a) => (
+                    <li key={String(a["id"])}>
+                      {fmtDateTime(String(a["created_at"]))} · {String(a["activity"])}
+                      {a["outcome"] ? ` — ${String(a["outcome"])}` : ""}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <Link to="/leads" className="text-xs text-primary hover:underline">
+                Open CRM pipeline
+              </Link>
+            </div>
+          ) : null}
         </section>
 
         <section className="surface-card p-5 lg:col-span-2">
