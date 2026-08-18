@@ -120,21 +120,12 @@ export function useCount(
   });
 }
 
-async function writeAudit(action: string, entity: string, entityId?: string) {
-  try {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) return;
-    await db.from("audit_logs").insert({
-      user_id: data.user.id,
-      action,
-      entity,
-      entity_id: entityId ?? null,
-      details: {},
-    });
-  } catch {
-    /* audit failures must never block the user */
-  }
-}
+/**
+ * Audit trail is written by database triggers (audit_row_change) on every
+ * sensitive table, so it cannot be bypassed by skipping the UI. No client-side
+ * audit write happens here — that would only duplicate rows.
+ */
+
 
 export function useSaveRow(table: string, label = "Record") {
   const qc = useQueryClient();
