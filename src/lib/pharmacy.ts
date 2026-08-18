@@ -13,7 +13,7 @@ import { db, errorMessage, type Row } from "@/lib/api";
  */
 
 export const PHARMACY_SALE_SELECT =
-  "id, created_at, quantity, unit_price, tax_percent, amount, status, returned_qty, notes, patient_id, visit_id, prescription_id, prescription_item_id, invoice_id, invoice_item_id, " +
+  "id, created_at, quantity, unit_price, tax_percent, amount, status, returned_qty, notes, patient_id, visit_id, product_id, batch_id, prescription_id, prescription_item_id, invoice_id, invoice_item_id, " +
   "products(id, name, sku, selling_price, tax_percent), product_batches(id, batch_no, expiry_date, quantity), " +
   "patients(id, mrn, first_name, last_name, phone), profiles:dispensed_by(id, full_name), invoices(id, invoice_no, status, total, paid_amount)";
 
