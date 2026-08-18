@@ -249,6 +249,33 @@ function PatientRecord() {
   });
 
   const p = patient.data;
+  const leadId = p?.["lead_id"] ? String(p["lead_id"]) : null;
+
+  const lead = useQuery({
+    queryKey: ["patient-lead", leadId],
+    enabled: !!leadId,
+    queryFn: async () => {
+      const { data } = await db
+        .from("leads")
+        .select("id, name, source, campaign, status, created_at")
+        .eq("id", leadId)
+        .maybeSingle();
+      return (data ?? null) as Row | null;
+    },
+  });
+
+  const leadActivities = useQuery({
+    queryKey: ["patient-lead-activities", leadId],
+    enabled: !!leadId,
+    queryFn: async () => {
+      const { data } = await db
+        .from("lead_activities")
+        .select("id, activity, outcome, created_at")
+        .eq("lead_id", leadId)
+        .order("created_at", { ascending: false });
+      return (data ?? []) as Row[];
+    },
+  });
 
   if (patient.isLoading) return <Skeleton className="h-64 w-full" />;
   if (!p) return <EmptyState title="Patient not found" description="This record no longer exists." />;
@@ -285,6 +312,32 @@ function PatientRecord() {
               {fmtMoney(payments.data?.billed ?? 0)} / {fmtMoney(payments.data?.paid ?? 0)}
             </p>
           </div>
+          {lead.data ? (
+            <div className="border-t pt-3">
+              <p className="text-xs text-muted-foreground">Enquiry origin</p>
+              <p className="font-medium">
+                {titleize(String(lead.data["source"] ?? "lead"))}
+                {lead.data["campaign"] ? ` · ${String(lead.data["campaign"])}` : ""}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Converted from lead “{String(lead.data["name"])}”
+                {p["converted_at"] ? ` on ${fmtDateTime(String(p["converted_at"]))}` : ""}
+              </p>
+              {leadActivities.data?.length ? (
+                <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                  {leadActivities.data.slice(0, 5).map((a) => (
+                    <li key={String(a["id"])}>
+                      {fmtDateTime(String(a["created_at"]))} · {String(a["activity"])}
+                      {a["outcome"] ? ` — ${String(a["outcome"])}` : ""}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <Link to="/leads" className="text-xs text-primary hover:underline">
+                Open CRM pipeline
+              </Link>
+            </div>
+          ) : null}
         </section>
 
         <section className="surface-card p-5 lg:col-span-2">
