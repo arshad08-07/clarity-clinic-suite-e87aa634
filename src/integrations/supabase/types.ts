@@ -822,6 +822,9 @@ export type Database = {
           item_type: string
           product_id: string | null
           quantity: number
+          source_id: string | null
+          source_ref: string | null
+          source_type: string | null
           tax_percent: number
           unit_price: number
         }
@@ -835,6 +838,9 @@ export type Database = {
           item_type?: string
           product_id?: string | null
           quantity?: number
+          source_id?: string | null
+          source_ref?: string | null
+          source_type?: string | null
           tax_percent?: number
           unit_price?: number
         }
@@ -848,6 +854,9 @@ export type Database = {
           item_type?: string
           product_id?: string | null
           quantity?: number
+          source_id?: string | null
+          source_ref?: string | null
+          source_type?: string | null
           tax_percent?: number
           unit_price?: number
         }
