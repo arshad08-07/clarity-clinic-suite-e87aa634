@@ -1174,6 +1174,7 @@ export type Database = {
           model_code: string | null
           name: string
           price: number | null
+          product_id: string | null
           type: string | null
           unit_cost: number | null
         }
@@ -1185,6 +1186,7 @@ export type Database = {
           model_code?: string | null
           name: string
           price?: number | null
+          product_id?: string | null
           type?: string | null
           unit_cost?: number | null
         }
@@ -1196,10 +1198,19 @@ export type Database = {
           model_code?: string | null
           name?: string
           price?: number | null
+          product_id?: string | null
           type?: string | null
           unit_cost?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "iol_models_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lead_activities: {
         Row: {
@@ -2715,16 +2726,26 @@ export type Database = {
           biometry_axial_length: number | null
           biometry_k1: number | null
           biometry_k2: number | null
+          biometry_order_id: string | null
           branch_id: string | null
           complications: string | null
+          consent_document_id: string | null
           consent_signed: boolean
+          consent_signed_at: string | null
+          consent_status: string
           consumables: string | null
           created_at: string
+          discharge_instructions: string | null
+          discharge_summary: string | null
+          discharged_at: string | null
           duration_min: number
           ended_at: string | null
+          estimate_amount: number | null
+          estimate_notes: string | null
           estimated_cost: number | null
           eye: Database["public"]["Enums"]["eye_side"]
           id: string
+          invoice_id: string | null
           iol_inventory_id: string | null
           iol_power: number | null
           nurse_id: string | null
@@ -2733,12 +2754,19 @@ export type Database = {
           patient_id: string
           post_op_notes: string | null
           pre_op_notes: string | null
+          preop_checklist: Json
+          preop_override: boolean
+          preop_override_reason: string | null
           procedure: string
+          recommendation_notes: string | null
+          recommended_at: string | null
+          recommended_by: string | null
           scheduled_at: string | null
           started_at: string | null
           status: Database["public"]["Enums"]["surgery_status"]
           surgeon_id: string | null
           updated_at: string
+          visit_id: string | null
         }
         Insert: {
           anesthesia?: string | null
@@ -2746,16 +2774,26 @@ export type Database = {
           biometry_axial_length?: number | null
           biometry_k1?: number | null
           biometry_k2?: number | null
+          biometry_order_id?: string | null
           branch_id?: string | null
           complications?: string | null
+          consent_document_id?: string | null
           consent_signed?: boolean
+          consent_signed_at?: string | null
+          consent_status?: string
           consumables?: string | null
           created_at?: string
+          discharge_instructions?: string | null
+          discharge_summary?: string | null
+          discharged_at?: string | null
           duration_min?: number
           ended_at?: string | null
+          estimate_amount?: number | null
+          estimate_notes?: string | null
           estimated_cost?: number | null
           eye?: Database["public"]["Enums"]["eye_side"]
           id?: string
+          invoice_id?: string | null
           iol_inventory_id?: string | null
           iol_power?: number | null
           nurse_id?: string | null
@@ -2764,12 +2802,19 @@ export type Database = {
           patient_id: string
           post_op_notes?: string | null
           pre_op_notes?: string | null
+          preop_checklist?: Json
+          preop_override?: boolean
+          preop_override_reason?: string | null
           procedure: string
+          recommendation_notes?: string | null
+          recommended_at?: string | null
+          recommended_by?: string | null
           scheduled_at?: string | null
           started_at?: string | null
           status?: Database["public"]["Enums"]["surgery_status"]
           surgeon_id?: string | null
           updated_at?: string
+          visit_id?: string | null
         }
         Update: {
           anesthesia?: string | null
@@ -2777,16 +2822,26 @@ export type Database = {
           biometry_axial_length?: number | null
           biometry_k1?: number | null
           biometry_k2?: number | null
+          biometry_order_id?: string | null
           branch_id?: string | null
           complications?: string | null
+          consent_document_id?: string | null
           consent_signed?: boolean
+          consent_signed_at?: string | null
+          consent_status?: string
           consumables?: string | null
           created_at?: string
+          discharge_instructions?: string | null
+          discharge_summary?: string | null
+          discharged_at?: string | null
           duration_min?: number
           ended_at?: string | null
+          estimate_amount?: number | null
+          estimate_notes?: string | null
           estimated_cost?: number | null
           eye?: Database["public"]["Enums"]["eye_side"]
           id?: string
+          invoice_id?: string | null
           iol_inventory_id?: string | null
           iol_power?: number | null
           nurse_id?: string | null
@@ -2795,12 +2850,19 @@ export type Database = {
           patient_id?: string
           post_op_notes?: string | null
           pre_op_notes?: string | null
+          preop_checklist?: Json
+          preop_override?: boolean
+          preop_override_reason?: string | null
           procedure?: string
+          recommendation_notes?: string | null
+          recommended_at?: string | null
+          recommended_by?: string | null
           scheduled_at?: string | null
           started_at?: string | null
           status?: Database["public"]["Enums"]["surgery_status"]
           surgeon_id?: string | null
           updated_at?: string
+          visit_id?: string | null
         }
         Relationships: [
           {
@@ -2811,10 +2873,31 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "surgeries_biometry_order_id_fkey"
+            columns: ["biometry_order_id"]
+            isOneToOne: false
+            referencedRelation: "diagnostic_orders"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "surgeries_branch_id_fkey"
             columns: ["branch_id"]
             isOneToOne: false
             referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surgeries_consent_document_id_fkey"
+            columns: ["consent_document_id"]
+            isOneToOne: false
+            referencedRelation: "patient_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surgeries_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
             referencedColumns: ["id"]
           },
           {
@@ -2846,10 +2929,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "surgeries_recommended_by_fkey"
+            columns: ["recommended_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "surgeries_surgeon_id_fkey"
             columns: ["surgeon_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surgeries_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "visits"
             referencedColumns: ["id"]
           },
         ]
@@ -2969,6 +3066,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      available_iol_inventory: {
+        Args: { _branch?: string }
+        Returns: {
+          branch_id: string
+          expiry_date: string
+          id: string
+          manufacturer: string
+          model_name: string
+          power: number
+          price: number
+          serial_no: string
+        }[]
+      }
       checkin_appointment: {
         Args: { _appointment_id: string }
         Returns: {
