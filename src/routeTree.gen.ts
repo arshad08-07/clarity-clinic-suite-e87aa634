@@ -45,6 +45,7 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
 import { Route as AuthenticatedSurgeriesRouteImport } from './routes/_authenticated/surgeries'
+import { Route as AuthenticatedInvoiceInvoiceIdRouteImport } from './routes/_authenticated/invoice.$invoiceId'
 import { Route as AuthenticatedPatientPatientIdRouteImport } from './routes/_authenticated/patient.$patientId'
 import { Route as AuthenticatedVisitVisitIdRouteImport } from './routes/_authenticated/visit.$visitId'
 
@@ -235,6 +236,12 @@ const AuthenticatedSurgeriesRoute = AuthenticatedSurgeriesRouteImport.update({
   path: '/surgeries',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInvoiceInvoiceIdRoute =
+  AuthenticatedInvoiceInvoiceIdRouteImport.update({
+    id: '/invoice/$invoiceId',
+    path: '/invoice/$invoiceId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPatientPatientIdRoute =
   AuthenticatedPatientPatientIdRouteImport.update({
     id: '/patient/$patientId',
@@ -284,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/staff': typeof AuthenticatedStaffRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
+  '/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
   '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
@@ -323,6 +331,7 @@ export interface FileRoutesByTo {
   '/staff': typeof AuthenticatedStaffRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
+  '/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
   '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
@@ -364,6 +373,7 @@ export interface FileRoutesById {
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
   '/_authenticated/surgeries': typeof AuthenticatedSurgeriesRoute
+  '/_authenticated/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
   '/_authenticated/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
   '/_authenticated/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
 }
@@ -405,6 +415,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/suppliers'
     | '/surgeries'
+    | '/invoice/$invoiceId'
     | '/patient/$patientId'
     | '/visit/$visitId'
   fileRoutesByTo: FileRoutesByTo
@@ -444,6 +455,7 @@ export interface FileRouteTypes {
     | '/staff'
     | '/suppliers'
     | '/surgeries'
+    | '/invoice/$invoiceId'
     | '/patient/$patientId'
     | '/visit/$visitId'
   id:
@@ -484,6 +496,7 @@ export interface FileRouteTypes {
     | '/_authenticated/staff'
     | '/_authenticated/suppliers'
     | '/_authenticated/surgeries'
+    | '/_authenticated/invoice/$invoiceId'
     | '/_authenticated/patient/$patientId'
     | '/_authenticated/visit/$visitId'
   fileRoutesById: FileRoutesById
@@ -749,6 +762,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSurgeriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/invoice/$invoiceId': {
+      id: '/_authenticated/invoice/$invoiceId'
+      path: '/invoice/$invoiceId'
+      fullPath: '/invoice/$invoiceId'
+      preLoaderRoute: typeof AuthenticatedInvoiceInvoiceIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/patient/$patientId': {
       id: '/_authenticated/patient/$patientId'
       path: '/patient/$patientId'
@@ -799,6 +819,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
   AuthenticatedSurgeriesRoute: typeof AuthenticatedSurgeriesRoute
+  AuthenticatedInvoiceInvoiceIdRoute: typeof AuthenticatedInvoiceInvoiceIdRoute
   AuthenticatedPatientPatientIdRoute: typeof AuthenticatedPatientPatientIdRoute
   AuthenticatedVisitVisitIdRoute: typeof AuthenticatedVisitVisitIdRoute
 }
@@ -837,6 +858,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
   AuthenticatedSurgeriesRoute: AuthenticatedSurgeriesRoute,
+  AuthenticatedInvoiceInvoiceIdRoute: AuthenticatedInvoiceInvoiceIdRoute,
   AuthenticatedPatientPatientIdRoute: AuthenticatedPatientPatientIdRoute,
   AuthenticatedVisitVisitIdRoute: AuthenticatedVisitVisitIdRoute,
 }
