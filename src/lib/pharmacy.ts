@@ -155,7 +155,9 @@ async function ensurePharmacyInvoice(input: DispenseInput): Promise<Row> {
   const found = ((existing ?? []) as Row[])[0];
   if (found) return found;
 
-  const { data: no, error: noErr } = await db.rpc("next_invoice_no");
+  const { data: no, error: noErr } = await db.rpc("next_invoice_no", {
+    _branch: input.branch_id ?? undefined,
+  });
   if (noErr) throw noErr;
   const { data, error } = await db
     .from("invoices")

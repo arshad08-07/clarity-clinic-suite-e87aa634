@@ -27,14 +27,28 @@ export function fmtTime(value?: string | null) {
   }
 }
 
+let moneyCurrency = "INR";
+let moneyLocale = "en-IN";
+
+/** Set from clinic billing settings so every amount uses the configured currency. */
+export function setMoneyFormat(currency?: string | null, locale?: string | null) {
+  moneyCurrency = currency?.trim() || "INR";
+  moneyLocale = locale?.trim() || "en-IN";
+}
+
 export function fmtMoney(value?: number | string | null) {
   const n = Number(value ?? 0);
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 2,
-  }).format(Number.isFinite(n) ? n : 0);
+  try {
+    return new Intl.NumberFormat(moneyLocale, {
+      style: "currency",
+      currency: moneyCurrency,
+      maximumFractionDigits: 2,
+    }).format(Number.isFinite(n) ? n : 0);
+  } catch {
+    return `${moneyCurrency} ${(Number.isFinite(n) ? n : 0).toFixed(2)}`;
+  }
 }
+
 
 export function titleize(value?: string | null) {
   if (!value) return "—";
