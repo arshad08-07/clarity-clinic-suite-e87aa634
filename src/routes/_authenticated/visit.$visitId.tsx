@@ -216,7 +216,37 @@ function VisitWorkspace() {
   );
 }
 
+/** Billing entry point for the current encounter: open or raise its invoice. */
+function VisitBillingActions({ visit }: { visit: Row }) {
+  const visitId = String(visit["id"]);
+  const invoices = useVisitInvoices(visitId);
+  const existing = invoices.data?.[0];
+  if (existing) {
+    return (
+      <Button asChild variant="outline" size="sm">
+        <Link to="/invoice/$invoiceId" params={{ invoiceId: String(existing["id"]) }}>
+          Invoice {String(existing["invoice_no"])}
+        </Link>
+      </Button>
+    );
+  }
+  return (
+    <NewInvoiceDialog
+      trigger={
+        <Button variant="outline" size="sm">
+          Create invoice
+        </Button>
+      }
+      patientId={String(visit["patient_id"])}
+      visitId={visitId}
+      {...(visit["branch_id"] ? { branchId: String(visit["branch_id"]) } : {})}
+      defaultType="consultation"
+    />
+  );
+}
+
 function Detail({ label, value }: { label: string; value: unknown }) {
+
   return (
     <div>
       <p className="text-xs text-muted-foreground">{label}</p>
