@@ -137,11 +137,16 @@ const SOURCES: Source[] = [
   },
   {
     table: "follow_ups",
-    select: "id, created_at, due_date, type, is_done, notes",
+    select: "id, created_at, due_date, type, status, is_done, reason, notes, outcome_notes, cancel_reason",
     label: "Follow-up",
     dateField: "due_date",
-    describe: (r) => `${titleize(String(r["type"] ?? "review"))} · ${r["is_done"] ? "Completed" : "Pending"}${r["notes"] ? ` · ${String(r["notes"])}` : ""}`,
+    describe: (r) => {
+      const status = String(r["status"] ?? (r["is_done"] ? "completed" : "upcoming"));
+      const tail = r["outcome_notes"] ?? r["cancel_reason"] ?? r["reason"] ?? r["notes"];
+      return `${titleize(String(r["type"] ?? "review"))} · ${titleize(status)}${tail ? ` · ${String(tail)}` : ""}`;
+    },
   },
+
   {
     table: "patient_documents",
     select: "id, created_at, doc_type, title, file_url",
@@ -163,11 +168,17 @@ const SOURCES: Source[] = [
   },
   {
     table: "communications",
-    select: "id, created_at, channel, direction, subject, message",
+    select: "id, created_at, channel, direction, subject, message, status, purpose, sent_at, failure_reason",
     label: "Communication",
     dateField: "created_at",
-    describe: (r) => `${titleize(String(r["channel"]))} ${String(r["direction"])} · ${String(r["subject"] ?? r["message"] ?? "")}`,
+    describe: (r) => {
+      const purpose = r["purpose"] === "follow_up_reminder" ? "Follow-up reminder" : titleize(String(r["direction"]));
+      const status = titleize(String(r["status"] ?? ""));
+      const fail = r["failure_reason"] ? ` · ${String(r["failure_reason"])}` : "";
+      return `${titleize(String(r["channel"]))} · ${purpose} · ${status}${fail} · ${String(r["subject"] ?? r["message"] ?? "")}`;
+    },
   },
+
 ];
 
 const TONE: Record<string, string> = {
