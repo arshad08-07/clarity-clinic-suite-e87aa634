@@ -3439,9 +3439,7 @@ export type Database = {
           phone: string
         }[]
       }
-      next_invoice_no:
-        | { Args: never; Returns: string }
-        | { Args: { _branch?: string }; Returns: string }
+      next_invoice_no: { Args: { _branch?: string }; Returns: string }
       next_mrn: { Args: never; Returns: string }
       next_po_no: { Args: never; Returns: string }
       owns_patient: { Args: { _patient_id: string }; Returns: boolean }
