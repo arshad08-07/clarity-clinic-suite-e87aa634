@@ -206,6 +206,7 @@ function VisitWorkspace() {
               <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
               <TabsTrigger value="pharmacy">Pharmacy</TabsTrigger>
               <TabsTrigger value="surgery">Surgery</TabsTrigger>
+              <TabsTrigger value="optical">Optical</TabsTrigger>
             </TabsList>
             <TabsContent value="optometry" className="mt-4">
               <OptometryForm visit={v} onCompleted={() => move("with_doctor")} />
@@ -222,6 +223,10 @@ function VisitWorkspace() {
             <TabsContent value="surgery" className="mt-4">
               <VisitSurgerySection visit={v} />
             </TabsContent>
+            <TabsContent value="optical" className="mt-4">
+              <VisitOpticalSection visit={v} />
+            </TabsContent>
+
 
           </Tabs>
 
