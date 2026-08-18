@@ -987,7 +987,7 @@ export const opticalOrdersConfig: ResourceConfig = {
       name: "status",
       label: "Status",
       type: "select",
-      options: opts("ordered", "in_production", "ready", "delivered", "cancelled"),
+      options: opts("ordered", "processing", "ready", "delivered", "cancelled"),
       defaultValue: "ordered",
       section: "Fulfilment",
     },
@@ -997,7 +997,7 @@ export const opticalOrdersConfig: ResourceConfig = {
     { name: "created_at", label: "Placed", type: "date", inForm: false },
   ],
   filters: [
-    { name: "status", label: "Status", type: "select", options: opts("ordered", "in_production", "ready", "delivered", "cancelled") },
+    { name: "status", label: "Status", type: "select", options: opts("ordered", "processing", "ready", "delivered", "cancelled") },
   ],
 };
 

@@ -115,7 +115,7 @@ const SOURCES: Source[] = [
   },
   {
     table: "optical_orders",
-    select: "id, created_at, status, brand, coating, selling_price",
+    select: "id, created_at, status, brand, coating, selling_price, invoice_id, delivered_at",
     label: "Optical order",
     dateField: "created_at",
     describe: (r) => `${titleize(String(r["status"]))}${r["brand"] ? ` · ${String(r["brand"])}` : ""} · ${fmtMoney(r["selling_price"] as number)}`,
@@ -211,6 +211,7 @@ function PatientRecord() {
             when: String(r[s.dateField] ?? r["created_at"] ?? ""),
             text: s.describe(r),
             surgeryId: s.table === "surgeries" ? String(r["id"]) : null,
+            opticalOrderId: s.table === "optical_orders" ? String(r["id"]) : null,
           }));
         }),
       );
@@ -296,6 +297,15 @@ function PatientRecord() {
                         className="text-xs text-primary hover:underline"
                       >
                         Open surgery workspace
+                      </Link>
+                    ) : null}
+                    {e.opticalOrderId ? (
+                      <Link
+                        to="/optical-order/$orderId"
+                        params={{ orderId: e.opticalOrderId }}
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Open optical order
                       </Link>
                     ) : null}
                   </div>
