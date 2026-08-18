@@ -16,7 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { VisitOpticalSection } from "@/components/visit-optical-section";
 import { VisitSurgerySection } from "@/components/visit-surgery-section";
+
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { db, errorMessage, type Row } from "@/lib/api";
