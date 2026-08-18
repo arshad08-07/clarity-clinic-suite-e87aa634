@@ -1,8 +1,10 @@
 import type { Session, User } from "@supabase/supabase-js";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
+import { setSessionContext } from "@/lib/access";
 import { supabase } from "@/integrations/supabase/client";
+
 
 export type AppRole =
   | "super_admin"
