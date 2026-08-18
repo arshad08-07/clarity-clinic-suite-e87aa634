@@ -125,6 +125,7 @@ function VisitWorkspace() {
         actions={
           <>
             <Badge variant={status === "completed" ? "secondary" : "default"}>{STAGE_LABEL[status] ?? status}</Badge>
+            <VisitBillingActions visit={v} />
             {p ? (
               <Button asChild variant="outline" size="sm">
                 <Link to="/patient/$patientId" params={{ patientId: String(p["id"]) }}>
@@ -137,6 +138,7 @@ function VisitWorkspace() {
             </Button>
           </>
         }
+
       />
 
       <div className="surface-card mb-4 flex flex-wrap items-center gap-2 p-4">
