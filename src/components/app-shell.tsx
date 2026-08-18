@@ -15,7 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { RouteGuard } from "@/components/route-guard";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+
 import { ROLE_LABELS, useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useList } from "@/lib/api";
@@ -188,7 +190,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           </DropdownMenu>
         </header>
 
-        <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6">{children}</main>
+        <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6">
+          <RouteGuard>{children}</RouteGuard>
+        </main>
+
       </div>
     </div>
   );

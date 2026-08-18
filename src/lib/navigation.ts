@@ -108,7 +108,8 @@ export const NAV: NavGroup[] = [
   {
     label: "Administration",
     items: [
-      { to: "/staff", label: "Staff & Roles", icon: "IdCard", roles: ADMIN },
+      { to: "/staff", label: "Staff Directory", icon: "IdCard", roles: ADMIN },
+      { to: "/roles", label: "Roles & Access", icon: "ShieldCheck", roles: ADMIN },
       { to: "/branches", label: "Branches", icon: "Building2", roles: ADMIN },
       { to: "/equipment", label: "Equipment", icon: "Microscope", roles: [...ADMIN, "inventory_manager"] },
       { to: "/catalog", label: "Clinical Catalog", icon: "BookMarked", roles: ADMIN },
@@ -125,3 +126,31 @@ export function visibleNav(roles: AppRole[]): NavGroup[] {
     items: g.items.filter((i) => !i.roles || i.roles.some((r) => roles.includes(r))),
   })).filter((g) => g.items.length > 0);
 }
+
+/** Detail screens that are not in the sidebar but still need a role gate. */
+const DETAIL_ROUTE_ROLES: Record<string, AppRole[]> = {
+  "/patient": ALL_STAFF,
+  "/visit": [...CLINICAL, ...FRONT_DESK, "diagnostic_staff"],
+  "/invoice": FINANCE,
+  "/purchase-order": [...ADMIN, "inventory_manager"],
+  "/surgery": [...CLINICAL],
+  "/optical-order": [...ADMIN, "optical_staff", "receptionist"],
+};
+
+/** Roles allowed on a given pathname, or null when the path is unrestricted. */
+export function allowedRolesForPath(pathname: string): AppRole[] | null {
+  const exact = NAV.flatMap((g) => g.items).find(
+    (i) => pathname === i.to || pathname.startsWith(`${i.to}/`),
+  );
+  if (exact) return exact.roles ?? null;
+  const base = `/${pathname.split("/").filter(Boolean)[0] ?? ""}`;
+  return DETAIL_ROUTE_ROLES[base] ?? null;
+}
+
+export function canVisit(pathname: string, roles: AppRole[]): boolean {
+  if (roles.includes("super_admin")) return true;
+  const allowed = allowedRolesForPath(pathname);
+  if (!allowed) return roles.length > 0;
+  return allowed.some((r) => roles.includes(r));
+}
+

@@ -2995,6 +2995,35 @@ export type Database = {
           },
         ]
       }
+      user_branches: {
+        Row: {
+          branch_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          branch_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_branches_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -3123,6 +3152,13 @@ export type Database = {
           serial_no: string
         }[]
       }
+      can_access_branch: { Args: { _branch: string }; Returns: boolean }
+      can_access_grn: { Args: { _grn_id: string }; Returns: boolean }
+      can_access_invoice: { Args: { _invoice_id: string }; Returns: boolean }
+      can_access_lead: { Args: { _lead_id: string }; Returns: boolean }
+      can_access_patient: { Args: { _patient_id: string }; Returns: boolean }
+      can_access_po: { Args: { _po_id: string }; Returns: boolean }
+      can_access_prescription: { Args: { _rx_id: string }; Returns: boolean }
       checkin_appointment: {
         Args: { _appointment_id: string }
         Returns: {
@@ -3196,6 +3232,7 @@ export type Database = {
       is_clinical: { Args: { _user_id: string }; Returns: boolean }
       is_finance: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      is_super_admin: { Args: { _user_id: string }; Returns: boolean }
       next_invoice_no: { Args: never; Returns: string }
       next_mrn: { Args: never; Returns: string }
       next_po_no: { Args: never; Returns: string }
@@ -3203,6 +3240,12 @@ export type Database = {
       po_recalc: { Args: { _po_id: string }; Returns: undefined }
       recalc_invoice: { Args: { _invoice_id: string }; Returns: undefined }
       same_branch: { Args: { _branch: string }; Returns: boolean }
+      user_branch_ids: {
+        Args: { _user_id: string }
+        Returns: {
+          branch_id: string
+        }[]
+      }
     }
     Enums: {
       app_role:

@@ -41,6 +41,7 @@ import { Route as AuthenticatedPrescriptionsRouteImport } from './routes/_authen
 import { Route as AuthenticatedProcurementRouteImport } from './routes/_authenticated/procurement'
 import { Route as AuthenticatedQueueRouteImport } from './routes/_authenticated/queue'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedRolesRouteImport } from './routes/_authenticated/roles'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
@@ -219,6 +220,11 @@ const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRolesRoute = AuthenticatedRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -308,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/procurement': typeof AuthenticatedProcurementRoute
   '/queue': typeof AuthenticatedQueueRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/roles': typeof AuthenticatedRolesRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
@@ -351,6 +358,7 @@ export interface FileRoutesByTo {
   '/procurement': typeof AuthenticatedProcurementRoute
   '/queue': typeof AuthenticatedQueueRoute
   '/reports': typeof AuthenticatedReportsRoute
+  '/roles': typeof AuthenticatedRolesRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/staff': typeof AuthenticatedStaffRoute
   '/suppliers': typeof AuthenticatedSuppliersRoute
@@ -396,6 +404,7 @@ export interface FileRoutesById {
   '/_authenticated/procurement': typeof AuthenticatedProcurementRoute
   '/_authenticated/queue': typeof AuthenticatedQueueRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/_authenticated/roles': typeof AuthenticatedRolesRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
@@ -441,6 +450,7 @@ export interface FileRouteTypes {
     | '/procurement'
     | '/queue'
     | '/reports'
+    | '/roles'
     | '/settings'
     | '/staff'
     | '/suppliers'
@@ -484,6 +494,7 @@ export interface FileRouteTypes {
     | '/procurement'
     | '/queue'
     | '/reports'
+    | '/roles'
     | '/settings'
     | '/staff'
     | '/suppliers'
@@ -528,6 +539,7 @@ export interface FileRouteTypes {
     | '/_authenticated/procurement'
     | '/_authenticated/queue'
     | '/_authenticated/reports'
+    | '/_authenticated/roles'
     | '/_authenticated/settings'
     | '/_authenticated/staff'
     | '/_authenticated/suppliers'
@@ -773,6 +785,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/roles': {
+      id: '/_authenticated/roles'
+      path: '/roles'
+      fullPath: '/roles'
+      preLoaderRoute: typeof AuthenticatedRolesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -875,6 +894,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProcurementRoute: typeof AuthenticatedProcurementRoute
   AuthenticatedQueueRoute: typeof AuthenticatedQueueRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedRolesRoute: typeof AuthenticatedRolesRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
@@ -917,6 +937,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProcurementRoute: AuthenticatedProcurementRoute,
   AuthenticatedQueueRoute: AuthenticatedQueueRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+  AuthenticatedRolesRoute: AuthenticatedRolesRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,

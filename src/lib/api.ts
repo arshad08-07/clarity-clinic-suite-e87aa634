@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { BRANCH_SCOPED_TABLES, defaultBranchId } from "@/lib/access";
+
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Row = Record<string, any>;
@@ -148,7 +150,12 @@ export function useSaveRow(table: string, label = "Record") {
         await writeAudit("update", table, id);
         return data as Row;
       }
+      if (BRANCH_SCOPED_TABLES.has(table) && !payload["branch_id"]) {
+        const branch = defaultBranchId();
+        if (branch) payload["branch_id"] = branch;
+      }
       const { data, error } = await db.from(table).insert(payload).select().single();
+
       if (error) throw error;
       await writeAudit("create", table, (data as Row)?.["id"]);
       return data as Row;
