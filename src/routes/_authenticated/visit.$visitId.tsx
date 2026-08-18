@@ -5,7 +5,9 @@ import { toast } from "sonner";
 
 import { DiagnosticOrderPanel, statusVariant } from "@/components/diagnostic-order-panel";
 import { EmptyState } from "@/components/empty-state";
+import { NewInvoiceDialog } from "@/components/new-invoice-dialog";
 import { OrderDiagnosticsDialog } from "@/components/order-diagnostics-dialog";
+
 import { PageHeader } from "@/components/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +18,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { db, errorMessage, type Row } from "@/lib/api";
+import { useVisitInvoices } from "@/lib/billing";
 import { DIAG_STATUS_LABEL, useUpdateDiagnosticOrder, useVisitDiagnostics } from "@/lib/diagnostics";
+
 import { age, fmtDateTime, fmtTime, titleize } from "@/lib/format";
 import { ALLOWED, patientName, STAGE_LABEL, useVisit, useVisitUpdate, waitingMinutes } from "@/lib/queue";
 
@@ -125,6 +129,7 @@ function VisitWorkspace() {
         actions={
           <>
             <Badge variant={status === "completed" ? "secondary" : "default"}>{STAGE_LABEL[status] ?? status}</Badge>
+            <VisitBillingActions visit={v} />
             {p ? (
               <Button asChild variant="outline" size="sm">
                 <Link to="/patient/$patientId" params={{ patientId: String(p["id"]) }}>
@@ -137,6 +142,7 @@ function VisitWorkspace() {
             </Button>
           </>
         }
+
       />
 
       <div className="surface-card mb-4 flex flex-wrap items-center gap-2 p-4">
@@ -214,7 +220,37 @@ function VisitWorkspace() {
   );
 }
 
+/** Billing entry point for the current encounter: open or raise its invoice. */
+function VisitBillingActions({ visit }: { visit: Row }) {
+  const visitId = String(visit["id"]);
+  const invoices = useVisitInvoices(visitId);
+  const existing = invoices.data?.[0];
+  if (existing) {
+    return (
+      <Button asChild variant="outline" size="sm">
+        <Link to="/invoice/$invoiceId" params={{ invoiceId: String(existing["id"]) }}>
+          Invoice {String(existing["invoice_no"])}
+        </Link>
+      </Button>
+    );
+  }
+  return (
+    <NewInvoiceDialog
+      trigger={
+        <Button variant="outline" size="sm">
+          Create invoice
+        </Button>
+      }
+      patientId={String(visit["patient_id"])}
+      visitId={visitId}
+      {...(visit["branch_id"] ? { branchId: String(visit["branch_id"]) } : {})}
+      defaultType="consultation"
+    />
+  );
+}
+
 function Detail({ label, value }: { label: string; value: unknown }) {
+
   return (
     <div>
       <p className="text-xs text-muted-foreground">{label}</p>
