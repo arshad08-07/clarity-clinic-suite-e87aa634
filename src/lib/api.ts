@@ -120,21 +120,12 @@ export function useCount(
   });
 }
 
-async function writeAudit(action: string, entity: string, entityId?: string) {
-  try {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) return;
-    await db.from("audit_logs").insert({
-      user_id: data.user.id,
-      action,
-      entity,
-      entity_id: entityId ?? null,
-      details: {},
-    });
-  } catch {
-    /* audit failures must never block the user */
-  }
-}
+/**
+ * Audit trail is written by database triggers (audit_row_change) on every
+ * sensitive table, so it cannot be bypassed by skipping the UI. No client-side
+ * audit write happens here — that would only duplicate rows.
+ */
+
 
 export function useSaveRow(table: string, label = "Record") {
   const qc = useQueryClient();
@@ -147,7 +138,6 @@ export function useSaveRow(table: string, label = "Record") {
       if (id) {
         const { data, error } = await db.from(table).update(payload).eq("id", id).select().single();
         if (error) throw error;
-        await writeAudit("update", table, id);
         return data as Row;
       }
       if (BRANCH_SCOPED_TABLES.has(table) && !payload["branch_id"]) {
@@ -157,7 +147,6 @@ export function useSaveRow(table: string, label = "Record") {
       const { data, error } = await db.from(table).insert(payload).select().single();
 
       if (error) throw error;
-      await writeAudit("create", table, (data as Row)?.["id"]);
       return data as Row;
     },
     onSuccess: () => {
@@ -174,7 +163,6 @@ export function useDeleteRow(table: string, label = "Record") {
     mutationFn: async (id: string) => {
       const { error } = await db.from(table).delete().eq("id", id);
       if (error) throw error;
-      await writeAudit("delete", table, id);
     },
     onSuccess: () => {
       toast.success(`${label} deleted`);
