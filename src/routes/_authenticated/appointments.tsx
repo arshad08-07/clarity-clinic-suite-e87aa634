@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { BookAppointmentDialog } from "@/components/book-appointment-dialog";
 import { AppointmentActions } from "@/components/clinic-actions";
 import { ResourceModule } from "@/components/resource-module";
 import { appointmentsConfig } from "@/lib/module-configs";
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/_authenticated/appointments")({
       config={{
         ...appointmentsConfig,
         rowActions: (row) => <AppointmentActions row={row} />,
+        extraHeaderActions: <BookAppointmentDialog />,
       }}
     />
   ),

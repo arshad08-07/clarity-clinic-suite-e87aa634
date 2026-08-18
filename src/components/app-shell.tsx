@@ -22,6 +22,7 @@ import { ROLE_LABELS, useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useList } from "@/lib/api";
 import { visibleNav } from "@/lib/navigation";
+import { setSettingsSnapshot, useSettings } from "@/lib/settings";
 import { cn } from "@/lib/utils";
 
 function NavIcon({ name, className }: { name: string; className?: string }) {
@@ -30,7 +31,8 @@ function NavIcon({ name, className }: { name: string; className?: string }) {
 }
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
-  const { roles } = useAuth();
+  const { roles, primaryBranchId } = useAuth();
+  const { settings } = useSettings(primaryBranchId);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const groups = visibleNav(roles);
 
@@ -41,7 +43,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           <Eye className="size-5" />
         </span>
         <div className="leading-tight">
-          <p className="font-display text-sm font-semibold">Vision Care</p>
+          <p className="font-display text-sm font-semibold">{settings.clinic_identity.name}</p>
           <p className="text-xs text-sidebar-foreground/60">Eye Hospital HMS</p>
         </div>
       </div>
