@@ -30,7 +30,7 @@ function LeadsPage() {
         <ResourceModule
           config={{
             ...leadsConfig,
-            select: "*, patients:converted_patient_id(id, mrn, first_name, last_name)",
+            
             rowActions: (row) => <LeadActions row={row} />,
           }}
         />
