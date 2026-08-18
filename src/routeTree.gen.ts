@@ -52,6 +52,7 @@ import { Route as AuthenticatedPatientPatientIdRouteImport } from './routes/_aut
 import { Route as AuthenticatedPurchaseOrderPoIdRouteImport } from './routes/_authenticated/purchase-order.$poId'
 import { Route as AuthenticatedSurgerySurgeryIdRouteImport } from './routes/_authenticated/surgery.$surgeryId'
 import { Route as AuthenticatedVisitVisitIdRouteImport } from './routes/_authenticated/visit.$visitId'
+import { Route as ApiPublicHooksFollowUpRemindersRouteImport } from './routes/api/public/hooks/follow-up-reminders'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -281,6 +282,12 @@ const AuthenticatedVisitVisitIdRoute =
     path: '/visit/$visitId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicHooksFollowUpRemindersRoute =
+  ApiPublicHooksFollowUpRemindersRouteImport.update({
+    id: '/api/public/hooks/follow-up-reminders',
+    path: '/api/public/hooks/follow-up-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -325,6 +332,7 @@ export interface FileRoutesByFullPath {
   '/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/surgery/$surgeryId': typeof AuthenticatedSurgerySurgeryIdRoute
   '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
+  '/api/public/hooks/follow-up-reminders': typeof ApiPublicHooksFollowUpRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -369,6 +377,7 @@ export interface FileRoutesByTo {
   '/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/surgery/$surgeryId': typeof AuthenticatedSurgerySurgeryIdRoute
   '/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
+  '/api/public/hooks/follow-up-reminders': typeof ApiPublicHooksFollowUpRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -415,6 +424,7 @@ export interface FileRoutesById {
   '/_authenticated/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/_authenticated/surgery/$surgeryId': typeof AuthenticatedSurgerySurgeryIdRoute
   '/_authenticated/visit/$visitId': typeof AuthenticatedVisitVisitIdRoute
+  '/api/public/hooks/follow-up-reminders': typeof ApiPublicHooksFollowUpRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -461,6 +471,7 @@ export interface FileRouteTypes {
     | '/purchase-order/$poId'
     | '/surgery/$surgeryId'
     | '/visit/$visitId'
+    | '/api/public/hooks/follow-up-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -505,6 +516,7 @@ export interface FileRouteTypes {
     | '/purchase-order/$poId'
     | '/surgery/$surgeryId'
     | '/visit/$visitId'
+    | '/api/public/hooks/follow-up-reminders'
   id:
     | '__root__'
     | '/'
@@ -550,6 +562,7 @@ export interface FileRouteTypes {
     | '/_authenticated/purchase-order/$poId'
     | '/_authenticated/surgery/$surgeryId'
     | '/_authenticated/visit/$visitId'
+    | '/api/public/hooks/follow-up-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -557,6 +570,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicHooksFollowUpRemindersRoute: typeof ApiPublicHooksFollowUpRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -862,6 +876,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVisitVisitIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/hooks/follow-up-reminders': {
+      id: '/api/public/hooks/follow-up-reminders'
+      path: '/api/public/hooks/follow-up-reminders'
+      fullPath: '/api/public/hooks/follow-up-reminders'
+      preLoaderRoute: typeof ApiPublicHooksFollowUpRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -958,6 +979,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicHooksFollowUpRemindersRoute: ApiPublicHooksFollowUpRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.dispatch_due_reminders() TO anon;

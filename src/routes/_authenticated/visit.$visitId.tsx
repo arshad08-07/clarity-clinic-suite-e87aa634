@@ -16,7 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FollowUpSection } from "@/components/follow-up-section";
 import { VisitOpticalSection } from "@/components/visit-optical-section";
+
 import { VisitSurgerySection } from "@/components/visit-surgery-section";
 
 import { Textarea } from "@/components/ui/textarea";
@@ -209,6 +211,7 @@ function VisitWorkspace() {
               <TabsTrigger value="pharmacy">Pharmacy</TabsTrigger>
               <TabsTrigger value="surgery">Surgery</TabsTrigger>
               <TabsTrigger value="optical">Optical</TabsTrigger>
+              <TabsTrigger value="follow-up">Follow-up</TabsTrigger>
             </TabsList>
             <TabsContent value="optometry" className="mt-4">
               <OptometryForm visit={v} onCompleted={() => move("with_doctor")} />
@@ -228,6 +231,15 @@ function VisitWorkspace() {
             <TabsContent value="optical" className="mt-4">
               <VisitOpticalSection visit={v} />
             </TabsContent>
+            <TabsContent value="follow-up" className="mt-4">
+              <FollowUpSection
+                patientId={String(v["patient_id"])}
+                visitId={visitId}
+                doctorId={(v["doctor_id"] as string | null) ?? null}
+                branchId={(v["branch_id"] as string | null) ?? null}
+              />
+            </TabsContent>
+
 
 
           </Tabs>

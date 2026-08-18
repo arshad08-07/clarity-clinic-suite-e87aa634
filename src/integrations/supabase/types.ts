@@ -196,42 +196,83 @@ export type Database = {
       }
       communications: {
         Row: {
+          attempts: number
+          branch_id: string | null
           channel: string
           created_at: string
           created_by: string | null
           direction: string
+          failure_reason: string | null
+          follow_up_id: string | null
           id: string
           lead_id: string | null
           message: string | null
           patient_id: string | null
+          provider: string | null
+          purpose: string | null
+          recipient: string | null
+          scheduled_at: string | null
+          sent_at: string | null
           status: string
           subject: string | null
         }
         Insert: {
+          attempts?: number
+          branch_id?: string | null
           channel?: string
           created_at?: string
           created_by?: string | null
           direction?: string
+          failure_reason?: string | null
+          follow_up_id?: string | null
           id?: string
           lead_id?: string | null
           message?: string | null
           patient_id?: string | null
+          provider?: string | null
+          purpose?: string | null
+          recipient?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
           status?: string
           subject?: string | null
         }
         Update: {
+          attempts?: number
+          branch_id?: string | null
           channel?: string
           created_at?: string
           created_by?: string | null
           direction?: string
+          failure_reason?: string | null
+          follow_up_id?: string | null
           id?: string
           lead_id?: string | null
           message?: string | null
           patient_id?: string | null
+          provider?: string | null
+          purpose?: string | null
+          recipient?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
           status?: string
           subject?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "communications_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communications_follow_up_id_fkey"
+            columns: ["follow_up_id"]
+            isOneToOne: false
+            referencedRelation: "follow_ups"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "communications_lead_id_fkey"
             columns: ["lead_id"]
@@ -679,39 +720,75 @@ export type Database = {
       }
       follow_ups: {
         Row: {
+          allow_duplicate: boolean
           assigned_to: string | null
+          branch_id: string | null
+          cancel_reason: string | null
+          completed_at: string | null
+          completed_visit_id: string | null
           created_at: string
+          created_by: string | null
+          doctor_id: string | null
           due_date: string
           id: string
           is_done: boolean
           notes: string | null
+          outcome_notes: string | null
           patient_id: string
+          priority: string
+          reason: string | null
+          reminder_offset_days: number
+          status: string
           surgery_id: string | null
           type: string | null
           updated_at: string
           visit_id: string | null
         }
         Insert: {
+          allow_duplicate?: boolean
           assigned_to?: string | null
+          branch_id?: string | null
+          cancel_reason?: string | null
+          completed_at?: string | null
+          completed_visit_id?: string | null
           created_at?: string
+          created_by?: string | null
+          doctor_id?: string | null
           due_date: string
           id?: string
           is_done?: boolean
           notes?: string | null
+          outcome_notes?: string | null
           patient_id: string
+          priority?: string
+          reason?: string | null
+          reminder_offset_days?: number
+          status?: string
           surgery_id?: string | null
           type?: string | null
           updated_at?: string
           visit_id?: string | null
         }
         Update: {
+          allow_duplicate?: boolean
           assigned_to?: string | null
+          branch_id?: string | null
+          cancel_reason?: string | null
+          completed_at?: string | null
+          completed_visit_id?: string | null
           created_at?: string
+          created_by?: string | null
+          doctor_id?: string | null
           due_date?: string
           id?: string
           is_done?: boolean
           notes?: string | null
+          outcome_notes?: string | null
           patient_id?: string
+          priority?: string
+          reason?: string | null
+          reminder_offset_days?: number
+          status?: string
           surgery_id?: string | null
           type?: string | null
           updated_at?: string
@@ -721,6 +798,27 @@ export type Database = {
           {
             foreignKeyName: "follow_ups_assigned_to_fkey"
             columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_ups_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_ups_completed_visit_id_fkey"
+            columns: ["completed_visit_id"]
+            isOneToOne: false
+            referencedRelation: "visits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_ups_doctor_id_fkey"
+            columns: ["doctor_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -3220,6 +3318,17 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      dispatch_due_reminders: {
+        Args: never
+        Returns: {
+          delivered: number
+          held: number
+        }[]
+      }
+      follow_up_state: {
+        Args: { _due: string; _status: string }
+        Returns: string
       }
       has_role: {
         Args: {

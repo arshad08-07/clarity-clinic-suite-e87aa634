@@ -31,6 +31,9 @@ import {
   useSurgeryStockMovements,
   useUpdateSurgery,
 } from "@/lib/surgery";
+import { followUpState, STATE_LABELS, STATE_TONE } from "@/lib/follow-ups";
+import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/_authenticated/surgery/$surgeryId")({
   head: () => ({
@@ -862,19 +865,23 @@ function FollowUpCard({ surgery }: { surgery: Row }) {
   const [notes, setNotes] = useState("Day-1 post-operative review");
 
   return (
-    <Section title="Post-op follow-up" description="Recall linked to this surgery and patient.">
+    <Section title="Post-op follow-up" description="Recall linked to this surgery and patient. Reminders queue automatically.">
       {list.data?.length ? (
         <ul className="mb-3 space-y-2 text-sm">
-          {list.data.map((f: Row) => (
-            <li key={String(f["id"])} className="flex justify-between gap-2">
-              <span>
-                {fmtDate(String(f["due_date"]))} · {titleize(String(f["type"] ?? "post_op"))}
-              </span>
-              <Badge variant={f["is_done"] ? "secondary" : "default"}>{f["is_done"] ? "Done" : "Pending"}</Badge>
-            </li>
-          ))}
+          {list.data.map((f: Row) => {
+            const state = followUpState(f);
+            return (
+              <li key={String(f["id"])} className="flex justify-between gap-2">
+                <span>
+                  {fmtDate(String(f["due_date"]))} · {titleize(String(f["type"] ?? "post_op"))}
+                </span>
+                <Badge className={cn("border-0", STATE_TONE[state])}>{STATE_LABELS[state]}</Badge>
+              </li>
+            );
+          })}
         </ul>
       ) : null}
+
       <div className="grid gap-2">
         <Input type="date" value={due} onChange={(e) => setDue(e.target.value)} />
         <Input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Notes" />
