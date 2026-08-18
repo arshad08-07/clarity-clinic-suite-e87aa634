@@ -46,6 +46,7 @@ import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSuppliersRouteImport } from './routes/_authenticated/suppliers'
 import { Route as AuthenticatedSurgeriesRouteImport } from './routes/_authenticated/surgeries'
 import { Route as AuthenticatedInvoiceInvoiceIdRouteImport } from './routes/_authenticated/invoice.$invoiceId'
+import { Route as AuthenticatedOpticalOrderOrderIdRouteImport } from './routes/_authenticated/optical-order.$orderId'
 import { Route as AuthenticatedPatientPatientIdRouteImport } from './routes/_authenticated/patient.$patientId'
 import { Route as AuthenticatedPurchaseOrderPoIdRouteImport } from './routes/_authenticated/purchase-order.$poId'
 import { Route as AuthenticatedSurgerySurgeryIdRouteImport } from './routes/_authenticated/surgery.$surgeryId'
@@ -244,6 +245,12 @@ const AuthenticatedInvoiceInvoiceIdRoute =
     path: '/invoice/$invoiceId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOpticalOrderOrderIdRoute =
+  AuthenticatedOpticalOrderOrderIdRouteImport.update({
+    id: '/optical-order/$orderId',
+    path: '/optical-order/$orderId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPatientPatientIdRoute =
   AuthenticatedPatientPatientIdRouteImport.update({
     id: '/patient/$patientId',
@@ -306,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
   '/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
+  '/optical-order/$orderId': typeof AuthenticatedOpticalOrderOrderIdRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
   '/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/surgery/$surgeryId': typeof AuthenticatedSurgerySurgeryIdRoute
@@ -348,6 +356,7 @@ export interface FileRoutesByTo {
   '/suppliers': typeof AuthenticatedSuppliersRoute
   '/surgeries': typeof AuthenticatedSurgeriesRoute
   '/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
+  '/optical-order/$orderId': typeof AuthenticatedOpticalOrderOrderIdRoute
   '/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
   '/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/surgery/$surgeryId': typeof AuthenticatedSurgerySurgeryIdRoute
@@ -392,6 +401,7 @@ export interface FileRoutesById {
   '/_authenticated/suppliers': typeof AuthenticatedSuppliersRoute
   '/_authenticated/surgeries': typeof AuthenticatedSurgeriesRoute
   '/_authenticated/invoice/$invoiceId': typeof AuthenticatedInvoiceInvoiceIdRoute
+  '/_authenticated/optical-order/$orderId': typeof AuthenticatedOpticalOrderOrderIdRoute
   '/_authenticated/patient/$patientId': typeof AuthenticatedPatientPatientIdRoute
   '/_authenticated/purchase-order/$poId': typeof AuthenticatedPurchaseOrderPoIdRoute
   '/_authenticated/surgery/$surgeryId': typeof AuthenticatedSurgerySurgeryIdRoute
@@ -436,6 +446,7 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/surgeries'
     | '/invoice/$invoiceId'
+    | '/optical-order/$orderId'
     | '/patient/$patientId'
     | '/purchase-order/$poId'
     | '/surgery/$surgeryId'
@@ -478,6 +489,7 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/surgeries'
     | '/invoice/$invoiceId'
+    | '/optical-order/$orderId'
     | '/patient/$patientId'
     | '/purchase-order/$poId'
     | '/surgery/$surgeryId'
@@ -521,6 +533,7 @@ export interface FileRouteTypes {
     | '/_authenticated/suppliers'
     | '/_authenticated/surgeries'
     | '/_authenticated/invoice/$invoiceId'
+    | '/_authenticated/optical-order/$orderId'
     | '/_authenticated/patient/$patientId'
     | '/_authenticated/purchase-order/$poId'
     | '/_authenticated/surgery/$surgeryId'
@@ -795,6 +808,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInvoiceInvoiceIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/optical-order/$orderId': {
+      id: '/_authenticated/optical-order/$orderId'
+      path: '/optical-order/$orderId'
+      fullPath: '/optical-order/$orderId'
+      preLoaderRoute: typeof AuthenticatedOpticalOrderOrderIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/patient/$patientId': {
       id: '/_authenticated/patient/$patientId'
       path: '/patient/$patientId'
@@ -860,6 +880,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSuppliersRoute: typeof AuthenticatedSuppliersRoute
   AuthenticatedSurgeriesRoute: typeof AuthenticatedSurgeriesRoute
   AuthenticatedInvoiceInvoiceIdRoute: typeof AuthenticatedInvoiceInvoiceIdRoute
+  AuthenticatedOpticalOrderOrderIdRoute: typeof AuthenticatedOpticalOrderOrderIdRoute
   AuthenticatedPatientPatientIdRoute: typeof AuthenticatedPatientPatientIdRoute
   AuthenticatedPurchaseOrderPoIdRoute: typeof AuthenticatedPurchaseOrderPoIdRoute
   AuthenticatedSurgerySurgeryIdRoute: typeof AuthenticatedSurgerySurgeryIdRoute
@@ -901,6 +922,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSuppliersRoute: AuthenticatedSuppliersRoute,
   AuthenticatedSurgeriesRoute: AuthenticatedSurgeriesRoute,
   AuthenticatedInvoiceInvoiceIdRoute: AuthenticatedInvoiceInvoiceIdRoute,
+  AuthenticatedOpticalOrderOrderIdRoute: AuthenticatedOpticalOrderOrderIdRoute,
   AuthenticatedPatientPatientIdRoute: AuthenticatedPatientPatientIdRoute,
   AuthenticatedPurchaseOrderPoIdRoute: AuthenticatedPurchaseOrderPoIdRoute,
   AuthenticatedSurgerySurgeryIdRoute: AuthenticatedSurgerySurgeryIdRoute,
