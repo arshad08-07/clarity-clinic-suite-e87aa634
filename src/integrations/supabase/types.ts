@@ -23,8 +23,9 @@ export type Database = {
           doctor_id: string | null
           duration_min: number
           id: string
+          lead_id: string | null
           notes: string | null
-          patient_id: string
+          patient_id: string | null
           reason: string | null
           scheduled_at: string
           status: Database["public"]["Enums"]["appointment_status"]
@@ -38,8 +39,9 @@ export type Database = {
           doctor_id?: string | null
           duration_min?: number
           id?: string
+          lead_id?: string | null
           notes?: string | null
-          patient_id: string
+          patient_id?: string | null
           reason?: string | null
           scheduled_at: string
           status?: Database["public"]["Enums"]["appointment_status"]
@@ -53,8 +55,9 @@ export type Database = {
           doctor_id?: string | null
           duration_min?: number
           id?: string
+          lead_id?: string | null
           notes?: string | null
-          patient_id?: string
+          patient_id?: string | null
           reason?: string | null
           scheduled_at?: string
           status?: Database["public"]["Enums"]["appointment_status"]
@@ -73,6 +76,13 @@ export type Database = {
             columns: ["doctor_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
             referencedColumns: ["id"]
           },
           {
@@ -2023,6 +2033,7 @@ export type Database = {
           blood_group: string | null
           branch_id: string | null
           city: string | null
+          converted_at: string | null
           created_at: string
           date_of_birth: string | null
           email: string | null
@@ -2035,6 +2046,9 @@ export type Database = {
           insurance_provider: string | null
           is_active: boolean
           last_name: string | null
+          lead_campaign: string | null
+          lead_id: string | null
+          lead_source: string | null
           medical_history: string | null
           mrn: string
           phone: string
@@ -2050,6 +2064,7 @@ export type Database = {
           blood_group?: string | null
           branch_id?: string | null
           city?: string | null
+          converted_at?: string | null
           created_at?: string
           date_of_birth?: string | null
           email?: string | null
@@ -2062,6 +2077,9 @@ export type Database = {
           insurance_provider?: string | null
           is_active?: boolean
           last_name?: string | null
+          lead_campaign?: string | null
+          lead_id?: string | null
+          lead_source?: string | null
           medical_history?: string | null
           mrn: string
           phone: string
@@ -2077,6 +2095,7 @@ export type Database = {
           blood_group?: string | null
           branch_id?: string | null
           city?: string | null
+          converted_at?: string | null
           created_at?: string
           date_of_birth?: string | null
           email?: string | null
@@ -2089,6 +2108,9 @@ export type Database = {
           insurance_provider?: string | null
           is_active?: boolean
           last_name?: string | null
+          lead_campaign?: string | null
+          lead_id?: string | null
+          lead_source?: string | null
           medical_history?: string | null
           mrn?: string
           phone?: string
@@ -2104,6 +2126,13 @@ export type Database = {
             columns: ["branch_id"]
             isOneToOne: false
             referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patients_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
             referencedColumns: ["id"]
           },
         ]
@@ -3257,6 +3286,7 @@ export type Database = {
       can_access_patient: { Args: { _patient_id: string }; Returns: boolean }
       can_access_po: { Args: { _po_id: string }; Returns: boolean }
       can_access_prescription: { Args: { _rx_id: string }; Returns: boolean }
+      can_convert_leads: { Args: { _user_id: string }; Returns: boolean }
       checkin_appointment: {
         Args: { _appointment_id: string }
         Returns: {
@@ -3281,6 +3311,46 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "visits"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      convert_lead_to_patient: {
+        Args: { _create_new?: boolean; _lead_id: string; _patient_id?: string }
+        Returns: {
+          address: string | null
+          allergies: string | null
+          blood_group: string | null
+          branch_id: string | null
+          city: string | null
+          converted_at: string | null
+          created_at: string
+          date_of_birth: string | null
+          email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          first_name: string
+          gender: Database["public"]["Enums"]["gender_t"] | null
+          id: string
+          insurance_policy_no: string | null
+          insurance_provider: string | null
+          is_active: boolean
+          last_name: string | null
+          lead_campaign: string | null
+          lead_id: string | null
+          lead_source: string | null
+          medical_history: string | null
+          mrn: string
+          phone: string
+          pincode: string | null
+          referred_by: string | null
+          state: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "patients"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -3319,6 +3389,20 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      crm_funnel: {
+        Args: { _from: string; _to: string }
+        Returns: {
+          appointments: number
+          campaign: string
+          contacted: number
+          leads: number
+          patients: number
+          revenue: number
+          source: string
+          surgeries: number
+          visits: number
+        }[]
+      }
       dispatch_due_reminders: {
         Args: never
         Returns: {
@@ -3342,6 +3426,18 @@ export type Database = {
       is_finance: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       is_super_admin: { Args: { _user_id: string }; Returns: boolean }
+      lead_patient_matches: {
+        Args: { _lead_id: string }
+        Returns: {
+          branch_id: string
+          email: string
+          full_name: string
+          match_on: string
+          mrn: string
+          patient_id: string
+          phone: string
+        }[]
+      }
       next_invoice_no: { Args: never; Returns: string }
       next_mrn: { Args: never; Returns: string }
       next_po_no: { Args: never; Returns: string }
