@@ -109,7 +109,7 @@ export const NAV: NavGroup[] = [
     label: "Administration",
     items: [
       { to: "/staff", label: "Staff Directory", icon: "IdCard", roles: ADMIN },
-      { to: "/roles", label: "Roles & Access", icon: "ShieldUser", roles: ADMIN },
+      { to: "/roles", label: "Roles & Access", icon: "ShieldCheck", roles: ADMIN },
       { to: "/branches", label: "Branches", icon: "Building2", roles: ADMIN },
       { to: "/equipment", label: "Equipment", icon: "Microscope", roles: [...ADMIN, "inventory_manager"] },
       { to: "/catalog", label: "Clinical Catalog", icon: "BookMarked", roles: ADMIN },
