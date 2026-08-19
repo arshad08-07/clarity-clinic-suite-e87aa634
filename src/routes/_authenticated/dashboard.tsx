@@ -167,7 +167,7 @@ function Dashboard() {
         <StatCard label="Collected today" value={fmtMoney(revenue)} icon={ReceiptText} tone="success" loading={invoicesToday.isLoading} />
         <StatCard label="Outstanding today" value={fmtMoney(outstanding)} icon={Activity} tone="destructive" loading={invoicesToday.isLoading} />
         <StatCard label="Follow-ups due" value={followUps.data?.count ?? 0} icon={CircleDot} tone="info" loading={followUps.isLoading} />
-        <StatCard label="Low stock items" value={(lowStock.data?.rows ?? []).filter((r) => Number(r["stock_qty"]) <= Number(r["reorder_level"])).length} icon={Package} tone="warning" loading={lowStock.isLoading} />
+        <StatCard label="Low stock items" value={lowStock.data?.count ?? 0} icon={Package} tone="warning" loading={lowStock.isLoading} />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
