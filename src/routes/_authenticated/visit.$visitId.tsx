@@ -204,9 +204,11 @@ function VisitWorkspace() {
 
         <div className="lg:col-span-3">
           <Tabs defaultValue={status === "diagnostics" ? "diagnostics" : status === "with_doctor" || status === "completed" ? "consultation" : "optometry"}>
-            <TabsList>
+            <TabsList className="flex-wrap">
               <TabsTrigger value="optometry">Optometry</TabsTrigger>
               <TabsTrigger value="consultation">Consultation</TabsTrigger>
+              <TabsTrigger value="diagnosis">Diagnosis</TabsTrigger>
+              <TabsTrigger value="prescription">Prescription</TabsTrigger>
               <TabsTrigger value="diagnostics">Diagnostics</TabsTrigger>
               <TabsTrigger value="pharmacy">Pharmacy</TabsTrigger>
               <TabsTrigger value="surgery">Surgery</TabsTrigger>
@@ -218,6 +220,12 @@ function VisitWorkspace() {
             </TabsContent>
             <TabsContent value="consultation" className="mt-4">
               <ConsultationForm visit={v} onSend={move} />
+            </TabsContent>
+            <TabsContent value="diagnosis" className="mt-4">
+              <VisitDiagnosisSection visit={v} />
+            </TabsContent>
+            <TabsContent value="prescription" className="mt-4">
+              <VisitPrescriptionSection visit={v} />
             </TabsContent>
             <TabsContent value="diagnostics" className="mt-4">
               <DiagnosticsSection visit={v} onSend={move} />
