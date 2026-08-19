@@ -39,13 +39,34 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
 
+function isoDay(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 function dayBounds() {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
   end.setDate(end.getDate() + 1);
-  return { start: start.toISOString(), end: end.toISOString(), day: start.toISOString().slice(0, 10) };
+  const weekStart = new Date(start);
+  weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+  const monthStart = new Date(start.getFullYear(), start.getMonth(), 1);
+  return {
+    start: start.toISOString(),
+    end: end.toISOString(),
+    day: isoDay(start),
+    weekFrom: isoDay(weekStart),
+    monthFrom: isoDay(monthStart),
+  };
 }
+
+interface CollectionRow {
+  collected: number;
+  refunds: number;
+  net: number;
+  txns: number;
+}
+
 
 function Dashboard() {
   const { profile } = useAuth();
