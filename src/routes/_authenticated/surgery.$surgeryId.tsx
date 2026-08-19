@@ -752,6 +752,10 @@ function BillingCard({ surgery, invoice }: { surgery: Row; invoice: Row | null }
   const createInvoice = useCreateInvoice();
   const update = useUpdateSurgery(id);
   const qc = useQueryClient();
+  const { isAdmin } = useAuth();
+  const [waiveReason, setWaiveReason] = useState("");
+  const nonBillable = Boolean(surgery["non_billable"]);
+  const legacyUnbilled = Boolean(surgery["is_legacy_unbilled"]);
 
   const iol = surgery["iol_inventory"] as Row | null;
   const iolModel = (iol?.["iol_models"] as Row | null) ?? null;
