@@ -671,7 +671,7 @@ function CompletionCard({ surgery, missing }: { surgery: Row; missing: string[] 
               </Button>
             ) : null}
             <Button
-              disabled={update.isPending || (missing.length > 0 && !override)}
+              disabled={update.isPending || billingBlocked || (missing.length > 0 && !override)}
               onClick={() =>
                 update.mutate(
                   { ...notes, status: "completed" },
