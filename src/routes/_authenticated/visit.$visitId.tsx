@@ -17,7 +17,9 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FollowUpSection } from "@/components/follow-up-section";
+import { VisitDiagnosisSection } from "@/components/visit-diagnosis-section";
 import { VisitOpticalSection } from "@/components/visit-optical-section";
+import { VisitPrescriptionSection } from "@/components/visit-prescription-section";
 
 import { VisitSurgerySection } from "@/components/visit-surgery-section";
 
