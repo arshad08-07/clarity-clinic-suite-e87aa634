@@ -320,6 +320,15 @@ function SettingsWorkspace() {
                   onChange={(e) => set("billing", { tax_label: e.target.value })}
                 />
               </Field>
+              <Field label="Refund approval limit" help="Refunds above this amount need an administrator approver.">
+                <Input
+                  type="number"
+                  step="1"
+                  min={0}
+                  value={draft.billing.refund_approval_limit}
+                  onChange={(e) => set("billing", { refund_approval_limit: Number(e.target.value) })}
+                />
+              </Field>
               <Field label="Default tax %">
                 <Input
                   type="number"
