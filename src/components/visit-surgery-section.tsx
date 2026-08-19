@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { useLookup, type Row } from "@/lib/api";
+import { diagnosisCode, diagnosisLabel, useVisitDiagnoses } from "@/lib/diagnoses";
 import { fmtDateTime, fmtMoney, titleize } from "@/lib/format";
 import { useRecommendSurgery, useVisitSurgeries } from "@/lib/surgery";
 
@@ -28,6 +29,7 @@ export function VisitSurgerySection({ visit }: { visit: Row }) {
   const visitId = String(visit["id"]);
   const list = useVisitSurgeries(visitId);
   const recommend = useRecommendSurgery();
+  const diagnoses = useVisitDiagnoses(visitId);
   const { profile } = useAuth();
   const surgeons = useLookup("profiles", "id, full_name", { filters: { is_active: true }, orderBy: "full_name" });
   const tests = useLookup("diagnostic_tests", "id, name, price", { filters: { is_active: true }, orderBy: "name" });
