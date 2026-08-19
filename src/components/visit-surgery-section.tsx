@@ -114,6 +114,31 @@ export function VisitSurgerySection({ visit }: { visit: Row }) {
           </div>
         </div>
         <div className="mt-3 grid gap-1.5">
+          <Label>Clinical context — diagnoses from this visit</Label>
+          {(diagnoses.data ?? []).length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              No diagnosis recorded on this visit yet — add one in the Diagnosis tab.
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {(diagnoses.data ?? []).map((d: Row) => {
+                const label = `${diagnosisLabel(d)}${diagnosisCode(d) ? ` (${diagnosisCode(d)})` : ""} · ${String(d["eye"] ?? "N/A")}`;
+                return (
+                  <Button
+                    key={String(d["id"])}
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setNotes((prev) => (prev.includes(label) ? prev : [prev, label].filter(Boolean).join(" · ")))}
+                  >
+                    {label}
+                  </Button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        <div className="mt-3 grid gap-1.5">
           <Label htmlFor="surg-notes">Indication / notes</Label>
           <Textarea id="surg-notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} />
         </div>
