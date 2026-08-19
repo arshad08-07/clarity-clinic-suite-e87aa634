@@ -788,9 +788,11 @@ function BillingCard({ surgery, invoice }: { surgery: Row; invoice: Row | null }
           quantity: 1,
           unit_price: Number(iolModel["price"]),
           tax_percent: 0,
-          source_type: "surgery",
-          source_id: id,
-          source_ref: String(iol?.["serial_no"] ?? ""),
+          /* The procedure line carries the surgery source key; the implant line
+             references it so one surgery can never be billed twice. */
+          source_type: "other",
+          source_id: null,
+          source_ref: `Surgery ${String(surgery["procedure"])} · ${String(iol?.["serial_no"] ?? "")}`,
         });
       }
       const { error } = await db.from("invoice_items").insert(items);
