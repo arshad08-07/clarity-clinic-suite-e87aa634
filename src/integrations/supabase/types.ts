@@ -3427,6 +3427,9 @@ export type Database = {
       can_access_po: { Args: { _po_id: string }; Returns: boolean }
       can_access_prescription: { Args: { _rx_id: string }; Returns: boolean }
       can_convert_leads: { Args: { _user_id: string }; Returns: boolean }
+      can_read_clinical: { Args: { _user_id: string }; Returns: boolean }
+      can_read_medication: { Args: { _user_id: string }; Returns: boolean }
+      can_read_optical_rx: { Args: { _user_id: string }; Returns: boolean }
       checkin_appointment: {
         Args: { _appointment_id: string }
         Returns: {
