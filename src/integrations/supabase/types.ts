@@ -1155,6 +1155,8 @@ export type Database = {
           id: string
           invoice_no: string
           invoice_type: string
+          is_legacy: boolean
+          legacy_reason: string | null
           notes: string | null
           paid_amount: number
           patient_id: string | null
@@ -1173,6 +1175,8 @@ export type Database = {
           id?: string
           invoice_no: string
           invoice_type?: string
+          is_legacy?: boolean
+          legacy_reason?: string | null
           notes?: string | null
           paid_amount?: number
           patient_id?: string | null
@@ -1191,6 +1195,8 @@ export type Database = {
           id?: string
           invoice_no?: string
           invoice_type?: string
+          is_legacy?: boolean
+          legacy_reason?: string | null
           notes?: string | null
           paid_amount?: number
           patient_id?: string | null
