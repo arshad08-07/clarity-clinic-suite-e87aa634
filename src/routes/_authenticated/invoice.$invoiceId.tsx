@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/empty-state";
 import { PageHeader } from "@/components/page-header";
+import { RefundDialog } from "@/components/refund-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +15,9 @@ import { useLookup, type Row } from "@/lib/api";
 import {
   balanceOf,
   invoicePatientName,
+  isRefund,
   PAYMENT_METHODS,
+  refundableOf,
   printReceipt,
   SOURCE_TYPES,
   STATUS_LABEL,
@@ -173,11 +176,11 @@ function InvoicePage() {
     );
   };
 
-  const submitPayment = (refund: boolean) => {
+  const submitPayment = () => {
     const amount = Number(payAmount || 0);
     if (!amount) return;
     pay.mutate(
-      { amount, method: payMethod, reference: payRef, refund },
+      { amount, method: payMethod, reference: payRef },
       {
         onSuccess: () => {
           setPayAmount("");
@@ -271,6 +274,149 @@ function InvoicePage() {
                       </TableCell>
                     </TableRow>
                   ))}
+                </TableBody>
+              </Table>
+            )}
+          </section>
+
+          <section className="surface-card p-5">
+            <h2 className="mb-1 font-display text-base font-semibold">Add charge</h2>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Prices are pulled from the clinical catalog; adjust only where the clinic allows.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-1.5">
+                <Label>Source</Label>
+                <Select
+                  value={source}
+                  onValueChange={(v) => {
+                    setSource(v);
+                    setCatalogId("");
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SOURCE_TYPES.map((s) => (
+                      <SelectItem key={s.value} value={s.value}>
+                        {s.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {catalog.length > 0 && (
+                <div className="grid gap-1.5 sm:col-span-2">
+                  <Label>Catalog item</Label>
+                  <Select value={catalogId} onValueChange={pickCatalog}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select from catalog" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {catalog.map((c) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.label} · {fmtMoney(c.price)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <div className="grid gap-1.5 sm:col-span-2">
+                <Label>Description</Label>
+                <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label>Reference</Label>
+                <Input value={ref} onChange={(e) => setRef(e.target.value)} placeholder="Order / SKU / code" />
+              </div>
+              <div className="grid gap-1.5">
+                <Label>Quantity</Label>
+                <Input type="number" min="1" value={qty} onChange={(e) => setQty(e.target.value)} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label>Unit price</Label>
+                <Input type="number" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label>Tax %</Label>
+                <Input type="number" step="0.01" value={tax} onChange={(e) => setTax(e.target.value)} />
+              </div>
+            </div>
+            <Button className="mt-4" onClick={submitItem} disabled={addItem.isPending || !price}>
+              Add line item
+            </Button>
+          </section>
+
+          <section className="surface-card p-5">
+            <h2 className="mb-3 font-display text-base font-semibold">Payment history</h2>
+            {(payments.data ?? []).length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nothing collected yet.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Method</TableHead>
+                    <TableHead>Details</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                    <TableHead className="text-right">Refundable</TableHead>
+                    <TableHead />
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(payments.data ?? []).map((p: Row) => {
+                    const all = payments.data ?? [];
+                    const amt = Number(p["amount"]);
+                    const refunded = isRefund(p);
+                    const original = refunded
+                      ? all.find((x) => String(x["id"]) === String(p["original_payment_id"] ?? ""))
+                      : null;
+                    return (
+                      <TableRow key={String(p["id"])}>
+                        <TableCell>{fmtDateTime(String(p["paid_at"]))}</TableCell>
+                        <TableCell>{titleize(String(p["method"]))}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {refunded ? (
+                            <>
+                              <div>
+                                {original
+                                  ? `Reverses ${fmtMoney(original["amount"])} collected ${fmtDateTime(String(original["paid_at"]))}`
+                                  : "Legacy refund — no linked original payment"}
+                              </div>
+                              {p["refund_reason"] ? <div>Reason: {String(p["refund_reason"])}</div> : null}
+                              {p["approved_by"] ? <div>Approved by an administrator</div> : null}
+                            </>
+                          ) : p["reference"] ? (
+                            String(p["reference"])
+                          ) : (
+                            "—"
+                          )}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {refunded ? <Badge variant="outline">Refund</Badge> : null} {fmtMoney(amt)}
+                        </TableCell>
+                        <TableCell className="text-right text-xs text-muted-foreground">
+                          {refunded ? "—" : fmtMoney(refundableOf(p, all))}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {refunded ? (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              disabled={delPay.isPending}
+                              onClick={() => delPay.mutate(String(p["id"]))}
+                            >
+                              Remove
+                            </Button>
+                          ) : (
+                            <RefundDialog invoiceId={invoiceId} payment={p} payments={all} />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             )}
@@ -452,18 +598,16 @@ function InvoicePage() {
               <Input value={payRef} onChange={(e) => setPayRef(e.target.value)} placeholder="Txn / receipt no." />
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button onClick={() => submitPayment(false)} disabled={pay.isPending || !payAmount}>
+              <Button onClick={submitPayment} disabled={pay.isPending || !payAmount}>
                 Record payment
               </Button>
               <Button variant="outline" onClick={() => setPayAmount(String(balance))} disabled={balance <= 0}>
                 Pay full balance
               </Button>
-              <Button variant="ghost" onClick={() => submitPayment(true)} disabled={pay.isPending || !payAmount}>
-                Record refund
-              </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Payments cannot exceed the invoice total, and refunds cannot exceed what was collected.
+              Payments cannot exceed the invoice total. Refunds are raised from the payment history against the
+              specific payment they reverse.
             </p>
           </section>
         </div>
