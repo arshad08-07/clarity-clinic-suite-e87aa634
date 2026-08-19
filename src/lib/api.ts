@@ -102,6 +102,24 @@ export function useLookup(
   });
 }
 
+/** Database-side aggregation. Summary numbers must never be paged in the client. */
+export function useRpc<T = unknown>(
+  fn: string,
+  args: Row = {},
+  opts: { enabled?: boolean } = {},
+) {
+  return useQuery({
+    queryKey: ["rpc", fn, args],
+    enabled: opts.enabled ?? true,
+    queryFn: async () => {
+      const { data, error } = await db.rpc(fn, args);
+      if (error) throw error;
+      return data as T;
+    },
+  });
+}
+
+
 export function useCount(
   table: string,
   opts: { filters?: Record<string, unknown>; gte?: [string, string]; lte?: [string, string] } = {},

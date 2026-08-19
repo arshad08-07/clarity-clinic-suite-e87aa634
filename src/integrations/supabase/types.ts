@@ -3455,6 +3455,43 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      collection_by_day: {
+        Args: {
+          _branch?: string
+          _from?: string
+          _method?: string
+          _to?: string
+        }
+        Returns: {
+          collected: number
+          day: string
+          net: number
+          refunds: number
+        }[]
+      }
+      collection_by_method: {
+        Args: { _branch?: string; _from?: string; _to?: string }
+        Returns: {
+          collected: number
+          method: string
+          net: number
+          refunds: number
+        }[]
+      }
+      collection_totals: {
+        Args: {
+          _branch?: string
+          _from?: string
+          _method?: string
+          _to?: string
+        }
+        Returns: {
+          collected: number
+          net: number
+          refunds: number
+          txns: number
+        }[]
+      }
       convert_lead_to_patient: {
         Args: { _create_new?: boolean; _lead_id: string; _patient_id?: string }
         Returns: {
@@ -3550,6 +3587,10 @@ export type Database = {
           held: number
         }[]
       }
+      expense_total: {
+        Args: { _branch?: string; _from?: string; _to?: string }
+        Returns: number
+      }
       follow_up_state: {
         Args: { _due: string; _status: string }
         Returns: string
@@ -3585,6 +3626,24 @@ export type Database = {
       po_recalc: { Args: { _po_id: string }; Returns: undefined }
       product_batch_qty: { Args: { _product: string }; Returns: number }
       recalc_invoice: { Args: { _invoice_id: string }; Returns: undefined }
+      receivables_summary: {
+        Args: { _branch?: string; _from?: string; _to?: string }
+        Returns: {
+          billed: number
+          invoices: number
+          outstanding: number
+          settled: number
+        }[]
+      }
+      revenue_by_stream: {
+        Args: { _branch?: string; _from?: string; _to?: string }
+        Returns: {
+          billed: number
+          collected: number
+          invoice_type: string
+          invoices: number
+        }[]
+      }
       same_branch: { Args: { _branch: string }; Returns: boolean }
       user_branch_ids: {
         Args: { _user_id: string }

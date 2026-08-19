@@ -7,6 +7,7 @@ import {
   Package,
   ReceiptText,
   Scissors,
+  Undo2,
   Users,
 } from "lucide-react";
 
@@ -16,7 +17,7 @@ import { StatCard } from "@/components/stat-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import { useCount, useList } from "@/lib/api";
+import { useCount, useList, useRpc } from "@/lib/api";
 import { fmtMoney, fmtTime, titleize } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -39,17 +40,38 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
 
+function isoDay(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 function dayBounds() {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
   end.setDate(end.getDate() + 1);
-  return { start: start.toISOString(), end: end.toISOString(), day: start.toISOString().slice(0, 10) };
+  const weekStart = new Date(start);
+  weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+  const monthStart = new Date(start.getFullYear(), start.getMonth(), 1);
+  return {
+    start: start.toISOString(),
+    end: end.toISOString(),
+    day: isoDay(start),
+    weekFrom: isoDay(weekStart),
+    monthFrom: isoDay(monthStart),
+  };
 }
+
+interface CollectionRow {
+  collected: number;
+  refunds: number;
+  net: number;
+  txns: number;
+}
+
 
 function Dashboard() {
   const { profile } = useAuth();
-  const { start, end, day } = dayBounds();
+  const { start, end, day, weekFrom, monthFrom } = dayBounds();
 
   const patients = useCount("patients", { filters: { is_active: true } });
   const todayAppointments = useCount("appointments", {
@@ -86,14 +108,15 @@ function Dashboard() {
     pageSize: 6,
   });
 
-  const invoicesToday = useList({
-    table: "invoices",
-    select: "id, invoice_no, total, paid_amount, status",
-    orderBy: "created_at",
-    dateField: "created_at",
-    dateFrom: start,
-    pageSize: 100,
-  });
+  /* Money actually received: aggregated from payment transactions in the database. */
+  const collectedToday = useRpc<CollectionRow[]>("collection_totals", { _from: day, _to: day });
+  const collectedWeek = useRpc<CollectionRow[]>("collection_totals", { _from: weekFrom, _to: day });
+  const collectedMonth = useRpc<CollectionRow[]>("collection_totals", { _from: monthFrom, _to: day });
+  const receivables = useRpc<{ billed: number; settled: number; outstanding: number }[]>(
+    "receivables_summary",
+    {},
+  );
+
 
   const followUps = useList({
     table: "follow_ups",
@@ -115,14 +138,13 @@ function Dashboard() {
   });
 
 
-  const revenue = (invoicesToday.data?.rows ?? []).reduce(
-    (sum, r) => sum + Number(r["paid_amount"] ?? 0),
-    0,
-  );
-  const outstanding = (invoicesToday.data?.rows ?? []).reduce(
-    (sum, r) => sum + (Number(r["total"] ?? 0) - Number(r["paid_amount"] ?? 0)),
-    0,
-  );
+  const today = collectedToday.data?.[0];
+  const week = collectedWeek.data?.[0];
+  const month = collectedMonth.data?.[0];
+  const revenue = Number(today?.collected ?? 0);
+  const refundsToday = Number(today?.refunds ?? 0);
+  const outstanding = Number(receivables.data?.[0]?.outstanding ?? 0);
+
 
   const name = (row: Record<string, unknown>) => {
     const p = row["patients"] as { first_name?: string; last_name?: string; mrn?: string } | null;
@@ -164,9 +186,13 @@ function Dashboard() {
           tone="success"
           loading={plannedSurgeries.isLoading}
         />
-        <StatCard label="Collected today" value={fmtMoney(revenue)} icon={ReceiptText} tone="success" loading={invoicesToday.isLoading} />
-        <StatCard label="Outstanding today" value={fmtMoney(outstanding)} icon={Activity} tone="destructive" loading={invoicesToday.isLoading} />
+        <StatCard label="Collected today" value={fmtMoney(revenue)} icon={ReceiptText} tone="success" loading={collectedToday.isLoading} />
+        <StatCard label="Collected this week" value={fmtMoney(Number(week?.collected ?? 0))} icon={ReceiptText} tone="info" loading={collectedWeek.isLoading} />
+        <StatCard label="Collected this month" value={fmtMoney(Number(month?.collected ?? 0))} icon={ReceiptText} tone="info" loading={collectedMonth.isLoading} />
+        <StatCard label="Refunds today" value={fmtMoney(refundsToday)} icon={Undo2} tone="warning" loading={collectedToday.isLoading} />
+        <StatCard label="Outstanding" value={fmtMoney(outstanding)} icon={Activity} tone="destructive" loading={receivables.isLoading} />
         <StatCard label="Follow-ups due" value={followUps.data?.count ?? 0} icon={CircleDot} tone="info" loading={followUps.isLoading} />
+
         <StatCard label="Low stock items" value={lowStock.data?.count ?? 0} icon={Package} tone="warning" loading={lowStock.isLoading} />
       </div>
 
