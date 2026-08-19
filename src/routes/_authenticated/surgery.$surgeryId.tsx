@@ -826,15 +826,50 @@ function BillingCard({ surgery, invoice }: { surgery: Row; invoice: Row | null }
             </Link>
           </Button>
         </div>
+      ) : nonBillable ? (
+        <div className="space-y-1 text-sm">
+          <Badge variant="outline">Non-billable · authorised</Badge>
+          <p className="text-muted-foreground">{String(surgery["non_billable_reason"] ?? "")}</p>
+        </div>
+      ) : legacyUnbilled ? (
+        <div className="space-y-1 text-sm">
+          <Badge variant="outline">Legacy unbilled record</Badge>
+          <p className="text-muted-foreground">{String(surgery["legacy_unbilled_reason"] ?? "")}</p>
+        </div>
       ) : (
-        <div className="space-y-2 text-sm">
+        <div className="space-y-3 text-sm">
           <p className="text-muted-foreground">
             Raises a surgery invoice for {fmtMoney(fee)}
             {iolModel && Number(iolModel["price"] ?? 0) > 0 ? ` plus the implant ${fmtMoney(iolModel["price"])}` : ""}.
+            A surgery cannot be completed until it is billed.
           </p>
           <Button size="sm" disabled={raise.isPending} onClick={() => raise.mutate()}>
             Create surgery invoice
           </Button>
+          {isAdmin ? (
+            <div className="grid gap-2 border-t pt-3">
+              <Label htmlFor="waive">Authorised non-billable reason (admin)</Label>
+              <Input
+                id="waive"
+                value={waiveReason}
+                onChange={(e) => setWaiveReason(e.target.value)}
+                placeholder="e.g. free camp surgery approved by medical director"
+              />
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={!waiveReason.trim() || update.isPending}
+                onClick={() =>
+                  update.mutate(
+                    { non_billable: true, non_billable_reason: waiveReason.trim() },
+                    { onSuccess: () => toast.success("Surgery marked non-billable") },
+                  )
+                }
+              >
+                Mark non-billable
+              </Button>
+            </div>
+          ) : null}
         </div>
       )}
     </Section>
