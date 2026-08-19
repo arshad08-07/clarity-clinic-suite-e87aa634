@@ -689,7 +689,8 @@ export const invoicesConfig: ResourceConfig = {
   searchFields: ["invoice_no", "notes"],
   orderBy: "created_at",
   fields: [
-    { name: "invoice_no", label: "Invoice no.", required: true },
+    // Numbering and all money columns are database-derived — never editable here.
+    { name: "invoice_no", label: "Invoice no.", inForm: false },
     patientRef({ required: false }),
     {
       name: "invoice_type",
@@ -698,12 +699,12 @@ export const invoicesConfig: ResourceConfig = {
       options: opts("consultation", "pharmacy", "optical", "diagnostic", "surgery"),
       defaultValue: "consultation",
     },
-    { name: "subtotal", label: "Subtotal", type: "money" },
+    { name: "subtotal", label: "Subtotal", type: "money", inForm: false },
     { name: "discount", label: "Discount", type: "money", inTable: false },
-    { name: "tax", label: "Tax", type: "money", inTable: false },
-    { name: "total", label: "Total", type: "money" },
-    { name: "paid_amount", label: "Paid", type: "money" },
-    { name: "status", label: "Status", type: "select", options: PAYMENT_STATUS, defaultValue: "unpaid" },
+    { name: "tax", label: "Tax", type: "money", inForm: false, inTable: false },
+    { name: "total", label: "Total", type: "money", inForm: false },
+    { name: "paid_amount", label: "Paid", type: "money", inForm: false },
+    { name: "status", label: "Status", type: "select", options: PAYMENT_STATUS, inForm: false },
     branchRef(),
     { name: "notes", label: "Notes", type: "textarea", full: true, inTable: false },
     { name: "created_at", label: "Raised", type: "date", inForm: false },
