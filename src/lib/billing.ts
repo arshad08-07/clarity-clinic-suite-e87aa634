@@ -6,7 +6,7 @@ import { fmtDateTime, fmtMoney } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
 
 export const INVOICE_SELECT =
-  "id, invoice_no, invoice_type, patient_id, visit_id, branch_id, subtotal, discount, tax, total, paid_amount, status, notes, created_at, patients(id, mrn, first_name, last_name, phone, address), branches(id, name, address, phone), visits(id, token_no, status, checked_in_at)";
+  "id, invoice_no, invoice_type, patient_id, visit_id, branch_id, is_legacy, legacy_reason, subtotal, discount, tax, total, paid_amount, status, notes, created_at, patients(id, mrn, first_name, last_name, phone, address), branches(id, name, address, phone), visits(id, token_no, status, checked_in_at)";
 
 export const INVOICE_TYPES = [
   "consultation",
