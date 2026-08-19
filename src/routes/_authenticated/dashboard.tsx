@@ -107,14 +107,15 @@ function Dashboard() {
     pageSize: 6,
   });
 
-  const invoicesToday = useList({
-    table: "invoices",
-    select: "id, invoice_no, total, paid_amount, status",
-    orderBy: "created_at",
-    dateField: "created_at",
-    dateFrom: start,
-    pageSize: 100,
-  });
+  /* Money actually received: aggregated from payment transactions in the database. */
+  const collectedToday = useRpc<CollectionRow[]>("collection_totals", { _from: day, _to: day });
+  const collectedWeek = useRpc<CollectionRow[]>("collection_totals", { _from: weekFrom, _to: day });
+  const collectedMonth = useRpc<CollectionRow[]>("collection_totals", { _from: monthFrom, _to: day });
+  const receivables = useRpc<{ billed: number; settled: number; outstanding: number }[]>(
+    "receivables_summary",
+    {},
+  );
+
 
   const followUps = useList({
     table: "follow_ups",
