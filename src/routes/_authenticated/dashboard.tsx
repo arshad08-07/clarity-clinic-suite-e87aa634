@@ -137,14 +137,13 @@ function Dashboard() {
   });
 
 
-  const revenue = (invoicesToday.data?.rows ?? []).reduce(
-    (sum, r) => sum + Number(r["paid_amount"] ?? 0),
-    0,
-  );
-  const outstanding = (invoicesToday.data?.rows ?? []).reduce(
-    (sum, r) => sum + (Number(r["total"] ?? 0) - Number(r["paid_amount"] ?? 0)),
-    0,
-  );
+  const today = collectedToday.data?.[0];
+  const week = collectedWeek.data?.[0];
+  const month = collectedMonth.data?.[0];
+  const revenue = Number(today?.collected ?? 0);
+  const refundsToday = Number(today?.refunds ?? 0);
+  const outstanding = Number(receivables.data?.[0]?.outstanding ?? 0);
+
 
   const name = (row: Record<string, unknown>) => {
     const p = row["patients"] as { first_name?: string; last_name?: string; mrn?: string } | null;
