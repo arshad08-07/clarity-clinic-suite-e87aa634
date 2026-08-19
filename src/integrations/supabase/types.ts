@@ -3352,7 +3352,7 @@ export type Database = {
           chief_complaint: string | null
           completed_at: string | null
           created_at: string
-          department: string | null
+          department: string
           doctor_id: string | null
           id: string
           on_hold: boolean
@@ -3371,7 +3371,7 @@ export type Database = {
           chief_complaint?: string | null
           completed_at?: string | null
           created_at?: string
-          department?: string | null
+          department?: string
           doctor_id?: string | null
           id?: string
           on_hold?: boolean
@@ -3390,7 +3390,7 @@ export type Database = {
           chief_complaint?: string | null
           completed_at?: string | null
           created_at?: string
-          department?: string | null
+          department?: string
           doctor_id?: string | null
           id?: string
           on_hold?: boolean
@@ -3507,7 +3507,7 @@ export type Database = {
           chief_complaint: string | null
           completed_at: string | null
           created_at: string
-          department: string | null
+          department: string
           doctor_id: string | null
           id: string
           on_hold: boolean
@@ -3618,7 +3618,7 @@ export type Database = {
           chief_complaint: string | null
           completed_at: string | null
           created_at: string
-          department: string | null
+          department: string
           doctor_id: string | null
           id: string
           on_hold: boolean
