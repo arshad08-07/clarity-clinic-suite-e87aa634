@@ -29,6 +29,7 @@ export interface BillingSettings {
   default_tax_percent: number;
   tax_label: string;
   tax_inclusive: boolean;
+  refund_approval_limit: number;
 }
 
 export interface DayHours {
