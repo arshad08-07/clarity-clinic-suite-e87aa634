@@ -927,6 +927,13 @@ export type Database = {
             foreignKeyName: "goods_receipt_items_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goods_receipt_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -1141,6 +1148,13 @@ export type Database = {
             foreignKeyName: "invoice_items_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -1317,6 +1331,13 @@ export type Database = {
           unit_cost?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "iol_models_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "iol_models_product_id_fkey"
             columns: ["product_id"]
@@ -1576,6 +1597,13 @@ export type Database = {
             foreignKeyName: "optical_orders_frame_product_id_fkey"
             columns: ["frame_product_id"]
             isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_frame_product_id_fkey"
+            columns: ["frame_product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -1590,6 +1618,13 @@ export type Database = {
             foreignKeyName: "optical_orders_lens_od_product_id_fkey"
             columns: ["lens_od_product_id"]
             isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_lens_od_product_id_fkey"
+            columns: ["lens_od_product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -1597,7 +1632,21 @@ export type Database = {
             foreignKeyName: "optical_orders_lens_os_product_id_fkey"
             columns: ["lens_os_product_id"]
             isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_lens_os_product_id_fkey"
+            columns: ["lens_os_product_id"]
+            isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "optical_orders_lens_product_id_fkey"
+            columns: ["lens_product_id"]
+            isOneToOne: false
+            referencedRelation: "low_stock_products"
             referencedColumns: ["id"]
           },
           {
@@ -2312,6 +2361,13 @@ export type Database = {
             foreignKeyName: "pharmacy_sales_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pharmacy_sales_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -2475,6 +2531,13 @@ export type Database = {
             foreignKeyName: "product_batches_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_batches_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
@@ -2482,6 +2545,7 @@ export type Database = {
       }
       products: {
         Row: {
+          batch_tracked: boolean
           brand: string | null
           category: Database["public"]["Enums"]["product_category"]
           cost_price: number
@@ -2500,6 +2564,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          batch_tracked?: boolean
           brand?: string | null
           category?: Database["public"]["Enums"]["product_category"]
           cost_price?: number
@@ -2518,6 +2583,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          batch_tracked?: boolean
           brand?: string | null
           category?: Database["public"]["Enums"]["product_category"]
           cost_price?: number
@@ -2628,6 +2694,13 @@ export type Database = {
           unit_cost?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "purchase_order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "low_stock_products"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "purchase_order_items_product_id_fkey"
             columns: ["product_id"]
@@ -2779,6 +2852,13 @@ export type Database = {
             columns: ["branch_id"]
             isOneToOne: false
             referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_movements_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "low_stock_products"
             referencedColumns: ["id"]
           },
           {
@@ -3287,7 +3367,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      low_stock_products: {
+        Row: {
+          available_quantity: number | null
+          batch_tracked: boolean | null
+          brand: string | null
+          category: Database["public"]["Enums"]["product_category"] | null
+          id: string | null
+          name: string | null
+          reorder_level: number | null
+          sku: string | null
+          unit: string | null
+        }
+        Insert: {
+          available_quantity?: number | null
+          batch_tracked?: boolean | null
+          brand?: string | null
+          category?: Database["public"]["Enums"]["product_category"] | null
+          id?: string | null
+          name?: string | null
+          reorder_level?: number | null
+          sku?: string | null
+          unit?: string | null
+        }
+        Update: {
+          available_quantity?: number | null
+          batch_tracked?: boolean | null
+          brand?: string | null
+          category?: Database["public"]["Enums"]["product_category"] | null
+          id?: string | null
+          name?: string | null
+          reorder_level?: number | null
+          sku?: string | null
+          unit?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       app_setting: { Args: { _branch?: string; _key: string }; Returns: Json }
@@ -3468,6 +3583,7 @@ export type Database = {
       next_po_no: { Args: never; Returns: string }
       owns_patient: { Args: { _patient_id: string }; Returns: boolean }
       po_recalc: { Args: { _po_id: string }; Returns: undefined }
+      product_batch_qty: { Args: { _product: string }; Returns: number }
       recalc_invoice: { Args: { _invoice_id: string }; Returns: undefined }
       same_branch: { Args: { _branch: string }; Returns: boolean }
       user_branch_ids: {
