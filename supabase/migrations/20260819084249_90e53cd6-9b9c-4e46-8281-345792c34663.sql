@@ -1,0 +1,12 @@
+CREATE INDEX IF NOT EXISTS idx_visits_branch_status ON public.visits (branch_id, status, checked_in_at DESC);
+CREATE INDEX IF NOT EXISTS idx_visits_doctor_checkin ON public.visits (doctor_id, checked_in_at DESC);
+CREATE INDEX IF NOT EXISTS idx_surgeries_surgeon_sched ON public.surgeries (surgeon_id, scheduled_at);
+CREATE INDEX IF NOT EXISTS idx_follow_ups_doctor ON public.follow_ups (doctor_id);
+CREATE INDEX IF NOT EXISTS idx_goods_receipts_branch ON public.goods_receipts (branch_id);
+CREATE INDEX IF NOT EXISTS idx_user_branches_branch ON public.user_branches (branch_id);
+CREATE INDEX IF NOT EXISTS idx_optical_orders_frame ON public.optical_orders (frame_product_id);
+CREATE INDEX IF NOT EXISTS idx_optical_orders_lens_od ON public.optical_orders (lens_od_product_id);
+CREATE INDEX IF NOT EXISTS idx_optical_orders_lens_os ON public.optical_orders (lens_os_product_id);
+CREATE INDEX IF NOT EXISTS idx_pharmacy_sales_prescription ON public.pharmacy_sales (prescription_id);
+CREATE INDEX IF NOT EXISTS idx_leads_assigned_to ON public.leads (assigned_to);
+CREATE INDEX IF NOT EXISTS idx_prescriptions_doctor ON public.prescriptions (doctor_id);
