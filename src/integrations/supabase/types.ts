@@ -2925,6 +2925,12 @@ export type Database = {
           invoice_id: string | null
           iol_inventory_id: string | null
           iol_power: number | null
+          is_legacy_unbilled: boolean
+          legacy_unbilled_reason: string | null
+          non_billable: boolean
+          non_billable_at: string | null
+          non_billable_by: string | null
+          non_billable_reason: string | null
           nurse_id: string | null
           op_notes: string | null
           ot_room_id: string | null
@@ -2973,6 +2979,12 @@ export type Database = {
           invoice_id?: string | null
           iol_inventory_id?: string | null
           iol_power?: number | null
+          is_legacy_unbilled?: boolean
+          legacy_unbilled_reason?: string | null
+          non_billable?: boolean
+          non_billable_at?: string | null
+          non_billable_by?: string | null
+          non_billable_reason?: string | null
           nurse_id?: string | null
           op_notes?: string | null
           ot_room_id?: string | null
@@ -3021,6 +3033,12 @@ export type Database = {
           invoice_id?: string | null
           iol_inventory_id?: string | null
           iol_power?: number | null
+          is_legacy_unbilled?: boolean
+          legacy_unbilled_reason?: string | null
+          non_billable?: boolean
+          non_billable_at?: string | null
+          non_billable_by?: string | null
+          non_billable_reason?: string | null
           nurse_id?: string | null
           op_notes?: string | null
           ot_room_id?: string | null
