@@ -610,6 +610,8 @@ function CompletionCard({ surgery, missing }: { surgery: Row; missing: string[] 
   const status = String(surgery["status"]);
   const done = status === "completed";
   const override = Boolean(surgery["preop_override"]);
+  /* A billable surgery needs a linked invoice before it can be completed. */
+  const billingBlocked = !surgery["invoice_id"] && !surgery["non_billable"];
   const [notes, setNotes] = useState({
     pre_op_notes: String(surgery["pre_op_notes"] ?? ""),
     op_notes: String(surgery["op_notes"] ?? ""),
