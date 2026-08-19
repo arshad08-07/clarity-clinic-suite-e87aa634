@@ -35,7 +35,7 @@ export function VisitPrescriptionSection({ visit }: { visit: Row }) {
   const [instructions, setInstructions] = useState("");
 
   const record = rx.data;
-  const items = ((record?.["prescription_items"] ?? []) as Row[]) ?? [];
+  const items = (record?.["prescription_items"] ?? []) as Row[];
   const dxRows = diagnoses.data ?? [];
   const dxById = new Map(dxRows.map((d) => [String(d["id"]), d]));
 
