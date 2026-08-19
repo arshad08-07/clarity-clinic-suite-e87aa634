@@ -185,9 +185,13 @@ function Dashboard() {
           tone="success"
           loading={plannedSurgeries.isLoading}
         />
-        <StatCard label="Collected today" value={fmtMoney(revenue)} icon={ReceiptText} tone="success" loading={invoicesToday.isLoading} />
-        <StatCard label="Outstanding today" value={fmtMoney(outstanding)} icon={Activity} tone="destructive" loading={invoicesToday.isLoading} />
+        <StatCard label="Collected today" value={fmtMoney(revenue)} icon={ReceiptText} tone="success" loading={collectedToday.isLoading} />
+        <StatCard label="Collected this week" value={fmtMoney(Number(week?.collected ?? 0))} icon={ReceiptText} tone="info" loading={collectedWeek.isLoading} />
+        <StatCard label="Collected this month" value={fmtMoney(Number(month?.collected ?? 0))} icon={ReceiptText} tone="info" loading={collectedMonth.isLoading} />
+        <StatCard label="Refunds today" value={fmtMoney(refundsToday)} icon={Undo2} tone="warning" loading={collectedToday.isLoading} />
+        <StatCard label="Outstanding" value={fmtMoney(outstanding)} icon={Activity} tone="destructive" loading={receivables.isLoading} />
         <StatCard label="Follow-ups due" value={followUps.data?.count ?? 0} icon={CircleDot} tone="info" loading={followUps.isLoading} />
+
         <StatCard label="Low stock items" value={lowStock.data?.count ?? 0} icon={Package} tone="warning" loading={lowStock.isLoading} />
       </div>
 
