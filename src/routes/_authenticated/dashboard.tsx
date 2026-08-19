@@ -70,7 +70,7 @@ interface CollectionRow {
 
 function Dashboard() {
   const { profile } = useAuth();
-  const { start, end, day } = dayBounds();
+  const { start, end, day, weekFrom, monthFrom } = dayBounds();
 
   const patients = useCount("patients", { filters: { is_active: true } });
   const todayAppointments = useCount("appointments", {
