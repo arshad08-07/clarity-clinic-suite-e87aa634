@@ -610,6 +610,8 @@ function CompletionCard({ surgery, missing }: { surgery: Row; missing: string[] 
   const status = String(surgery["status"]);
   const done = status === "completed";
   const override = Boolean(surgery["preop_override"]);
+  /* A billable surgery needs a linked invoice before it can be completed. */
+  const billingBlocked = !surgery["invoice_id"] && !surgery["non_billable"];
   const [notes, setNotes] = useState({
     pre_op_notes: String(surgery["pre_op_notes"] ?? ""),
     op_notes: String(surgery["op_notes"] ?? ""),
@@ -641,6 +643,12 @@ function CompletionCard({ surgery, missing }: { surgery: Row; missing: string[] 
           </div>
         ))}
       </div>
+      {!done && billingBlocked ? (
+        <p className="mt-3 text-sm text-destructive">
+          Blocked until billed: raise the surgery invoice below, or have an administrator record an authorised
+          non-billable reason.
+        </p>
+      ) : null}
       {!done && missing.length > 0 && !override ? (
         <p className="mt-3 text-sm text-destructive">Blocked until complete: {missing.join(", ")}.</p>
       ) : null}
@@ -669,7 +677,7 @@ function CompletionCard({ surgery, missing }: { surgery: Row; missing: string[] 
               </Button>
             ) : null}
             <Button
-              disabled={update.isPending || (missing.length > 0 && !override)}
+              disabled={update.isPending || billingBlocked || (missing.length > 0 && !override)}
               onClick={() =>
                 update.mutate(
                   { ...notes, status: "completed" },
@@ -744,6 +752,10 @@ function BillingCard({ surgery, invoice }: { surgery: Row; invoice: Row | null }
   const createInvoice = useCreateInvoice();
   const update = useUpdateSurgery(id);
   const qc = useQueryClient();
+  const { isAdmin } = useAuth();
+  const [waiveReason, setWaiveReason] = useState("");
+  const nonBillable = Boolean(surgery["non_billable"]);
+  const legacyUnbilled = Boolean(surgery["is_legacy_unbilled"]);
 
   const iol = surgery["iol_inventory"] as Row | null;
   const iolModel = (iol?.["iol_models"] as Row | null) ?? null;
@@ -780,9 +792,11 @@ function BillingCard({ surgery, invoice }: { surgery: Row; invoice: Row | null }
           quantity: 1,
           unit_price: Number(iolModel["price"]),
           tax_percent: 0,
-          source_type: "surgery",
-          source_id: id,
-          source_ref: String(iol?.["serial_no"] ?? ""),
+          /* The procedure line carries the surgery source key; the implant line
+             references it so one surgery can never be billed twice. */
+          source_type: "other",
+          source_id: null,
+          source_ref: `Surgery ${String(surgery["procedure"])} · ${String(iol?.["serial_no"] ?? "")}`,
         });
       }
       const { error } = await db.from("invoice_items").insert(items);
@@ -812,15 +826,50 @@ function BillingCard({ surgery, invoice }: { surgery: Row; invoice: Row | null }
             </Link>
           </Button>
         </div>
+      ) : nonBillable ? (
+        <div className="space-y-1 text-sm">
+          <Badge variant="outline">Non-billable · authorised</Badge>
+          <p className="text-muted-foreground">{String(surgery["non_billable_reason"] ?? "")}</p>
+        </div>
+      ) : legacyUnbilled ? (
+        <div className="space-y-1 text-sm">
+          <Badge variant="outline">Legacy unbilled record</Badge>
+          <p className="text-muted-foreground">{String(surgery["legacy_unbilled_reason"] ?? "")}</p>
+        </div>
       ) : (
-        <div className="space-y-2 text-sm">
+        <div className="space-y-3 text-sm">
           <p className="text-muted-foreground">
             Raises a surgery invoice for {fmtMoney(fee)}
             {iolModel && Number(iolModel["price"] ?? 0) > 0 ? ` plus the implant ${fmtMoney(iolModel["price"])}` : ""}.
+            A surgery cannot be completed until it is billed.
           </p>
           <Button size="sm" disabled={raise.isPending} onClick={() => raise.mutate()}>
             Create surgery invoice
           </Button>
+          {isAdmin ? (
+            <div className="grid gap-2 border-t pt-3">
+              <Label htmlFor="waive">Authorised non-billable reason (admin)</Label>
+              <Input
+                id="waive"
+                value={waiveReason}
+                onChange={(e) => setWaiveReason(e.target.value)}
+                placeholder="e.g. free camp surgery approved by medical director"
+              />
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={!waiveReason.trim() || update.isPending}
+                onClick={() =>
+                  update.mutate(
+                    { non_billable: true, non_billable_reason: waiveReason.trim() },
+                    { onSuccess: () => toast.success("Surgery marked non-billable") },
+                  )
+                }
+              >
+                Mark non-billable
+              </Button>
+            </div>
+          ) : null}
         </div>
       )}
     </Section>
