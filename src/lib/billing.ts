@@ -195,13 +195,12 @@ export function useDeleteInvoiceItem(invoiceId: string) {
 export function useRecordPayment(invoiceId: string) {
   const invalidate = useInvalidateInvoice(invoiceId);
   return useMutation({
-    mutationFn: async (values: { amount: number; method: string; reference?: string | null; refund?: boolean }) => {
-      const signed = values.refund ? -Math.abs(values.amount) : Math.abs(values.amount);
+    mutationFn: async (values: { amount: number; method: string; reference?: string | null }) => {
       const { data, error } = await db
         .from("payments")
         .insert({
           invoice_id: invoiceId,
-          amount: signed,
+          amount: Math.abs(values.amount),
           method: values.method,
           reference: values.reference || null,
           paid_at: new Date().toISOString(),
@@ -211,8 +210,88 @@ export function useRecordPayment(invoiceId: string) {
       if (error) throw error;
       return data as Row;
     },
-    onSuccess: (_d, vars) => {
-      toast.success(vars.refund ? "Refund recorded" : "Payment recorded");
+    onSuccess: () => {
+      toast.success("Payment recorded");
+      invalidate();
+    },
+    onError: (e) => toast.error(errorMessage(e)),
+  });
+}
+
+/** True when the row is a refund (stored as a negative amount). */
+export function isRefund(p: Row) {
+  return Number(p["amount"] ?? 0) < 0;
+}
+
+/** Amount still refundable against an original payment, given the invoice ledger. */
+export function refundableOf(payment: Row, all: Row[]) {
+  if (isRefund(payment)) return 0;
+  const refunded = all
+    .filter((r) => isRefund(r) && String(r["original_payment_id"] ?? "") === String(payment["id"]))
+    .reduce((s, r) => s + Math.abs(Number(r["amount"] ?? 0)), 0);
+  return Math.max(Number(payment["amount"] ?? 0) - refunded, 0);
+}
+
+/** Refund threshold above which an authorised approver must be recorded. */
+export function refundApprovalLimit() {
+  return Number(getSettings().billing.refund_approval_limit ?? 0);
+}
+
+/** Admins/finance users who may approve a restricted refund. */
+export function useRefundApprovers() {
+  return useQuery({
+    queryKey: ["refund-approvers"],
+    queryFn: async () => {
+      const { data, error } = await db
+        .from("user_roles")
+        .select("user_id, role, profiles:user_id(id, full_name, designation)")
+        .in("role", ["super_admin", "clinic_admin"]);
+      if (error) throw error;
+      const seen = new Set<string>();
+      return (data ?? []).flatMap((r) => {
+        const p = (r as Row)["profiles"] as Row | null;
+        const id = String((r as Row)["user_id"]);
+        if (!p || seen.has(id)) return [];
+        seen.add(id);
+        return [{ id, name: String(p["full_name"] ?? "Administrator") }];
+      });
+    },
+  });
+}
+
+/** Records an auditable refund linked to the original payment it reverses. */
+export function useRefundPayment(invoiceId: string) {
+  const invalidate = useInvalidateInvoice(invoiceId);
+  return useMutation({
+    mutationFn: async (values: {
+      original_payment_id: string;
+      amount: number;
+      method: string;
+      reason: string;
+      approved_by?: string | null;
+      notes?: string | null;
+      reference?: string | null;
+    }) => {
+      const { data, error } = await db
+        .from("payments")
+        .insert({
+          invoice_id: invoiceId,
+          original_payment_id: values.original_payment_id,
+          amount: -Math.abs(values.amount),
+          method: values.method,
+          reference: values.reference || null,
+          refund_reason: values.reason,
+          approved_by: values.approved_by || null,
+          notes: values.notes || null,
+          paid_at: new Date().toISOString(),
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      return data as Row;
+    },
+    onSuccess: () => {
+      toast.success("Refund recorded");
       invalidate();
     },
     onError: (e) => toast.error(errorMessage(e)),
