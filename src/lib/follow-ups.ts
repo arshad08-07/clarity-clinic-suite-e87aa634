@@ -40,7 +40,7 @@ export function followUpState(row: Row): FollowUpState {
 }
 
 export const FOLLOW_UP_SELECT =
-  "id, due_date, type, reason, notes, priority, status, is_done, completed_at, outcome_notes, " +
+  "id, due_date, type, reason, notes, priority, status, completed_at, outcome_notes, " +
   "cancel_reason, reminder_offset_days, branch_id, visit_id, surgery_id, completed_visit_id, created_at, " +
   "patients(id, mrn, first_name, last_name, phone, email), " +
   "doctor:doctor_id(id, full_name), assignee:assigned_to(id, full_name), " +
@@ -130,7 +130,7 @@ export function useCreateFollowUp() {
     mutationFn: async (values: NewFollowUp) => {
       const { data, error } = await db
         .from("follow_ups")
-        .insert({ ...values, status: "upcoming", is_done: false })
+        .insert({ ...values, status: "upcoming" })
         .select("id")
         .single();
       if (error) throw error;
