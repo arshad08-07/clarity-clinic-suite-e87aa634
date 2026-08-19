@@ -107,12 +107,13 @@ function Dashboard() {
   });
 
   const lowStock = useList({
-    table: "products",
-    select: "id, name, sku, stock_qty, reorder_level",
-    orderBy: "stock_qty",
+    table: "low_stock_products",
+    select: "id, name, sku, available_quantity, reorder_level",
+    orderBy: "available_quantity",
     ascending: true,
     pageSize: 6,
   });
+
 
   const revenue = (invoicesToday.data?.rows ?? []).reduce(
     (sum, r) => sum + Number(r["paid_amount"] ?? 0),
