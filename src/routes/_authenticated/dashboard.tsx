@@ -7,6 +7,7 @@ import {
   Package,
   ReceiptText,
   Scissors,
+  Undo2,
   Users,
 } from "lucide-react";
 
@@ -16,7 +17,7 @@ import { StatCard } from "@/components/stat-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import { useCount, useList } from "@/lib/api";
+import { useCount, useList, useRpc } from "@/lib/api";
 import { fmtMoney, fmtTime, titleize } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
