@@ -643,6 +643,12 @@ function CompletionCard({ surgery, missing }: { surgery: Row; missing: string[] 
           </div>
         ))}
       </div>
+      {!done && billingBlocked ? (
+        <p className="mt-3 text-sm text-destructive">
+          Blocked until billed: raise the surgery invoice below, or have an administrator record an authorised
+          non-billable reason.
+        </p>
+      ) : null}
       {!done && missing.length > 0 && !override ? (
         <p className="mt-3 text-sm text-destructive">Blocked until complete: {missing.join(", ")}.</p>
       ) : null}
