@@ -107,12 +107,13 @@ function Dashboard() {
   });
 
   const lowStock = useList({
-    table: "products",
-    select: "id, name, sku, stock_qty, reorder_level",
-    orderBy: "stock_qty",
+    table: "low_stock_products",
+    select: "id, name, sku, available_quantity, reorder_level",
+    orderBy: "available_quantity",
     ascending: true,
     pageSize: 6,
   });
+
 
   const revenue = (invoicesToday.data?.rows ?? []).reduce(
     (sum, r) => sum + Number(r["paid_amount"] ?? 0),
@@ -166,7 +167,7 @@ function Dashboard() {
         <StatCard label="Collected today" value={fmtMoney(revenue)} icon={ReceiptText} tone="success" loading={invoicesToday.isLoading} />
         <StatCard label="Outstanding today" value={fmtMoney(outstanding)} icon={Activity} tone="destructive" loading={invoicesToday.isLoading} />
         <StatCard label="Follow-ups due" value={followUps.data?.count ?? 0} icon={CircleDot} tone="info" loading={followUps.isLoading} />
-        <StatCard label="Low stock items" value={(lowStock.data?.rows ?? []).filter((r) => Number(r["stock_qty"]) <= Number(r["reorder_level"])).length} icon={Package} tone="warning" loading={lowStock.isLoading} />
+        <StatCard label="Low stock items" value={lowStock.data?.count ?? 0} icon={Package} tone="warning" loading={lowStock.isLoading} />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
@@ -271,13 +272,8 @@ function Dashboard() {
                     <p className="truncate text-sm font-medium">{String(row["name"])}</p>
                     <p className="truncate text-xs text-muted-foreground">{String(row["sku"])}</p>
                   </div>
-                  <Badge
-                    variant={
-                      Number(row["stock_qty"]) <= Number(row["reorder_level"]) ? "destructive" : "secondary"
-                    }
-                  >
-                    {String(row["stock_qty"])} left
-                  </Badge>
+                  <Badge variant="destructive">{String(row["available_quantity"])} left</Badge>
+
                 </li>
               ))}
             </ul>
