@@ -147,6 +147,24 @@ export function OrderDiagnosticsDialog({
           </div>
 
           <div className="grid gap-1.5">
+            <Label>Indication — diagnosis from this visit (optional)</Label>
+            <Select value={dxId} onValueChange={setDxId}>
+              <SelectTrigger>
+                <SelectValue placeholder="Not linked" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NO_DX}>Not linked</SelectItem>
+                {(diagnoses.data ?? []).map((d) => (
+                  <SelectItem key={String(d["id"])} value={String(d["id"])}>
+                    {diagnosisLabel(d)}
+                    {diagnosisCode(d) ? ` (${diagnosisCode(d)})` : ""} · {String(d["eye"] ?? "N/A")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid gap-1.5">
             <Label>Note for diagnostic staff</Label>
             <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
           </div>
