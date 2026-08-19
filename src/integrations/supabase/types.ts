@@ -2205,33 +2205,66 @@ export type Database = {
       payments: {
         Row: {
           amount: number
+          approved_at: string | null
+          approved_by: string | null
           created_at: string
           id: string
           invoice_id: string
+          is_legacy_refund: boolean
+          legacy_reason: string | null
           method: string
+          notes: string | null
+          original_payment_id: string | null
           paid_at: string
+          patient_id: string | null
           received_by: string | null
           reference: string | null
+          refund_reason: string | null
+          refund_status: string | null
+          refunded_at: string | null
+          refunded_by: string | null
         }
         Insert: {
           amount: number
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           id?: string
           invoice_id: string
+          is_legacy_refund?: boolean
+          legacy_reason?: string | null
           method?: string
+          notes?: string | null
+          original_payment_id?: string | null
           paid_at?: string
+          patient_id?: string | null
           received_by?: string | null
           reference?: string | null
+          refund_reason?: string | null
+          refund_status?: string | null
+          refunded_at?: string | null
+          refunded_by?: string | null
         }
         Update: {
           amount?: number
+          approved_at?: string | null
+          approved_by?: string | null
           created_at?: string
           id?: string
           invoice_id?: string
+          is_legacy_refund?: boolean
+          legacy_reason?: string | null
           method?: string
+          notes?: string | null
+          original_payment_id?: string | null
           paid_at?: string
+          patient_id?: string | null
           received_by?: string | null
           reference?: string | null
+          refund_reason?: string | null
+          refund_status?: string | null
+          refunded_at?: string | null
+          refunded_by?: string | null
         }
         Relationships: [
           {
@@ -2239,6 +2272,20 @@ export type Database = {
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_original_payment_id_fkey"
+            columns: ["original_payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
             referencedColumns: ["id"]
           },
         ]
@@ -3646,6 +3693,7 @@ export type Database = {
       next_mrn: { Args: never; Returns: string }
       next_po_no: { Args: never; Returns: string }
       owns_patient: { Args: { _patient_id: string }; Returns: boolean }
+      payment_refundable: { Args: { _payment_id: string }; Returns: number }
       po_recalc: { Args: { _po_id: string }; Returns: undefined }
       product_batch_qty: { Args: { _product: string }; Returns: number }
       recalc_invoice: { Args: { _invoice_id: string }; Returns: undefined }

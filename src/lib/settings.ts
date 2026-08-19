@@ -29,6 +29,7 @@ export interface BillingSettings {
   default_tax_percent: number;
   tax_label: string;
   tax_inclusive: boolean;
+  refund_approval_limit: number;
 }
 
 export interface DayHours {
@@ -117,6 +118,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     default_tax_percent: 0,
     tax_label: "GST",
     tax_inclusive: false,
+    refund_approval_limit: 5000,
   },
   appointments: {
     enforce_rules: true,
