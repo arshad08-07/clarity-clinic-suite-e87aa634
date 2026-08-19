@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.can_read_clinical(uuid), public.can_read_medication(uuid), public.can_read_optical_rx(uuid) TO PUBLIC;
