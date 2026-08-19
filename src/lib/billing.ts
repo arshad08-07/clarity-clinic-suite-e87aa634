@@ -248,7 +248,7 @@ export function useRefundApprovers() {
         .in("role", ["super_admin", "clinic_admin"]);
       if (error) throw error;
       const seen = new Set<string>();
-      return (data ?? []).flatMap((r) => {
+      return ((data ?? []) as Row[]).flatMap((r: Row) => {
         const p = (r as Row)["profiles"] as Row | null;
         const id = String((r as Row)["user_id"]);
         if (!p || seen.has(id)) return [];
