@@ -38,7 +38,7 @@ function BillingPage() {
 
   const list = useList({
     table: "invoices",
-    select: "id, invoice_no, invoice_type, status, subtotal, tax, discount, total, paid_amount, created_at, visit_id, patient_id, patients(id, mrn, first_name, last_name)",
+    select: "id, invoice_no, invoice_type, status, is_legacy, subtotal, tax, discount, total, paid_amount, created_at, visit_id, patient_id, patients(id, mrn, first_name, last_name)",
     search,
     searchFields: ["invoice_no", "notes"],
     filters: { status },
@@ -159,7 +159,12 @@ function BillingPage() {
                 const st = String(r["status"]);
                 return (
                   <TableRow key={String(r["id"])}>
-                    <TableCell className="font-medium">{String(r["invoice_no"])}</TableCell>
+                    <TableCell className="font-medium">
+                      {String(r["invoice_no"])}
+                      {r["is_legacy"] ? (
+                        <span className="ml-2 text-xs text-muted-foreground">legacy</span>
+                      ) : null}
+                    </TableCell>
                     <TableCell>{invoicePatientName(r)}</TableCell>
                     <TableCell>{titleize(String(r["invoice_type"]))}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">

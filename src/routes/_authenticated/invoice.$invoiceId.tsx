@@ -194,6 +194,7 @@ function InvoicePage() {
         description={`${invoicePatientName(inv)} · ${titleize(String(inv["invoice_type"]))} · raised ${fmtDateTime(String(inv["created_at"]))}`}
         actions={
           <>
+            {inv["is_legacy"] ? <Badge variant="outline">Legacy · read only</Badge> : null}
             <Badge variant={status === "paid" ? "secondary" : status === "unpaid" ? "destructive" : "default"}>
               {STATUS_LABEL[status] ?? status}
             </Badge>
