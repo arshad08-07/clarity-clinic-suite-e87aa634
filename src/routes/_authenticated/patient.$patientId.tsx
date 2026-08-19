@@ -147,11 +147,11 @@ const SOURCES: Source[] = [
   },
   {
     table: "follow_ups",
-    select: "id, created_at, due_date, type, status, is_done, reason, notes, outcome_notes, cancel_reason",
+    select: "id, created_at, due_date, type, status, reason, notes, outcome_notes, cancel_reason",
     label: "Follow-up",
     dateField: "due_date",
     describe: (r) => {
-      const status = String(r["status"] ?? (r["is_done"] ? "completed" : "upcoming"));
+      const status = String(r["status"] ?? "upcoming");
       const tail = r["outcome_notes"] ?? r["cancel_reason"] ?? r["reason"] ?? r["notes"];
       return `${titleize(String(r["type"] ?? "review"))} · ${titleize(status)}${tail ? ` · ${String(tail)}` : ""}`;
     },

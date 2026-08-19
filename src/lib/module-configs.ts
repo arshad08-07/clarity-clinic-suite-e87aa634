@@ -415,7 +415,13 @@ export const followUpsConfig: ResourceConfig = {
     patientRef(),
     { name: "due_date", label: "Due date", type: "date", required: true },
     { name: "type", label: "Type", type: "select", options: opts("post_op", "review", "recall", "reminder"), defaultValue: "post_op" },
-    { name: "is_done", label: "Completed", type: "boolean", defaultValue: false },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: opts("upcoming", "completed", "cancelled", "no_show"),
+      defaultValue: "upcoming",
+    },
     staffRef("assigned_to", "Assigned to"),
     {
       name: "surgery_id",
@@ -428,7 +434,9 @@ export const followUpsConfig: ResourceConfig = {
     },
     { name: "notes", label: "Notes", type: "textarea", full: true, inTable: false },
   ],
-  filters: [{ name: "is_done", label: "Completed", type: "boolean" }],
+  filters: [
+    { name: "status", label: "Status", type: "select", options: opts("upcoming", "completed", "cancelled", "no_show") },
+  ],
 };
 
 export const surgeriesConfig: ResourceConfig = {

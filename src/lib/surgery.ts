@@ -208,7 +208,7 @@ export function useSurgeryFollowUps(surgeryId: string) {
     queryFn: async () => {
       const { data, error } = await db
         .from("follow_ups")
-        .select("id, due_date, type, notes, is_done")
+        .select("id, due_date, type, notes, status")
         .eq("surgery_id", surgeryId)
         .order("due_date", { ascending: true });
       if (error) throw error;
@@ -223,7 +223,7 @@ export function useCreateSurgeryFollowUp(surgeryId: string) {
     mutationFn: async (values: { patient_id: string; due_date: string; type: string; notes?: string | null; visit_id?: string | null }) => {
       const { data, error } = await db
         .from("follow_ups")
-        .insert({ ...values, surgery_id: surgeryId, is_done: false })
+        .insert({ ...values, surgery_id: surgeryId, status: "upcoming" })
         .select("id")
         .single();
       if (error) throw error;

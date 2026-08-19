@@ -120,10 +120,10 @@ function Dashboard() {
 
   const followUps = useList({
     table: "follow_ups",
-    select: "id, due_date, type, is_done, patients(first_name, last_name)",
+    select: "id, due_date, type, status, patients(first_name, last_name)",
     orderBy: "due_date",
     ascending: true,
-    filters: { is_done: false },
+    filters: { status: "upcoming" },
     dateField: "due_date",
     dateTo: day,
     pageSize: 6,
