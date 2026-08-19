@@ -17,8 +17,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { type Row } from "@/lib/api";
+import { diagnosisCode, diagnosisLabel, useVisitDiagnoses } from "@/lib/diagnoses";
 import { DIAG_PRIORITIES, useCreateDiagnosticOrders, useDiagnosticTests } from "@/lib/diagnostics";
 import { titleize } from "@/lib/format";
+
+const NO_DX = "__none__";
 
 /**
  * Doctor-side ordering: every order is bound to the visit that is open on screen,
@@ -38,8 +41,11 @@ export function OrderDiagnosticsDialog({
   const [eye, setEye] = useState("OU");
   const [priority, setPriority] = useState("normal");
   const [notes, setNotes] = useState("");
+  const [dxId, setDxId] = useState(NO_DX);
   const { profile } = useAuth();
   const tests = useDiagnosticTests(open);
+  const diagnoses = useVisitDiagnoses(open ? String(visit["id"]) : "");
+
   const create = useCreateDiagnosticOrders();
 
   const toggle = (id: string) =>
@@ -47,6 +53,11 @@ export function OrderDiagnosticsDialog({
 
   const submit = () => {
     if (!picked.length) return;
+    const dx = (diagnoses.data ?? []).find((d) => String(d["id"]) === dxId);
+    const dxLine = dx
+      ? `Indication: ${diagnosisLabel(dx)}${diagnosisCode(dx) ? ` (${diagnosisCode(dx)})` : ""}`
+      : "";
+    const combinedNotes = [dxLine, notes.trim()].filter(Boolean).join(" — ");
     create.mutate(
       picked.map((test_id) => ({
         patient_id: String(visit["patient_id"]),
@@ -55,13 +66,14 @@ export function OrderDiagnosticsDialog({
         eye,
         priority,
         ordered_by: (visit["doctor_id"] as string) ?? profile?.id ?? null,
-        doctor_notes: notes || null,
+        doctor_notes: combinedNotes || null,
       })),
       {
         onSuccess: () => {
           setOpen(false);
           setPicked([]);
           setNotes("");
+          setDxId(NO_DX);
           onOrdered?.();
         },
       },
@@ -132,6 +144,24 @@ export function OrderDiagnosticsDialog({
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="grid gap-1.5">
+            <Label>Indication — diagnosis from this visit (optional)</Label>
+            <Select value={dxId} onValueChange={setDxId}>
+              <SelectTrigger>
+                <SelectValue placeholder="Not linked" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NO_DX}>Not linked</SelectItem>
+                {(diagnoses.data ?? []).map((d) => (
+                  <SelectItem key={String(d["id"])} value={String(d["id"])}>
+                    {diagnosisLabel(d)}
+                    {diagnosisCode(d) ? ` (${diagnosisCode(d)})` : ""} · {String(d["eye"] ?? "N/A")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid gap-1.5">

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { useLookup, type Row } from "@/lib/api";
+import { diagnosisCode, diagnosisLabel, useVisitDiagnoses } from "@/lib/diagnoses";
 import { fmtDateTime, fmtMoney, titleize } from "@/lib/format";
 import { useRecommendSurgery, useVisitSurgeries } from "@/lib/surgery";
 
@@ -28,6 +29,7 @@ export function VisitSurgerySection({ visit }: { visit: Row }) {
   const visitId = String(visit["id"]);
   const list = useVisitSurgeries(visitId);
   const recommend = useRecommendSurgery();
+  const diagnoses = useVisitDiagnoses(visitId);
   const { profile } = useAuth();
   const surgeons = useLookup("profiles", "id, full_name", { filters: { is_active: true }, orderBy: "full_name" });
   const tests = useLookup("diagnostic_tests", "id, name, price", { filters: { is_active: true }, orderBy: "name" });
@@ -112,6 +114,31 @@ export function VisitSurgerySection({ visit }: { visit: Row }) {
               </SelectContent>
             </Select>
           </div>
+        </div>
+        <div className="mt-3 grid gap-1.5">
+          <Label>Clinical context — diagnoses from this visit</Label>
+          {(diagnoses.data ?? []).length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              No diagnosis recorded on this visit yet — add one in the Diagnosis tab.
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {(diagnoses.data ?? []).map((d: Row) => {
+                const label = `${diagnosisLabel(d)}${diagnosisCode(d) ? ` (${diagnosisCode(d)})` : ""} · ${String(d["eye"] ?? "N/A")}`;
+                return (
+                  <Button
+                    key={String(d["id"])}
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setNotes((prev) => (prev.includes(label) ? prev : [prev, label].filter(Boolean).join(" · ")))}
+                  >
+                    {label}
+                  </Button>
+                );
+              })}
+            </div>
+          )}
         </div>
         <div className="mt-3 grid gap-1.5">
           <Label htmlFor="surg-notes">Indication / notes</Label>

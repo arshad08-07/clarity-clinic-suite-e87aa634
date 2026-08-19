@@ -72,13 +72,23 @@ const SOURCES: Source[] = [
   },
   {
     table: "patient_diagnoses",
-    select: "id, created_at, diagnosis_text, eye, severity, is_primary, diagnosis_catalog(name, code)",
+    select:
+      "id, created_at, diagnosis_text, eye, severity, is_primary, visit_id, diagnosis_catalog(name, code), profiles:diagnosed_by(full_name)",
     label: "Diagnosis",
     dateField: "created_at",
     describe: (r) => {
       const cat = r["diagnosis_catalog"] as { name?: string; code?: string } | null;
+      const doc = r["profiles"] as { full_name?: string } | null;
       const name = cat?.name ?? String(r["diagnosis_text"] ?? "Diagnosis");
-      return `${r["is_primary"] === false ? "Secondary" : "Primary"} · ${name} · ${String(r["eye"] ?? "OU")}${r["severity"] ? ` · ${titleize(String(r["severity"]))}` : ""}`;
+      return [
+        r["is_primary"] === false ? "Secondary" : "Primary",
+        cat?.code ? `${name} (${cat.code})` : name,
+        String(r["eye"] ?? "N/A"),
+        r["severity"] ? titleize(String(r["severity"])) : null,
+        doc?.full_name ?? null,
+      ]
+        .filter(Boolean)
+        .join(" · ");
     },
   },
   {

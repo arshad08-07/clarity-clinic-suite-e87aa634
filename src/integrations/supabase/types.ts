@@ -1951,6 +1951,7 @@ export type Database = {
       }
       patient_diagnoses: {
         Row: {
+          branch_id: string | null
           created_at: string
           diagnosed_by: string | null
           diagnosis_id: string | null
@@ -1964,6 +1965,7 @@ export type Database = {
           visit_id: string | null
         }
         Insert: {
+          branch_id?: string | null
           created_at?: string
           diagnosed_by?: string | null
           diagnosis_id?: string | null
@@ -1977,6 +1979,7 @@ export type Database = {
           visit_id?: string | null
         }
         Update: {
+          branch_id?: string | null
           created_at?: string
           diagnosed_by?: string | null
           diagnosis_id?: string | null
@@ -1990,6 +1993,13 @@ export type Database = {
           visit_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "patient_diagnoses_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "patient_diagnoses_diagnosed_by_fkey"
             columns: ["diagnosed_by"]
@@ -2383,6 +2393,7 @@ export type Database = {
       prescription_items: {
         Row: {
           created_at: string
+          diagnosis_id: string | null
           dosage: string | null
           drug_name: string
           duration: string | null
@@ -2396,6 +2407,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          diagnosis_id?: string | null
           dosage?: string | null
           drug_name: string
           duration?: string | null
@@ -2409,6 +2421,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          diagnosis_id?: string | null
           dosage?: string | null
           drug_name?: string
           duration?: string | null
@@ -2421,6 +2434,13 @@ export type Database = {
           strength?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "prescription_items_diagnosis_id_fkey"
+            columns: ["diagnosis_id"]
+            isOneToOne: false
+            referencedRelation: "patient_diagnoses"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "prescription_items_prescription_id_fkey"
             columns: ["prescription_id"]
