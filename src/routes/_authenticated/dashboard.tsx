@@ -272,13 +272,8 @@ function Dashboard() {
                     <p className="truncate text-sm font-medium">{String(row["name"])}</p>
                     <p className="truncate text-xs text-muted-foreground">{String(row["sku"])}</p>
                   </div>
-                  <Badge
-                    variant={
-                      Number(row["stock_qty"]) <= Number(row["reorder_level"]) ? "destructive" : "secondary"
-                    }
-                  >
-                    {String(row["stock_qty"])} left
-                  </Badge>
+                  <Badge variant="destructive">{String(row["available_quantity"])} left</Badge>
+
                 </li>
               ))}
             </ul>
