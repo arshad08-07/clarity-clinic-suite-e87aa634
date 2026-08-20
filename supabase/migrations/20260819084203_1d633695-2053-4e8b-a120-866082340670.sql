@@ -12,7 +12,23 @@ DECLARE
   _inv uuid; _inv2 uuid; _lead uuid; _appt uuid; _visit uuid;
   _n numeric; _i integer; _txt text; _b boolean;
   _patient public.patients; _v public.visits;
+  _made_admin boolean := false; _made_rls boolean := false;
 BEGIN
+  -- Fixtures: on a fresh database these staff profiles do not exist yet. Create them
+  -- temporarily (deterministic ids, same branch scoping the assertions expect) so the
+  -- smoke test can run from zero; they are removed again in the CLEANUP block below.
+  IF NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = _admin) THEN
+    INSERT INTO public.profiles (id, full_name, is_active) VALUES (_admin, 'ZZ Smoke Admin', true);
+    INSERT INTO public.user_roles (user_id, role) VALUES (_admin, 'super_admin') ON CONFLICT DO NOTHING;
+    _made_admin := true;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM public.profiles WHERE id = _rls_user) THEN
+    INSERT INTO public.profiles (id, full_name, branch_id, is_active)
+    VALUES (_rls_user, 'ZZ Smoke RLS User A', _bra, true);
+    INSERT INTO public.user_roles (user_id, role) VALUES (_rls_user, 'receptionist') ON CONFLICT DO NOTHING;
+    _made_rls := true;
+  END IF;
+
   PERFORM set_config('request.jwt.claims',
     json_build_object('sub', _admin::text, 'role', 'authenticated')::text, true);
 
@@ -194,6 +210,15 @@ BEGIN
   DELETE FROM public.product_batches WHERE product_id = _prod;
   DELETE FROM public.products WHERE id IN (_prod, _frame, _lens);
   DELETE FROM public.suppliers WHERE id = _sup;
+
+  IF _made_rls THEN
+    DELETE FROM public.user_roles WHERE user_id = _rls_user;
+    DELETE FROM public.profiles WHERE id = _rls_user;
+  END IF;
+  IF _made_admin THEN
+    DELETE FROM public.user_roles WHERE user_id = _admin;
+    DELETE FROM public.profiles WHERE id = _admin;
+  END IF;
 
   DELETE FROM public.notifications WHERE created_at >= _t0;
   DELETE FROM public.audit_logs WHERE created_at >= _t0;
