@@ -216,6 +216,8 @@ BEGIN
     DELETE FROM public.profiles WHERE id = _rls_user;
   END IF;
   IF _made_admin THEN
+    -- drop the acting-user claim first; role changes are self-edit guarded
+    PERFORM set_config('request.jwt.claims', '', true);
     DELETE FROM public.user_roles WHERE user_id = _admin;
     DELETE FROM public.profiles WHERE id = _admin;
   END IF;
