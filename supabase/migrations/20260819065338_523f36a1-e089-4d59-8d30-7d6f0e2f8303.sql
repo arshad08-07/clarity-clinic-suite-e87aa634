@@ -7,6 +7,13 @@ GRANT EXECUTE ON FUNCTION public.can_read_clinical(uuid) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.can_read_medication(uuid) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.can_read_optical_rx(uuid) TO authenticated;
 
+-- Access-matrix probe fixtures: RLS test branches that the probe profiles are scoped to.
+-- Deterministic ids, matching the branch_id values referenced by the probe rows below.
+INSERT INTO public.branches (id, name, code, city, is_active) VALUES
+  ('aaaaaaaa-0000-4000-8000-00000000000a','RLS Test Branch A','RLSA','Bengaluru', true),
+  ('bbbbbbbb-0000-4000-8000-00000000000b','RLS Test Branch B','RLSB','Bengaluru', true)
+ON CONFLICT (id) DO NOTHING;
+
 -- Temporary probe users, one per role, all scoped to branch A, for the access matrix test
 INSERT INTO public.profiles (id, full_name, branch_id, is_active) VALUES
   ('aa000001-0000-4000-8000-000000000001','PROBE super_admin','aaaaaaaa-0000-4000-8000-00000000000a', true),
