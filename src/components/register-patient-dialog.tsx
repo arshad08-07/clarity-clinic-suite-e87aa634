@@ -78,8 +78,12 @@ export function RegisterPatientDialog() {
     return isSuperAdmin ? rows : rows.filter((b) => branchIds.includes(b.id));
   }, [isSuperAdmin, allBranches.data, branchIds]);
 
-  const autoBranch = primaryBranchId ?? (branchIds.length === 1 ? branchIds[0]! : null);
-  const needsBranchPicker = isSuperAdmin ? branchOptions.length > 1 : branchIds.length > 1 && !primaryBranchId;
+  /* Single allowed branch => auto-selected; picker only appears for multi-branch users. */
+  const autoBranch =
+    primaryBranchId ??
+    (branchIds.length === 1 ? branchIds[0]! : null) ??
+    (branchOptions.length === 1 ? branchOptions[0]!.id : null);
+  const needsBranchPicker = !autoBranch && branchOptions.length > 1;
   const branchId = form.branch_id || autoBranch || "";
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
