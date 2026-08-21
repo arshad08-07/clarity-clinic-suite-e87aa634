@@ -235,11 +235,11 @@ export function ResourceModule({ config }: { config: ResourceConfig }) {
             <Button variant="outline" size="sm" onClick={() => window.print()}>
               <Printer className="size-4" /> Print
             </Button>
-            {!config.readOnly ? (
+            {config.createAction ?? (!config.readOnly ? (
               <Button size="sm" onClick={() => setEditing({})}>
                 <Plus className="size-4" /> New {config.singular}
               </Button>
-            ) : null}
+            ) : null)}
           </>
         }
       />
@@ -354,11 +354,13 @@ export function ResourceModule({ config }: { config: ResourceConfig }) {
                           : `Create your first ${config.singular.toLowerCase()} to get started.`
                       }
                       action={
-                        !config.readOnly && !hasActiveFilters ? (
-                          <Button size="sm" onClick={() => setEditing({})}>
-                            <Plus className="size-4" /> New {config.singular}
-                          </Button>
-                        ) : null
+                        !hasActiveFilters
+                          ? (config.createAction ?? (!config.readOnly ? (
+                              <Button size="sm" onClick={() => setEditing({})}>
+                                <Plus className="size-4" /> New {config.singular}
+                              </Button>
+                            ) : null))
+                          : null
                       }
                     />
                   </TableCell>
