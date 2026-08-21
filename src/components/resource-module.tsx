@@ -104,6 +104,8 @@ export interface ResourceConfig {
   readOnly?: boolean;
   rowActions?: (row: Row) => ReactNode;
   extraHeaderActions?: ReactNode;
+  /** Replaces the generic "New <singular>" button with a purpose-built flow. */
+  createAction?: ReactNode;
   beforeSave?: (values: Row) => Row | Promise<Row>;
 }
 
