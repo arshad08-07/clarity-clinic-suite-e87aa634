@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PatientRecordLink } from "@/components/clinic-actions";
+import { RegisterPatientDialog } from "@/components/register-patient-dialog";
 import { ResourceModule } from "@/components/resource-module";
 import { patientsConfig } from "@/lib/module-configs";
 
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/patients")({
     <ResourceModule
       config={{
         ...patientsConfig,
+        createAction: <RegisterPatientDialog />,
         rowActions: (row) => <PatientRecordLink patientId={String(row["id"])} />,
       }}
     />

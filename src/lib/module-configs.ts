@@ -115,7 +115,8 @@ export const patientsConfig: ResourceConfig = {
   searchFields: ["mrn", "first_name", "last_name", "phone", "email"],
   orderBy: "created_at",
   fields: [
-    { name: "mrn", label: "MRN", required: true, section: "Identity" },
+    /* MRN is issued server-side on insert and is immutable — never typed by staff. */
+    { name: "mrn", label: "MRN", inForm: false, section: "Identity" },
     { name: "first_name", label: "First name", required: true, section: "Identity" },
     { name: "last_name", label: "Last name", section: "Identity" },
     { name: "gender", label: "Gender", type: "select", options: GENDER, section: "Identity" },
