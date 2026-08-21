@@ -2146,7 +2146,7 @@ export type Database = {
           lead_id?: string | null
           lead_source?: string | null
           medical_history?: string | null
-          mrn: string
+          mrn?: string
           phone: string
           pincode?: string | null
           referred_by?: string | null
