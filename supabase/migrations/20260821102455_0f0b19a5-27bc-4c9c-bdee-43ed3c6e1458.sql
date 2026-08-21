@@ -1,0 +1,1 @@
+DELETE FROM public.patients WHERE mrn = 'MRN-001012' AND phone = '9876500011' AND first_name = 'Ramesh';
