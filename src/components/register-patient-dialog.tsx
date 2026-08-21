@@ -378,6 +378,13 @@ export function RegisterPatientDialog() {
                 </div>
               ) : null}
 
+              {!branchId && !needsBranchPicker && !allBranches.isLoading ? (
+                <p className="text-xs text-destructive sm:col-span-2">
+                  Your account is not assigned to a branch yet — ask an administrator to assign one
+                  before registering patients.
+                </p>
+              ) : null}
+
               <button type="submit" className="hidden" aria-hidden />
             </form>
 
