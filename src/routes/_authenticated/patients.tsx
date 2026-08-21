@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/patients")({
     <ResourceModule
       config={{
         ...patientsConfig,
+        createAction: <RegisterPatientDialog />,
         rowActions: (row) => <PatientRecordLink patientId={String(row["id"])} />,
       }}
     />
