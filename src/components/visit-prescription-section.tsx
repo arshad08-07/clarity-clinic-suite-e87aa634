@@ -62,8 +62,8 @@ export function VisitPrescriptionSection({ visit }: { visit: Row }) {
     () =>
       pad
         .split("\n")
-        .map((l) => parseRxLine(l))
-        .filter((p): p is NonNullable<typeof p> => !!p),
+        .map((line, lineIndex) => ({ item: parseRxLine(line), lineIndex }))
+        .filter((p): p is { item: NonNullable<ReturnType<typeof parseRxLine>>; lineIndex: number } => !!p.item),
     [pad],
   );
 
@@ -71,13 +71,22 @@ export function VisitPrescriptionSection({ visit }: { visit: Row }) {
 
   const appendLine = (line: string) => setPad((p) => (p.trim() ? `${p.replace(/\n+$/, "")}\n${line}` : line));
 
+  const removeLine = (lineIndex: number) =>
+    setPad((p) =>
+      p
+        .split("\n")
+        .filter((_l, i) => i !== lineIndex)
+        .join("\n"),
+    );
+
   const commitPad = () => {
     if (parsed.length === 0) return;
     addItems.mutate(
-      { items: parsed.map(({ unparsed: _u, ...item }) => item), doctorId: profile?.id ?? null },
+      { items: parsed.map(({ item: { unparsed: _u, ...item } }) => item), doctorId: profile?.id ?? null },
       { onSuccess: () => setPad("") },
     );
   };
+
 
   const repeatPrevious = () => {
     if (prevItems.length === 0) return;
