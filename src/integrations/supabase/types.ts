@@ -3245,6 +3245,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          active_organization_id: string | null
           avatar_url: string | null
           branch_id: string | null
           created_at: string
@@ -3260,6 +3261,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          active_organization_id?: string | null
           avatar_url?: string | null
           branch_id?: string | null
           created_at?: string
@@ -3275,6 +3277,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          active_organization_id?: string | null
           avatar_url?: string | null
           branch_id?: string | null
           created_at?: string
@@ -3290,6 +3293,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "profiles_active_organization_id_fkey"
+            columns: ["active_organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profiles_branch_id_fkey"
             columns: ["branch_id"]
