@@ -99,7 +99,7 @@ function OrganizationSwitcher() {
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel>Your organizations</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {organizations.map((org) => (
+        {organizations.map((org: TenantOrganization) => (
           <DropdownMenuItem
             key={org.id}
             onClick={() => {
