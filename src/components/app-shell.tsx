@@ -185,6 +185,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             </p>
           </div>
 
+          <OrganizationSwitcher />
+
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
