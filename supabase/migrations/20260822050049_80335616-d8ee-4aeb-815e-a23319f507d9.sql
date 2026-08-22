@@ -1,0 +1,1 @@
+ALTER FUNCTION public.appointment_rules_guard() SET search_path = public;
