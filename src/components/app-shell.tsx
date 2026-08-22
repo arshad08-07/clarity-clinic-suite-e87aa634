@@ -82,12 +82,46 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
+function OrganizationSwitcher() {
+  const { organizations, activeOrganizationId, organization } = useTenant();
+  const switchOrg = useSwitchOrganization();
+  if (organizations.length < 2) return null;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm" className="gap-2">
+          <Building2 className="size-4" />
+          <span className="max-w-36 truncate">{organization?.name ?? "Select clinic"}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-60">
+        <DropdownMenuLabel>Your organizations</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {organizations.map((org) => (
+          <DropdownMenuItem
+            key={org.id}
+            onClick={() => {
+              if (org.id !== activeOrganizationId) switchOrg.mutate(org.id);
+            }}
+          >
+            <span className="truncate">{org.name}</span>
+            {org.id === activeOrganizationId ? <Check className="ml-auto size-4" /> : null}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   const { profile, roles, user, primaryBranchId } = useAuth();
   const { settings } = useSettings(primaryBranchId);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { needsOnboarding, loading: tenantLoading } = useTenant(!!user);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const notifications = useList({
     table: "notifications",
@@ -98,6 +132,13 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   // Keep non-React helpers (money formatting, printed documents) in sync.
   useEffect(() => setSettingsSnapshot(settings), [settings]);
+
+  // An account without a clinic workspace can only go to onboarding.
+  useEffect(() => {
+    if (!tenantLoading && needsOnboarding && pathname !== "/onboarding") {
+      void navigate({ to: "/onboarding", replace: true });
+    }
+  }, [tenantLoading, needsOnboarding, pathname, navigate]);
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
@@ -118,6 +159,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-sidebar-border lg:block no-print">
         <SidebarContent />
       </aside>
+
 
       <div className="lg:pl-64">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-card/85 px-4 backdrop-blur no-print">
