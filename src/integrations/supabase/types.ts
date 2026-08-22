@@ -1917,6 +1917,130 @@ export type Database = {
           },
         ]
       }
+      organization_members: {
+        Row: {
+          created_at: string
+          id: string
+          invited_by: string | null
+          is_owner: boolean
+          joined_at: string
+          organization_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          is_owner?: boolean
+          joined_at?: string
+          organization_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          is_owner?: boolean
+          joined_at?: string
+          organization_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          address: string | null
+          city: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          country: string
+          created_at: string
+          currency: string
+          id: string
+          legal_name: string | null
+          logo_url: string | null
+          name: string
+          onboarding_completed: boolean
+          plan_id: string | null
+          primary_color: string | null
+          slug: string
+          state: string | null
+          status: string
+          suspended_at: string | null
+          suspended_reason: string | null
+          timezone: string
+          trial_ends_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          country?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          legal_name?: string | null
+          logo_url?: string | null
+          name: string
+          onboarding_completed?: boolean
+          plan_id?: string | null
+          primary_color?: string | null
+          slug: string
+          state?: string | null
+          status?: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          timezone?: string
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          country?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          legal_name?: string | null
+          logo_url?: string | null
+          name?: string
+          onboarding_completed?: boolean
+          plan_id?: string | null
+          primary_color?: string | null
+          slug?: string
+          state?: string | null
+          status?: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          timezone?: string
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organizations_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ot_rooms: {
         Row: {
           branch_id: string | null
@@ -2433,6 +2557,110 @@ export type Database = {
             columns: ["visit_id"]
             isOneToOne: false
             referencedRelation: "visits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          max_branches: number | null
+          max_patients: number | null
+          max_users: number | null
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_branches?: number | null
+          max_patients?: number | null
+          max_users?: number | null
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_branches?: number | null
+          max_patients?: number | null
+          max_users?: number | null
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      platform_admins: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          is_active: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          is_active?: boolean
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          is_active?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      platform_support_grants: {
+        Row: {
+          admin_user_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          organization_id: string
+          reason: string | null
+          revoked_at: string | null
+        }
+        Insert: {
+          admin_user_id: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          organization_id: string
+          reason?: string | null
+          revoked_at?: string | null
+        }
+        Update: {
+          admin_user_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          organization_id?: string
+          reason?: string | null
+          revoked_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_support_grants_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -3650,6 +3878,7 @@ export type Database = {
           visits: number
         }[]
       }
+      current_org_id: { Args: never; Returns: string }
       dispatch_due_reminders: {
         Args: never
         Returns: {
@@ -3672,9 +3901,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_support_access: {
+        Args: { _org: string; _user_id?: string }
+        Returns: boolean
+      }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_clinical: { Args: { _user_id: string }; Returns: boolean }
       is_finance: { Args: { _user_id: string }; Returns: boolean }
+      is_org_member: {
+        Args: { _org: string; _user_id?: string }
+        Returns: boolean
+      }
+      is_platform_admin: { Args: { _user_id?: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       is_super_admin: { Args: { _user_id: string }; Returns: boolean }
       lead_patient_matches: {
@@ -3692,6 +3930,7 @@ export type Database = {
       next_invoice_no: { Args: { _branch?: string }; Returns: string }
       next_mrn: { Args: never; Returns: string }
       next_po_no: { Args: never; Returns: string }
+      org_visible: { Args: { _org: string }; Returns: boolean }
       owns_patient: { Args: { _patient_id: string }; Returns: boolean }
       payment_refundable: { Args: { _payment_id: string }; Returns: number }
       po_recalc: { Args: { _po_id: string }; Returns: undefined }
