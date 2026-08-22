@@ -187,15 +187,31 @@ export function VisitPrescriptionSection({ visit }: { visit: Row }) {
 
         {parsed.length > 0 ? (
           <ul className="mt-3 space-y-1.5 text-sm">
-            {parsed.map((p, idx) => (
-              <li key={`${p.drug_name}-${idx}`} className="rounded-md border border-dashed p-2">
-                <span className="font-medium">{p.drug_name}</span>{" "}
-                <span className="text-muted-foreground">{rxSummary(p) || "no details"}</span>
-                {p.instructions ? <span className="text-muted-foreground"> · {p.instructions}</span> : null}
+            {parsed.map(({ item: p, lineIndex }) => (
+              <li
+                key={`${p.drug_name}-${lineIndex}`}
+                className="flex items-start justify-between gap-2 rounded-md border border-dashed p-2"
+              >
+                <div>
+                  <span className="font-medium">{p.drug_name}</span>{" "}
+                  <span className="text-muted-foreground">{rxSummary(p) || "no details"}</span>
+                  {p.instructions ? <span className="text-muted-foreground"> · {p.instructions}</span> : null}
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 shrink-0"
+                  aria-label={`Remove ${p.drug_name} line`}
+                  onClick={() => removeLine(lineIndex)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </li>
             ))}
           </ul>
         ) : null}
+
 
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <Button onClick={commitPad} disabled={parsed.length === 0 || addItems.isPending}>
