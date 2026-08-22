@@ -148,6 +148,8 @@ export function allowedRolesForPath(pathname: string): AppRole[] | null {
 }
 
 export function canVisit(pathname: string, roles: AppRole[]): boolean {
+  // Creating your clinic workspace happens before any role exists.
+  if (pathname === "/onboarding" || pathname.startsWith("/onboarding/")) return true;
   if (roles.includes("super_admin")) return true;
   const allowed = allowedRolesForPath(pathname);
   if (!allowed) return roles.length > 0;

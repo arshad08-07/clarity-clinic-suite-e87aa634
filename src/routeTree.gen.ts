@@ -30,6 +30,7 @@ import { Route as AuthenticatedInsuranceRouteImport } from './routes/_authentica
 import { Route as AuthenticatedInventoryRouteImport } from './routes/_authenticated/inventory'
 import { Route as AuthenticatedIolRouteImport } from './routes/_authenticated/iol'
 import { Route as AuthenticatedLeadsRouteImport } from './routes/_authenticated/leads'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedOpticalPrescriptionsRouteImport } from './routes/_authenticated/optical-prescriptions'
 import { Route as AuthenticatedOpticalShopRouteImport } from './routes/_authenticated/optical-shop'
 import { Route as AuthenticatedOptometryRouteImport } from './routes/_authenticated/optometry'
@@ -160,6 +161,11 @@ const AuthenticatedIolRoute = AuthenticatedIolRouteImport.update({
 const AuthenticatedLeadsRoute = AuthenticatedLeadsRouteImport.update({
   id: '/leads',
   path: '/leads',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedOpticalPrescriptionsRoute =
@@ -310,6 +316,7 @@ export interface FileRoutesByFullPath {
   '/inventory': typeof AuthenticatedInventoryRoute
   '/iol': typeof AuthenticatedIolRoute
   '/leads': typeof AuthenticatedLeadsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/optical-prescriptions': typeof AuthenticatedOpticalPrescriptionsRoute
   '/optical-shop': typeof AuthenticatedOpticalShopRoute
   '/optometry': typeof AuthenticatedOptometryRoute
@@ -355,6 +362,7 @@ export interface FileRoutesByTo {
   '/inventory': typeof AuthenticatedInventoryRoute
   '/iol': typeof AuthenticatedIolRoute
   '/leads': typeof AuthenticatedLeadsRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/optical-prescriptions': typeof AuthenticatedOpticalPrescriptionsRoute
   '/optical-shop': typeof AuthenticatedOpticalShopRoute
   '/optometry': typeof AuthenticatedOptometryRoute
@@ -402,6 +410,7 @@ export interface FileRoutesById {
   '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
   '/_authenticated/iol': typeof AuthenticatedIolRoute
   '/_authenticated/leads': typeof AuthenticatedLeadsRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/optical-prescriptions': typeof AuthenticatedOpticalPrescriptionsRoute
   '/_authenticated/optical-shop': typeof AuthenticatedOpticalShopRoute
   '/_authenticated/optometry': typeof AuthenticatedOptometryRoute
@@ -449,6 +458,7 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/iol'
     | '/leads'
+    | '/onboarding'
     | '/optical-prescriptions'
     | '/optical-shop'
     | '/optometry'
@@ -494,6 +504,7 @@ export interface FileRouteTypes {
     | '/inventory'
     | '/iol'
     | '/leads'
+    | '/onboarding'
     | '/optical-prescriptions'
     | '/optical-shop'
     | '/optometry'
@@ -540,6 +551,7 @@ export interface FileRouteTypes {
     | '/_authenticated/inventory'
     | '/_authenticated/iol'
     | '/_authenticated/leads'
+    | '/_authenticated/onboarding'
     | '/_authenticated/optical-prescriptions'
     | '/_authenticated/optical-shop'
     | '/_authenticated/optometry'
@@ -720,6 +732,13 @@ declare module '@tanstack/react-router' {
       path: '/leads'
       fullPath: '/leads'
       preLoaderRoute: typeof AuthenticatedLeadsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/optical-prescriptions': {
@@ -904,6 +923,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
   AuthenticatedIolRoute: typeof AuthenticatedIolRoute
   AuthenticatedLeadsRoute: typeof AuthenticatedLeadsRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedOpticalPrescriptionsRoute: typeof AuthenticatedOpticalPrescriptionsRoute
   AuthenticatedOpticalShopRoute: typeof AuthenticatedOpticalShopRoute
   AuthenticatedOptometryRoute: typeof AuthenticatedOptometryRoute
@@ -946,6 +966,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
   AuthenticatedIolRoute: AuthenticatedIolRoute,
   AuthenticatedLeadsRoute: AuthenticatedLeadsRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedOpticalPrescriptionsRoute:
     AuthenticatedOpticalPrescriptionsRoute,
   AuthenticatedOpticalShopRoute: AuthenticatedOpticalShopRoute,
