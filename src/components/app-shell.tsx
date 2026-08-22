@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
-import { Bell, LogOut, Menu, Eye } from "lucide-react";
+import { Bell, Building2, Check, LogOut, Menu, Eye } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +24,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useList } from "@/lib/api";
 import { visibleNav } from "@/lib/navigation";
 import { setSettingsSnapshot, useSettings } from "@/lib/settings";
+import { useSwitchOrganization, useTenant, type TenantOrganization } from "@/lib/tenancy";
 import { cn } from "@/lib/utils";
 
 function NavIcon({ name, className }: { name: string; className?: string }) {
