@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, RotateCcw, Trash2 } from "lucide-react";
+import { Plus, RotateCcw, Trash2, X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -62,8 +62,8 @@ export function VisitPrescriptionSection({ visit }: { visit: Row }) {
     () =>
       pad
         .split("\n")
-        .map((l) => parseRxLine(l))
-        .filter((p): p is NonNullable<typeof p> => !!p),
+        .map((line, lineIndex) => ({ item: parseRxLine(line), lineIndex }))
+        .filter((p): p is { item: NonNullable<ReturnType<typeof parseRxLine>>; lineIndex: number } => !!p.item),
     [pad],
   );
 
@@ -71,13 +71,22 @@ export function VisitPrescriptionSection({ visit }: { visit: Row }) {
 
   const appendLine = (line: string) => setPad((p) => (p.trim() ? `${p.replace(/\n+$/, "")}\n${line}` : line));
 
+  const removeLine = (lineIndex: number) =>
+    setPad((p) =>
+      p
+        .split("\n")
+        .filter((_l, i) => i !== lineIndex)
+        .join("\n"),
+    );
+
   const commitPad = () => {
     if (parsed.length === 0) return;
     addItems.mutate(
-      { items: parsed.map(({ unparsed: _u, ...item }) => item), doctorId: profile?.id ?? null },
+      { items: parsed.map(({ item: { unparsed: _u, ...item } }) => item), doctorId: profile?.id ?? null },
       { onSuccess: () => setPad("") },
     );
   };
+
 
   const repeatPrevious = () => {
     if (prevItems.length === 0) return;
@@ -178,15 +187,31 @@ export function VisitPrescriptionSection({ visit }: { visit: Row }) {
 
         {parsed.length > 0 ? (
           <ul className="mt-3 space-y-1.5 text-sm">
-            {parsed.map((p, idx) => (
-              <li key={`${p.drug_name}-${idx}`} className="rounded-md border border-dashed p-2">
-                <span className="font-medium">{p.drug_name}</span>{" "}
-                <span className="text-muted-foreground">{rxSummary(p) || "no details"}</span>
-                {p.instructions ? <span className="text-muted-foreground"> · {p.instructions}</span> : null}
+            {parsed.map(({ item: p, lineIndex }) => (
+              <li
+                key={`${p.drug_name}-${lineIndex}`}
+                className="flex items-start justify-between gap-2 rounded-md border border-dashed p-2"
+              >
+                <div>
+                  <span className="font-medium">{p.drug_name}</span>{" "}
+                  <span className="text-muted-foreground">{rxSummary(p) || "no details"}</span>
+                  {p.instructions ? <span className="text-muted-foreground"> · {p.instructions}</span> : null}
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 shrink-0"
+                  aria-label={`Remove ${p.drug_name} line`}
+                  onClick={() => removeLine(lineIndex)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </li>
             ))}
           </ul>
         ) : null}
+
 
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <Button onClick={commitPad} disabled={parsed.length === 0 || addItems.isPending}>
